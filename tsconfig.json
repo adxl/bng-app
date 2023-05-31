@@ -13,6 +13,8 @@
     "noFallthroughCasesInSwitch": true,
     "strictNullChecks": true,
 
+    "esModuleInterop": true,
+
     "forceConsistentCasingInFileNames": true,
 
     "noImplicitAny": true,
