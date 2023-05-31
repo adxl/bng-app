@@ -1,1 +1,2 @@
-# bng-app
+# Board n' Go
+

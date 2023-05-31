@@ -1,0 +1,19 @@
+version: "3.7"
+
+services:
+  app:
+    image: node:18-alpine
+    user: node
+    working_dir: /home/node
+    env_file: .env
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/home/node
+    command: /bin/sh -c "npm i && npm run start"
+    networks:
+      - bng
+
+networks:
+  bng:
+    external: true
