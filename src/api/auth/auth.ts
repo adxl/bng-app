@@ -1,11 +1,12 @@
-import type { Response } from "@typing/api";
+import type { Response } from "@typing/api/axios";
+import type { User } from "@typing/api/users";
 
 import { _get, _post } from "../gateway";
 
 const URL = import.meta.env.VITE_API_URL + "/auth";
 
 // TODO: ADD USER RETURN TYPE
-export const getCurrentUser = (token: string): Response<unknown> => {
+export const getCurrentUser = (token: string): Response<User> => {
   return _get(URL + "/me", token);
 };
 

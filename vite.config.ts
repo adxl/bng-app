@@ -10,7 +10,7 @@ export default defineConfig({
   base: "",
   plugins: [
     react({
-      include: "**/*.{js,jsx,tsx}",
+      include: "**/*.{ts,tsx}",
     }),
   ],
   resolve: {
