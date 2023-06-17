@@ -25,6 +25,7 @@
     "paths": {
       "@api/*": ["src/api/*"],
       "@components/*": ["src/components/*"],
+      "@hooks/*": ["src/hooks/*"],
       "@pages/*": ["src/pages/*"],
       "@scss/*": ["src/sass/*"],
       "@typing/*": ["src/typing/*"]

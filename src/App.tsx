@@ -19,14 +19,10 @@ const Login = React.lazy(() => import("@pages/Login"));
 const App: React.FC = () => {
   useEffect(() => {
     Promise.all([authIndex(), eventsIndex(), examsIndex(), gearsIndex()])
-      .then(([authResponse, eventsResponse, examsResponse, gearsResponse]) => {
-        console.log(authResponse.data);
-        console.log(eventsResponse.data);
-        console.log(examsResponse.data);
-        console.log(gearsResponse.data);
+      .then(() => {
+        console.debug("BnG API's OK");
       })
       .catch((error) => {
-        // alert("API Error");
         console.error(error);
       });
   }, []);
@@ -39,7 +35,7 @@ const App: React.FC = () => {
             <Routes>
               <Route path="/" element={<Navigate to="/login" />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/home" element={<Guard el={<Home />} roles={["*"]} />} />
+              <Route path="/home" element={<Guard el={Home} roles={["*"]} />} />
             </Routes>
           </Router>
         </Suspense>

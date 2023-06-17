@@ -2,22 +2,16 @@ import React from "react";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { Button } from "flowbite-react";
-import Lottie from "lottie-react";
 
-import jetpackAnimation from "../../public/28991-jetpack-man-gsb.json";
 import { useAuth } from "../hooks/auth";
 
 const Login: React.FC = () => {
   const { login, _token } = useAuth();
 
-  const [_email, setEmail] = useState<string>("");
-  const [_password, setPassword] = useState<string>("");
-  const [_error, setError] = useState<string>("");
+  const [_email, setEmail] = useState<string>("@bng.fr");
+  const [_password, setPassword] = useState<string>("password");
 
-  // const defaultOptions = {
-  //   loop: false,
-  //   autoplay: true,
-  // };
+  const [_error, setError] = useState<string>("");
 
   function handleEmailChange(event: React.FormEvent<HTMLInputElement>): void {
     setEmail(event.currentTarget.value);
@@ -42,17 +36,16 @@ const Login: React.FC = () => {
 
   return (
     <div className="flex flex-row justify-center mt-20 p-10">
-      <div className="w-9/12 mt-10 mr-5 max-h-full h-full">
-        <Lottie animationData={jetpackAnimation} />
+      <div className="w-1/2 mt-10 mr-5 max-h-full h-full">
+        <img src="/logo.png" className="w-100 h-100 mb-5 p-2 rounded-full" />
       </div>
-      <div className="max-w-md w-1/2 py-4 shadow rounded-lg">
+      <div className="flex items-center max-w-md w-1/2 py-4  rounded-lg">
         <div className="flex flex-col w-full items-center">
-          <img src="/logo.png" className="w-40 h-40 mb-5 p-2 rounded-full" />
           <p className="text-red-600 font-bold mb-10">{_error}</p>
           <form onSubmit={handleLogin} className="flex flex-col w-full items-center">
             <div className="mb-6">
               <label htmlFor="email" className="block mb-2 text-sm font-medium text-left">
-                E-mail :
+                Email :
               </label>
               <input
                 type="email"

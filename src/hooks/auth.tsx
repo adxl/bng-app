@@ -9,7 +9,7 @@ type AuthContextType = {
   _token: string | null;
   setToken: (token: string) => void;
   user: User;
-  login: (email: string, password: string) => void;
+  login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   refreshUser: () => void;
 };
@@ -18,7 +18,7 @@ const defaultAuthContext = {
   _token: "",
   setToken: () => void 0,
   user: {},
-  login: () => void 0,
+  login: () => Promise.resolve(),
   logout: () => void 0,
   refreshUser: () => void 0,
 };
@@ -56,18 +56,18 @@ export function AuthProvider({ children }: IProps): ReactElement {
     refreshUser();
   }, [_token]);
 
-  function handleLogin(email: string, password: string) {
-    return new Promise((_, reject) => {
+  const handleLogin = (email: string, password: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
       login(email, password)
         .then(({ data: token }) => {
           setToken("Bearer " + token);
+          resolve();
         })
         .catch((error) => {
-          // console.error(error);
           reject(error.response.data);
         });
     });
-  }
+  };
 
   const handleChangeToken = (token: string) => setToken(token);
 
