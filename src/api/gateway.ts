@@ -3,6 +3,7 @@ import axios from "axios";
 
 type HttpHeaders = {
   "Content-Type": "application/json";
+  "X-BNG-KEY": string;
   Authorization?: string;
 };
 type HttpBody = Record<string, unknown>;
@@ -11,6 +12,7 @@ type HttpResponse = Promise<AxiosResponse>;
 function get_headers(token: string | null) {
   const headers: Partial<HttpHeaders> = {
     "Content-Type": "application/json",
+    "X-BNG-KEY": "esgi",
   };
 
   if (token) {
