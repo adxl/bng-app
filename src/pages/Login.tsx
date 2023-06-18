@@ -26,12 +26,13 @@ const Login: React.FC = () => {
     if (!(_email && _password)) return;
 
     login(_email, _password).catch((error) => {
-      setError(error.message);
+      const errorMessage = typeof error.message === "string" ? error.message : "Une erreur est survenue";
+      setError(errorMessage);
     });
   }
 
   if (_token) {
-    return <Navigate to="/home" />;
+    return <Navigate to="/" />;
   }
 
   return (
@@ -69,7 +70,7 @@ const Login: React.FC = () => {
                 placeholder="●●●●●●●●●●"
               />
             </div>
-            <Button type="submit" className="bg-[#e8505b] hover:bg-gray-800">
+            <Button type="submit" color="dark" className="hover:bg-gray-800">
               Se connecter
             </Button>
           </form>

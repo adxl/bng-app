@@ -16,7 +16,9 @@ const Guard: React.FC<Props> = ({ el: Element, roles }) => {
 
   if (!_token) return <Navigate to="/login" />;
 
-  if (user.role && !roles.includes(user.role) && !roles.includes("*")) return <Navigate to="/home" />;
+  if (user.role && !roles.includes(user.role) && !roles.includes("*")) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <div>

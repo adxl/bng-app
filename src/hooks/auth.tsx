@@ -17,7 +17,13 @@ type AuthContextType = {
 const defaultAuthContext = {
   _token: "",
   setToken: () => void 0,
-  user: {},
+  user: {
+    firstName: null,
+    lastName: null,
+    email: null,
+    role: null,
+    createdAt: null,
+  },
   login: () => Promise.resolve(),
   logout: () => void 0,
   refreshUser: () => void 0,
@@ -31,18 +37,18 @@ interface IProps {
 }
 
 export function AuthProvider({ children }: IProps): ReactElement {
-  const [_user, setUser] = useState<User>({});
-  const [_token, setToken] = useState<string | null>(JSON.parse(sessionStorage.getItem("bng-token") || "null"));
+  const [_user, setUser] = useState<User>(defaultAuthContext.user);
+  const [_token, setToken] = useState<string | null>(sessionStorage.getItem("bng-token"));
 
   const refreshUser = () => {
     if (!_token) return;
 
-    getCurrentUser(_token)
+    getCurrentUser()
       .then(({ data }) => {
         setUser(data);
       })
       .catch((_) => {
-        sessionStorage.setItem("bng-token", JSON.stringify(null));
+        sessionStorage.removeItem("bng-token");
         location.href = "/login";
       });
   };
@@ -52,7 +58,12 @@ export function AuthProvider({ children }: IProps): ReactElement {
   }, []);
 
   useEffect(() => {
-    sessionStorage.setItem("bng-token", JSON.stringify(_token));
+    if (_token) {
+      sessionStorage.setItem("bng-token", _token);
+    } else {
+      sessionStorage.removeItem("bng-token");
+    }
+
     refreshUser();
   }, [_token]);
 
