@@ -27,7 +27,7 @@ const Guard: React.FC<Props> = ({ el: Element, roles }) => {
       <Navbar />
       <div className="flex">
         <Sidebar />
-        <div>
+        <div className="flex flex-wrap w-full">
           <Element />
         </div>
       </div>

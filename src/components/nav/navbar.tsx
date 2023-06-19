@@ -1,8 +1,9 @@
 import React from "react";
+import { HiOutlineAdjustments } from "react-icons/hi";
+import { HiArrowLeftOnRectangle } from "react-icons/hi2";
 import { Link } from "react-router-dom";
 import { Avatar, Badge, Dropdown, Navbar as FlowbiteNavbar } from "flowbite-react";
 
-import { AdjustmentsHorizontalIcon, ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline";
 import { useAuth } from "@hooks/auth";
 
 const Navbar: React.FC = () => {
@@ -10,11 +11,9 @@ const Navbar: React.FC = () => {
 
   return (
     <FlowbiteNavbar className="mb-5 bg-gray-50 shadow-lg rounded-md">
-      <Link to={"/"}>
-        <FlowbiteNavbar.Brand>
-          <img src="/logo.png" alt="BNG Logo" className="w-12 h-12 mr-3" />
-        </FlowbiteNavbar.Brand>
-      </Link>
+      <FlowbiteNavbar.Brand as={Link} to="/">
+        <img src="/logo.png" alt="BNG Logo" className="w-12 h-12 mr-3" />
+      </FlowbiteNavbar.Brand>
       <div className="flex md:order-2 items-center">
         <Badge color="indigo" className="mr-3">
           {user.role}
@@ -32,16 +31,17 @@ const Navbar: React.FC = () => {
           </Dropdown.Header>
           <Link to={"#"}>
             <Dropdown.Item>
-              <AdjustmentsHorizontalIcon className="w-6 h-6 mr-2" />
+              <HiOutlineAdjustments className="w-6 h-6 mr-2" />
               <p>Profil</p>
             </Dropdown.Item>
           </Link>
           <Dropdown.Divider />
           <Dropdown.Item onClick={logout} className="text-red-600">
-            <ArrowLeftOnRectangleIcon className="w-6 h-6 mr-2" />
+            <HiArrowLeftOnRectangle className="w-6 h-6 mr-2" />
             <p>Se déconnecter</p>
           </Dropdown.Item>
         </Dropdown>
+        <FlowbiteNavbar.Toggle />
       </div>
     </FlowbiteNavbar>
   );

@@ -1,18 +1,15 @@
 import React from "react";
+import { HiOutlineHome, HiOutlineMap, HiOutlineTruck, HiOutlineUserGroup } from "react-icons/hi";
+import {
+  HiOutlineCalendarDays,
+  HiOutlineCircleStack,
+  HiOutlineClipboardDocumentList,
+  HiOutlineExclamationTriangle,
+  HiOutlineRocketLaunch,
+} from "react-icons/hi2";
 import { Link } from "react-router-dom";
 import { Sidebar as FlowbiteSidebar } from "flowbite-react";
 
-import {
-  CalendarDaysIcon,
-  CircleStackIcon,
-  ClipboardDocumentListIcon,
-  ExclamationTriangleIcon,
-  HomeIcon,
-  MapIcon,
-  RocketLaunchIcon,
-  TruckIcon,
-  UserGroupIcon,
-} from "@heroicons/react/24/outline";
 import { useAuth } from "@hooks/auth";
 import { ADMINISTRATOR, INSTRUCTOR, TECHNICIAN, USER } from "@typing/api/auth/users";
 
@@ -23,60 +20,46 @@ const Sidebar: React.FC = () => {
     <FlowbiteSidebar className="mr-5 shadow-lg rounded-lg">
       <FlowbiteSidebar.Items>
         <FlowbiteSidebar.ItemGroup>
-          <Link to={"/"}>
-            <FlowbiteSidebar.Item icon={HomeIcon}>
-              <p>Accueil</p>
-            </FlowbiteSidebar.Item>
-          </Link>
-          <Link to={"/stations"}>
-            <FlowbiteSidebar.Item icon={MapIcon}>
-              <p>Stations</p>
-            </FlowbiteSidebar.Item>
-          </Link>
-          <Link to={"#"}>
-            <FlowbiteSidebar.Item icon={CalendarDaysIcon}>
-              <p>Évènements</p>
-            </FlowbiteSidebar.Item>
-          </Link>
+          <FlowbiteSidebar.Item as={Link} to="/" icon={HiOutlineHome}>
+            <p>Accueil</p>
+          </FlowbiteSidebar.Item>
+          <FlowbiteSidebar.Item as={Link} to="/stations" icon={HiOutlineMap}>
+            <p>Stations</p>
+          </FlowbiteSidebar.Item>
+          <FlowbiteSidebar.Item as={Link} to="#" icon={HiOutlineCalendarDays}>
+            <p>Évènements</p>
+          </FlowbiteSidebar.Item>
           {user.role === USER && (
-            <Link to={"#"}>
-              <FlowbiteSidebar.Item icon={ClipboardDocumentListIcon}>
-                <p>Mes passages</p>
-              </FlowbiteSidebar.Item>
-            </Link>
+            <FlowbiteSidebar.Item as={Link} to="#" icon={HiOutlineClipboardDocumentList}>
+              <p>Mes passages</p>
+            </FlowbiteSidebar.Item>
           )}
         </FlowbiteSidebar.ItemGroup>
         {user.role === ADMINISTRATOR && (
           <FlowbiteSidebar.ItemGroup>
-            <FlowbiteSidebar.Collapse icon={CircleStackIcon} label="Administration">
-              <Link to={"#"}>
-                <FlowbiteSidebar.Item icon={UserGroupIcon}>
-                  <p>Utilisateurs</p>
-                </FlowbiteSidebar.Item>
-              </Link>
-              <Link to={"#"}>
-                <FlowbiteSidebar.Item icon={RocketLaunchIcon}>
-                  <p>Courses</p>
-                </FlowbiteSidebar.Item>
-              </Link>
-              <Link to={"#"}>
-                <FlowbiteSidebar.Item icon={TruckIcon}>
-                  <p>Véhicules</p>
-                </FlowbiteSidebar.Item>
-              </Link>
+            <FlowbiteSidebar.Collapse icon={HiOutlineCircleStack} label="Administration">
+              <FlowbiteSidebar.Item as={Link} to="#" icon={HiOutlineUserGroup}>
+                <p>Utilisateurs</p>
+              </FlowbiteSidebar.Item>
+              <FlowbiteSidebar.Item as={Link} to="#" icon={HiOutlineRocketLaunch}>
+                <p>Courses</p>
+              </FlowbiteSidebar.Item>
+              <FlowbiteSidebar.Item as={Link} to="#" icon={HiOutlineTruck}>
+                <p>Véhicules</p>
+              </FlowbiteSidebar.Item>
             </FlowbiteSidebar.Collapse>
           </FlowbiteSidebar.ItemGroup>
         )}
         {user.role === INSTRUCTOR && (
           <FlowbiteSidebar.ItemGroup>
-            <FlowbiteSidebar.Item icon={ClipboardDocumentListIcon}>
+            <FlowbiteSidebar.Item as={Link} to="#" icon={HiOutlineClipboardDocumentList}>
               <p>Candidats</p>
             </FlowbiteSidebar.Item>
           </FlowbiteSidebar.ItemGroup>
         )}
         {user.role === TECHNICIAN && (
           <FlowbiteSidebar.ItemGroup>
-            <FlowbiteSidebar.Item icon={ExclamationTriangleIcon}>
+            <FlowbiteSidebar.Item as={Link} to="#" icon={HiOutlineExclamationTriangle}>
               <p>Signalements</p>
             </FlowbiteSidebar.Item>
           </FlowbiteSidebar.ItemGroup>
