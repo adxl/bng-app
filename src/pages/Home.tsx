@@ -1,10 +1,9 @@
 import React from "react";
-import { Button } from "flowbite-react";
 
 import { useAuth } from "@hooks/auth";
 
 const Home: React.FC = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
 
   return (
     <React.Fragment>
@@ -12,10 +11,6 @@ const Home: React.FC = () => {
       <small>
         {user.firstName} {user.lastName}
       </small>
-
-      <Button color="failure" onClick={logout}>
-        Se déconnecter
-      </Button>
     </React.Fragment>
   );
 };

@@ -2,6 +2,8 @@ import type { ElementType } from "react";
 import React from "react";
 import { Navigate } from "react-router-dom";
 
+import Navbar from "@components/nav/navbar";
+import Sidebar from "@components/nav/sidebar";
 import type { UserRole } from "@typing/api/users";
 
 import { useAuth } from "../hooks/auth";
@@ -21,8 +23,14 @@ const Guard: React.FC<Props> = ({ el: Element, roles }) => {
   }
 
   return (
-    <div>
-      <Element />
+    <div className="flex flex-col">
+      <Navbar />
+      <div className="flex">
+        <Sidebar />
+        <div>
+          <Element />
+        </div>
+      </div>
     </div>
   );
 };
