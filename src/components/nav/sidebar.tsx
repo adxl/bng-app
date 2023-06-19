@@ -30,9 +30,7 @@ const Sidebar: React.FC = () => {
             <p>Évènements</p>
           </FlowbiteSidebar.Item>
           {user.role === USER && (
-            <FlowbiteSidebar.Item as={Link} to="#" icon={HiOutlineClipboardDocumentList}>
               <p>Mes passages</p>
-            </FlowbiteSidebar.Item>
           )}
         </FlowbiteSidebar.ItemGroup>
         {user.role === ADMINISTRATOR && (
@@ -46,6 +44,9 @@ const Sidebar: React.FC = () => {
               </FlowbiteSidebar.Item>
               <FlowbiteSidebar.Item as={Link} to="#" icon={HiOutlineTruck}>
                 <p>Véhicules</p>
+              </FlowbiteSidebar.Item>
+              <FlowbiteSidebar.Item as={Link} to="/stations/manage" icon={TruckIcon}>
+                <p>Stations</p>
               </FlowbiteSidebar.Item>
             </FlowbiteSidebar.Collapse>
           </FlowbiteSidebar.ItemGroup>
