@@ -4,7 +4,7 @@ import { Navigate } from "react-router-dom";
 
 import Navbar from "@components/nav/navbar";
 import Sidebar from "@components/nav/sidebar";
-import type { UserRole } from "@typing/api/users";
+import type { UserRole } from "@typing/api/auth/users";
 
 import { useAuth } from "../hooks/auth";
 

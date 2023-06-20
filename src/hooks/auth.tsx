@@ -3,7 +3,7 @@ import React from "react";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
 import { getCurrentUser, login } from "@api/auth/auth";
-import type { User } from "@typing/api/users";
+import type { User } from "@typing/api/auth/users";
 
 type AuthContextType = {
   _token: string | null;
