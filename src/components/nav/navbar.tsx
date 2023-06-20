@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { Avatar, Badge, Dropdown, Navbar as FlowbiteNavbar } from "flowbite-react";
 
 import { useAuth } from "@hooks/auth";
+import { isUser } from "@typing/api/auth/users";
 
 const Navbar: React.FC = () => {
   const { user, logout } = useAuth();
@@ -15,22 +16,32 @@ const Navbar: React.FC = () => {
         <img src="/logo.png" alt="BNG Logo" className="w-12 h-12 mr-3" />
       </FlowbiteNavbar.Brand>
       <div className="flex md:order-2 items-center">
+        <FlowbiteNavbar.Toggle />
+        {isUser(user) && (
+          <div className="flex items-center">
+            <div className="flex mr-5">
+              <img src="/cap.png" alt="cap" className="w-6 h-6 mr-2" />
+              <span>200</span>
+            </div>
+            <div className="flex mr-2">
+              <img src="/medaille-dor.png" alt="Médaille d'or" className="w-6 h-6" />
+              <span>5</span>
+            </div>
+            <div className="flex mr-2">
+              <img src="/medaille-dargent.png" alt="Médaille d'or" className="w-6 h-6" />
+              <span>6</span>
+            </div>
+            <div className="flex mr-2">
+              <img src="/medaille-de-bronze.png" alt="Médaille d'or" className="w-6 h-6" />
+              <span>1</span>
+            </div>
+          </div>
+        )}
+
         <Badge color="indigo" className="mr-3">
           {user.role}
         </Badge>
-        <Dropdown
-          inline
-          label={
-            <Avatar alt="User" img="/jetpack.png" rounded>
-              <div className="flex mr-5">
-                <img src="/cap.png" alt="cap" className="w-6 h-6 mr-2" />
-                <span>200</span>
-              </div>
-            </Avatar>
-          }
-          className="rounded-md"
-          arrowIcon={false}
-        >
+        <Dropdown inline label={<Avatar alt="User" img="/jetpack.png" rounded />} className="rounded-md" arrowIcon={false}>
           <Dropdown.Header>
             <span className="block text-sm">
               Bonjour&nbsp;
@@ -53,21 +64,6 @@ const Navbar: React.FC = () => {
             <p>Se déconnecter</p>
           </Dropdown.Item>
         </Dropdown>
-        <FlowbiteNavbar.Toggle />
-        <div className="flex items-center">
-          <div className="flex mr-2">
-            <img src="/medaille-dor.png" alt="Médaille d'or" className="w-6 h-6" />
-            <span>5</span>
-          </div>
-          <div className="flex mr-2">
-            <img src="/medaille-dargent.png" alt="Médaille d'or" className="w-6 h-6" />
-            <span>6</span>
-          </div>
-          <div className="flex mr-2">
-            <img src="/medaille-de-bronze.png" alt="Médaille d'or" className="w-6 h-6" />
-            <span>1</span>
-          </div>
-        </div>
       </div>
     </FlowbiteNavbar>
   );

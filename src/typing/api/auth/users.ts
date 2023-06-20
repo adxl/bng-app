@@ -13,3 +13,14 @@ export type User = {
   role: UserRole | null;
   createdAt: Date | null;
 };
+
+// test if a user has the role
+export const isUser = (user: User): boolean => user.role === USER;
+export const isAdmin = (user: User): boolean => user.role === ADMINISTRATOR;
+export const isTechnician = (user: User): boolean => user.role === TECHNICIAN;
+export const isInstructor = (user: User): boolean => user.role === INSTRUCTOR;
+export const isOrganizer = (user: User): boolean => user.role === ORGANIZER;
+
+// test if the user has access to front/back office
+export const hasFrontScope = (user: User): boolean => isUser(user);
+export const hasBackScope = (user: User): boolean => isAdmin(user) || isTechnician(user) || isInstructor(user) || isOrganizer(user);

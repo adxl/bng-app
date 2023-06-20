@@ -13,19 +13,14 @@ export const getOneStation = (id: string): Response<Station> => {
   return _get(URL + `/${id}`);
 };
 
-export const createStation = (name: string, longitude: number, latitude: number): Response<void> => {
-  return _post(URL, { name, longitude, latitude });
+// TODO: add DTO
+export const createStation = (data: Record<string, any>): Response<void> => {
+  return _post(URL, data);
 };
 
-export const updateStation = (
-  id: string,
-  name: string,
-  longitude: number,
-  latitude: number,
-  active: boolean,
-  eventId: string
-): Response<void> => {
-  return _patch(URL + `/${id}`, { name, longitude, latitude, active, eventId });
+// TODO: add DTO
+export const updateStation = (id: string, data: Record<string, any>): Response<void> => {
+  return _patch(URL + `/${id}`, data);
 };
 
 export const deleteStation = (id: string): Response<void> => {

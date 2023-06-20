@@ -13,8 +13,8 @@ const Login = React.lazy(() => import("@pages/Login"));
 
 const StationsMap = React.lazy(() => import("@pages/stations/StationsMap"));
 const StationsList = React.lazy(() => import("@pages/stations/StationsList"));
-// const StationsCreate = React.lazy(() => import("@pages/stations/StationsCreate"));
-// const StationsUpdate = React.lazy(() => import("@pages/stations/StationsUpdate"));
+const StationsCreate = React.lazy(() => import("@pages/stations/StationsCreate"));
+const StationsEdit = React.lazy(() => import("@pages/stations/StationsEdit"));
 
 const Placeholder = React.Fragment;
 
@@ -50,8 +50,8 @@ const App: React.FC = () => {
                 </Route>
                 <Route path="stations" element={<Outlet />}>
                   <Route index element={<Guard el={StationsList} roles={[ADMINISTRATOR, TECHNICIAN, INSTRUCTOR, ORGANIZER]} />} />
-                  <Route path="create" element={<Guard el={Placeholder} roles={[TECHNICIAN]} />} />
-                  <Route path="edit" element={<Guard el={Placeholder} roles={[TECHNICIAN]} />} />
+                  <Route path="create" element={<Guard el={StationsCreate} roles={[TECHNICIAN]} />} />
+                  <Route path="edit/:id" element={<Guard el={StationsEdit} roles={[TECHNICIAN]} />} />
                 </Route>
                 <Route path="vehicles" element={<Outlet />}>
                   <Route index element={<Guard el={Placeholder} roles={[ADMINISTRATOR, TECHNICIAN, INSTRUCTOR]} />} />

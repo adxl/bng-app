@@ -5,7 +5,7 @@ import { Card, Timeline } from "flowbite-react";
 
 import { getAllRides } from "@api/gears/rides";
 import { useAuth } from "@hooks/auth";
-import { ADMINISTRATOR } from "@typing/api/auth/users";
+import { isAdmin } from "@typing/api/auth/users";
 import type { Event } from "@typing/api/events/events";
 import type { Ride } from "@typing/api/gears/rides";
 
@@ -27,18 +27,14 @@ const Home: React.FC = () => {
       <Card className="w-full mb-5">
         <h5 className="text-2xl font-bold">Bienvenue sur Board N&apos; Go !</h5>
       </Card>
-      {user.role === ADMINISTRATOR && (
+      {isAdmin(user) && (
         <div className="w-full grid grid-cols-2 gap-4">
           <Card className="flex items-center row-span-2">
             <h5 className="text-xl font-medium">Évènements</h5>
             <Calendar
               className="border-none"
               tileClassName={({ date }) => {
-                if (
-                  events.find(
-                    (event) => new Date(event.startsAt).toLocaleDateString("fr-FR") === date.toLocaleDateString("fr-FR")
-                  )
-                ) {
+                if (events.find((event) => new Date(event.startsAt).toLocaleDateString("fr-FR") === date.toLocaleDateString("fr-FR"))) {
                   return "highlight";
                 }
               }}
