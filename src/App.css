@@ -30,3 +30,11 @@
   width: 30px;
   height: 30px;
 }
+
+/* Calendar date highlights */
+
+.highlight {
+  font-weight: 600;
+  background-color: rgb(117, 91, 235);
+  border-radius: 5px;
+}

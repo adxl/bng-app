@@ -18,7 +18,19 @@ const Navbar: React.FC = () => {
         <Badge color="indigo" className="mr-3">
           {user.role}
         </Badge>
-        <Dropdown inline label={<Avatar alt="User" img="/jetpack.png" rounded />} className="rounded-md">
+        <Dropdown
+          inline
+          label={
+            <Avatar alt="User" img="/jetpack.png" rounded>
+              <div className="flex mr-5">
+                <img src="/cap.png" alt="cap" className="w-6 h-6 mr-2" />
+                <span>200</span>
+              </div>
+            </Avatar>
+          }
+          className="rounded-md"
+          arrowIcon={false}
+        >
           <Dropdown.Header>
             <span className="block text-sm">
               Bonjour&nbsp;
@@ -42,6 +54,20 @@ const Navbar: React.FC = () => {
           </Dropdown.Item>
         </Dropdown>
         <FlowbiteNavbar.Toggle />
+        <div className="flex items-center">
+          <div className="flex mr-2">
+            <img src="/medaille-dor.png" alt="Médaille d'or" className="w-6 h-6" />
+            <span>5</span>
+          </div>
+          <div className="flex mr-2">
+            <img src="/medaille-dargent.png" alt="Médaille d'or" className="w-6 h-6" />
+            <span>6</span>
+          </div>
+          <div className="flex mr-2">
+            <img src="/medaille-de-bronze.png" alt="Médaille d'or" className="w-6 h-6" />
+            <span>1</span>
+          </div>
+        </div>
       </div>
     </FlowbiteNavbar>
   );
