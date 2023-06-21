@@ -1,19 +1,14 @@
 import type { EntityReference } from "@typing/api/commons";
 
 export type CreateVehicleDto = {
-  type: EntityReference;
-
   year: number;
-
+  type: EntityReference;
   station: EntityReference;
 };
 
 export type UpdateVehicleDto = {
-  type?: EntityReference;
-
   year?: number;
-
+  type?: EntityReference;
   station?: EntityReference;
-
   active?: boolean;
 };

@@ -8,7 +8,7 @@ import { useAuth } from "@hooks/auth";
 import { isTechnician } from "@typing/api/auth/users";
 import type { Station } from "@typing/api/gears/stations";
 
-const StationsMap: React.FC = () => {
+const StationsList: React.FC = () => {
   const { user } = useAuth();
 
   const [_stations, setStations] = useState<Station[]>([]);
@@ -81,4 +81,4 @@ const StationsMap: React.FC = () => {
   );
 };
 
-export default StationsMap;
+export default StationsList;

@@ -4,7 +4,7 @@ import type { VehicleSkin } from "@typing/api/gears/vehicles-skins";
 
 import type { CreateVehicleSkinDto, UpdateVehicleSkinDto } from "./dto/vehicles-skins.dto";
 
-const URL = import.meta.env.VITE_API_URL + "gears/vehicles-skins";
+const URL = import.meta.env.VITE_API_URL + "/gears/vehicles-skins";
 
 export const getAllSkinss = (): Response<VehicleSkin[]> => {
   return _get(URL);

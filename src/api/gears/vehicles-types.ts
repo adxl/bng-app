@@ -4,7 +4,7 @@ import type { VehicleType } from "@typing/api/gears/vehicles-types";
 
 import type { CreateVehicleTypeDto, UpdateVehicleTypeDto } from "./dto/vehicles-types.dto";
 
-const URL = import.meta.env.VITE_API_URL + "gears/vehicles-types";
+const URL = import.meta.env.VITE_API_URL + "/gears/vehicles-types";
 
 export const getAllTypes = (): Response<VehicleType[]> => {
   return _get(URL);
