@@ -7,6 +7,7 @@ export const ADMINISTRATOR = "ADMINISTRATOR";
 export type UserRole = typeof USER | typeof TECHNICIAN | typeof ORGANIZER | typeof INSTRUCTOR | typeof ADMINISTRATOR;
 
 export type User = {
+  id: string | null;
   email: string | null;
   firstName: string | null;
   lastName: string | null;

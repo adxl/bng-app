@@ -3,6 +3,8 @@ import type { Station } from "@typing/api/gears/stations";
 
 import { _delete, _get, _patch, _post } from "../gateway";
 
+import type { CreateStationDto, UpdateStationDto } from "./dto/stations.dto";
+
 const URL = import.meta.env.VITE_API_URL + "/gears/stations";
 
 export const getAllStations = (): Response<Station[]> => {
@@ -14,12 +16,12 @@ export const getOneStation = (id: string): Response<Station> => {
 };
 
 // TODO: add DTO
-export const createStation = (data: Record<string, any>): Response<void> => {
+export const createStation = (data: CreateStationDto): Response<void> => {
   return _post(URL, data);
 };
 
 // TODO: add DTO
-export const updateStation = (id: string, data: Record<string, any>): Response<void> => {
+export const updateStation = (id: string, data: UpdateStationDto): Response<void> => {
   return _patch(URL + `/${id}`, data);
 };
 

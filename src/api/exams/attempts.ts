@@ -1,6 +1,8 @@
 import { _get, _patch, _post } from "@api/gateway";
 import type { Response } from "@typing/api/axios";
-import type { Attempt, UserAnswer } from "@typing/api/exams/attempts";
+import type { Attempt } from "@typing/api/exams/attempts";
+
+import type { CreateAttemptDto, UpdateAttemptDto } from "./dto/attempts.dto";
 
 const URL = import.meta.env.VITE_API_URL + "/exams/attempts";
 
@@ -12,10 +14,10 @@ export const getOneAttempt = (id: string): Response<Attempt> => {
   return _get(URL + `/${id}`);
 };
 
-export const createAttempt = (examId: string, userId: string): Response<void> => {
-  return _post(URL, { examId, userId });
+export const createAttempt = (data: CreateAttemptDto): Response<void> => {
+  return _post(URL, data);
 };
 
-export const updateAttempt = (id: string, userAnswers: UserAnswer[]): Response<void> => {
-  return _patch(URL + `/${id}`, { userAnswers });
+export const updateAttempt = (id: string, data: UpdateAttemptDto): Response<void> => {
+  return _patch(URL + `/${id}`, data);
 };
