@@ -4,12 +4,12 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { Alert, Button, Card, Label, Select, TextInput, ToggleSwitch } from "flowbite-react";
 
 import { getAllStations } from "@api/gears/stations";
-import { getOneVehicle, updateVehicle } from "@api/gears/vehicles";
+import { deleteVehicle, getOneVehicle, updateVehicle } from "@api/gears/vehicles";
 import { getAllTypes } from "@api/gears/vehicles-types";
 import type { Station } from "@typing/api/gears/stations";
 import type { VehicleType } from "@typing/api/gears/vehicles-types";
 
-const StationsEdit: React.FC = () => {
+const VehiclesEdit: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -58,13 +58,13 @@ const StationsEdit: React.FC = () => {
       .catch(() => setError("Une erreur est survenue"));
   };
 
-  // const handleDelete = () => {
-  //   deleteStation(id!)
-  //     .then(() => {
-  //       navigate("/admin/stations");
-  //     })
-  //     .catch(() => setError("Une erreur est survenue"));
-  // };
+  const handleDelete = () => {
+    deleteVehicle(id!)
+      .then(() => {
+        navigate("/admin/vehicles");
+      })
+      .catch(() => setError("Une erreur est survenue"));
+  };
 
   return (
     <div>
@@ -72,9 +72,9 @@ const StationsEdit: React.FC = () => {
         <Button color="dark">
           <Link to="/admin/vehicles">Retour</Link>
         </Button>
-        {/* <Button color="failure" onClick={handleDelete}> */}
-        {/*   Supprimer */}
-        {/* </Button> */}
+        <Button color="failure" onClick={handleDelete}>
+          Supprimer
+        </Button>
       </div>
       <Card>
         {_error && (
@@ -129,4 +129,4 @@ const StationsEdit: React.FC = () => {
   );
 };
 
-export default StationsEdit;
+export default VehiclesEdit;
