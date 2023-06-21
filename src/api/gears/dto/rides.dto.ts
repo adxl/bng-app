@@ -1,11 +1,13 @@
+import type { EntityReference } from "@typing/api/commons";
+
 export type CreateRideDto = {
-  vehicle: string;
+  vehicle: EntityReference;
 
   userId: string;
 };
 
 export type UpdateRideInformationDto = {
-  endStation: string;
+  endStation: EntityReference;
 };
 
 export type UpdateRideReviewDto = {

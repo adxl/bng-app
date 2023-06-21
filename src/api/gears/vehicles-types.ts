@@ -2,7 +2,7 @@ import { _delete, _get, _post } from "@api/gateway";
 import type { Response } from "@typing/api/axios";
 import type { VehicleType } from "@typing/api/gears/vehicles-types";
 
-import type { CreateVehicleTypeDto, UpdateVehicleTypeDto } from "./dto/vehicles-types";
+import type { CreateVehicleTypeDto, UpdateVehicleTypeDto } from "./dto/vehicles-types.dto";
 
 const URL = import.meta.env.VITE_API_URL + "gears/vehicles-types";
 

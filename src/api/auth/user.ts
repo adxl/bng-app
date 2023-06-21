@@ -6,7 +6,7 @@ import type { UpdatePasswordDto, UpdateProfileDto, UpdateRoleDto } from "./dto/u
 
 const URL = import.meta.env.VITE_API_URL + "/auth/users";
 
-export const getUsers = (): Response<User[]> => {
+export const getAllUsers = (): Response<User[]> => {
   return _get(URL);
 };
 
