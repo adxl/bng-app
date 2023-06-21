@@ -6,9 +6,9 @@ export enum ReportStatus {
   DONE = "Terminé",
 }
 
-export class Report {
+export type Report = {
   id: string;
   ride: Ride;
   status: ReportStatus;
   createdAt: Date;
-}
+};
