@@ -69,7 +69,7 @@ export function AuthProvider({ children }: IProps): ReactElement {
 
   const handleLogin = (email: string, password: string): Promise<void> => {
     return new Promise((resolve, reject) => {
-      login(email, password)
+      login({ email, password })
         .then(({ data: token }) => {
           setToken("Bearer " + token);
           resolve();

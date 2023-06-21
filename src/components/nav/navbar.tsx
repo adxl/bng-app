@@ -13,7 +13,7 @@ const Navbar: React.FC = () => {
   return (
     <FlowbiteNavbar className="mb-5 bg-gray-50 shadow-lg rounded-md">
       <FlowbiteNavbar.Brand as={Link} to="/">
-        <img src="/logo.png" alt="BNG Logo" className="w-12 h-12 mr-3" />
+        <img src="/logo.png" alt="BNG Logo" className="w-16 h-16 mr-3" />
       </FlowbiteNavbar.Brand>
       <div className="flex md:order-2 items-center">
         <FlowbiteNavbar.Toggle />
