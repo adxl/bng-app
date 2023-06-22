@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Outlet, Route, Routes } from "react-router-dom
 import { Spinner } from "flowbite-react";
 
 import Guard from "@components/Guard";
+import UsersList from "@pages/users/UsersList";
 import { ADMINISTRATOR, INSTRUCTOR, ORGANIZER, TECHNICIAN, USER } from "@typing/api/auth/users";
 
 import { AuthProvider } from "./hooks/auth";
@@ -41,7 +42,7 @@ const App: React.FC = () => {
               {/* ROUTES FOR BACK OFFICE */}
               <Route path="/admin" element={<Outlet />}>
                 <Route path="users" element={<Outlet />}>
-                  <Route index element={<Guard el={Placeholder} roles={[ADMINISTRATOR]} />} />
+                  <Route index element={<Guard el={UsersList} roles={[ADMINISTRATOR]} />} />
                   <Route path="create" element={<Guard el={Placeholder} roles={[ADMINISTRATOR]} />} />
                   <Route path="edit" element={<Guard el={Placeholder} roles={[ADMINISTRATOR]} />} />
                 </Route>
