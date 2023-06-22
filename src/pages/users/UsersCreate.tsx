@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { HiArrowLeft, HiInformationCircle } from "react-icons/hi";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Alert, Button, Card, Label, Select, TextInput } from "flowbite-react";
 
 import { register } from "@api/auth/auth";
@@ -32,7 +32,7 @@ const UsersCreate: React.FC = () => {
 
     register(data)
       .then(() => {
-        return <Navigate to="/admin/users" />;
+        window.location.href = "/admin/users";
       })
       .catch(() => setError("une erreur est survenue"));
   }

@@ -52,7 +52,7 @@ const Navbar: React.FC = () => {
             </span>
             <span className="block truncate text-sm font-medium">{user.email}</span>
           </Dropdown.Header>
-          <Link to={"#"}>
+          <Link to={"/profile"}>
             <Dropdown.Item>
               <HiOutlineAdjustments className="w-6 h-6 mr-2" />
               <p>Profil</p>
