@@ -8,8 +8,8 @@ import { useAuth } from "@hooks/auth";
 const Profile: React.FC = () => {
   const { user, refreshUser } = useAuth();
 
-  const [_firstName, setFirstName] = useState<string>(user.firstName ?? "");
-  const [_lastName, setLastName] = useState<string>(user.lastName ?? "");
+  const [_firstName, setFirstName] = useState<string>(user.firstName!);
+  const [_lastName, setLastName] = useState<string>(user.lastName!);
 
   const [_odlPwd, setOldPwd] = useState<string>("");
   const [_newPwd, setNewPwd] = useState<string>("");
@@ -66,7 +66,7 @@ const Profile: React.FC = () => {
           <b>Nom : </b> {user.lastName}
         </p>
         <p className="font-normal text-gray-800">
-          <b>Membre depuis : </b> {user.createdAt && new Date(user.createdAt).toLocaleDateString("fr-FR")}
+          <b>Membre depuis : </b> {new Date(user.createdAt!).toLocaleDateString("fr-FR")}
         </p>
       </Card>
       <Accordion className="w-full">
@@ -79,14 +79,14 @@ const Profile: React.FC = () => {
                   <div className="text-start mb-2 block">
                     <Label value="Prénom" />
                   </div>
-                  <TextInput type="text" required defaultValue={user.firstName ?? ""} onChange={(e) => setFirstName(e.target.value)} />
+                  <TextInput type="text" required defaultValue={user.firstName!} onChange={(e) => setFirstName(e.target.value)} />
                 </div>
 
                 <div>
                   <div className="text-start mb-2 block">
                     <Label value="Nom" />
                   </div>
-                  <TextInput type="text" required defaultValue={user.lastName ?? ""} onChange={(e) => setLastName(e.target.value)} />
+                  <TextInput type="text" required defaultValue={user.lastName!} onChange={(e) => setLastName(e.target.value)} />
                 </div>
 
                 <Button color="dark" type="submit">

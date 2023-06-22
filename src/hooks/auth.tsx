@@ -18,6 +18,7 @@ const defaultAuthContext = {
   _token: "",
   setToken: () => void 0,
   user: {
+    id: null,
     firstName: null,
     lastName: null,
     email: null,

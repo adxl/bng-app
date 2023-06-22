@@ -6,7 +6,7 @@ export const ADMINISTRATOR = "ADMINISTRATOR";
 
 export type UserRole = typeof USER | typeof TECHNICIAN | typeof ORGANIZER | typeof INSTRUCTOR | typeof ADMINISTRATOR;
 
-export const RolesList = [USER, TECHNICIAN, ORGANIZER, INSTRUCTOR, ADMINISTRATOR];
+export const RolesList: UserRole[] = [USER, TECHNICIAN, ORGANIZER, INSTRUCTOR, ADMINISTRATOR];
 
 export type User = {
   id: string | null;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { HiArrowLeft, HiInformationCircle } from "react-icons/hi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Alert, Button, Card, Label, Select, TextInput } from "flowbite-react";
 
 import { register } from "@api/auth/auth";
@@ -8,10 +8,13 @@ import type { RegisterDto } from "@api/auth/dto/auth.dto";
 import { RolesList } from "@typing/api/auth/users";
 
 const UsersCreate: React.FC = () => {
+  const navigate = useNavigate();
+
   const [_email, setEmail] = useState<string>("");
   const [_firstName, setFirstName] = useState<string>("");
   const [_lastName, setLastName] = useState<string>("");
   const [_role, setRole] = useState<string>(RolesList[0]);
+
   const [_error, setError] = useState<string>("");
 
   useEffect(() => {
@@ -31,9 +34,7 @@ const UsersCreate: React.FC = () => {
     };
 
     register(data)
-      .then(() => {
-        window.location.href = "/admin/users";
-      })
+      .then(() => navigate("/admin/users"))
       .catch(() => setError("une erreur est survenue"));
   }
 

@@ -5,7 +5,6 @@ import { Alert, Button, Select, Table, TextInput } from "flowbite-react";
 
 import { deleteUser, getAllUsers, updateRole } from "@api/auth/user";
 import { useAuth } from "@hooks/auth";
-import type { UserRole } from "@typing/api/auth/users";
 import { type User, RolesList } from "@typing/api/auth/users";
 
 const UsersList: React.FC = () => {
@@ -19,7 +18,7 @@ const UsersList: React.FC = () => {
 
   useEffect(() => {
     fetchUsers();
-  }, [user]);
+  }, []);
 
   useEffect(() => {
     setTimeout(() => {
@@ -32,10 +31,12 @@ const UsersList: React.FC = () => {
     setEmail(event.currentTarget.value);
   }
 
-  function handleRoleChange(id: string | null, event: React.ChangeEvent<HTMLSelectElement>): void {
-    // find a better solution for id parameter
-    const newRole = RolesList.find((role) => role === event.currentTarget.value) as UserRole;
-    updateRole(id ?? "", { role: newRole })
+  function handleRoleChange(id: string, roleId: string): void {
+    const newRole = RolesList.find((role) => role === roleId);
+
+    if (!newRole) return setError("Rôle invalide");
+
+    updateRole(id, { role: newRole })
       .then(() => {
         fetchUsers();
         setSuccess("Le rôle a bien été modifié");
@@ -43,8 +44,8 @@ const UsersList: React.FC = () => {
       .catch(() => setError("Une erreur est survenue"));
   }
 
-  function handleRemoveUser(id: string | null) {
-    deleteUser(id ?? "")
+  function handleRemoveUser(id: string) {
+    deleteUser(id)
       .then(() => {
         fetchUsers();
         setSuccess("L'utilisateur a bien été supprimé");
@@ -68,8 +69,8 @@ const UsersList: React.FC = () => {
       <div className="flex justify-between items-center w-full mb-5">
         <div className="flex items-center">
           <h3 className="text-2xl font-bold mr-2">Utilisateurs</h3>
-          <Link to={"/admin/users/create"}>
-            <Button color={"success"}>
+          <Link to={"create"}>
+            <Button color="success">
               <HiUserAdd className="w-4 h-4" />
               Créer
             </Button>
@@ -104,7 +105,7 @@ const UsersList: React.FC = () => {
                 <Table.Cell>{oneUser.lastName}</Table.Cell>
                 <Table.Cell>
                   {oneUser.role && oneUser.id && (
-                    <Select onChange={(e) => handleRoleChange(oneUser.id, e)} defaultValue={oneUser.role}>
+                    <Select onChange={(e) => handleRoleChange(oneUser.id!, e.target.value)} defaultValue={oneUser.role}>
                       {RolesList.map((role) => (
                         <option value={role} key={role}>
                           {role}
@@ -114,7 +115,7 @@ const UsersList: React.FC = () => {
                   )}
                 </Table.Cell>
                 <Table.Cell>
-                  <Button color={"failure"} onClick={() => handleRemoveUser(oneUser.id)}>
+                  <Button color={"failure"} onClick={() => handleRemoveUser(oneUser.id!)}>
                     <HiOutlineTrash className="w-4 h-4" />
                   </Button>
                 </Table.Cell>

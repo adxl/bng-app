@@ -9,16 +9,16 @@ import { useAuth } from "@hooks/auth";
 import { isUser } from "@typing/api/auth/users";
 import type { Ride } from "@typing/api/gears/rides";
 
-type CalendarEvent = {
-  title: string;
-  start: string;
-  end: string;
-  url: string;
-};
+// type CalendarEvent = {
+//   title: string;
+//   start: string;
+//   end: string;
+//   url: string;
+// };
 
 const Home: React.FC = () => {
   const [rides, setRides] = useState<Ride[]>([]);
-  const [events, setEvents] = useState<CalendarEvent[]>([]);
+  // const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [preferedTypes, setPreferedTypes] = useState<[string, number][]>([]);
   const { user } = useAuth();
 
