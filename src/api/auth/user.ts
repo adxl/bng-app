@@ -27,5 +27,5 @@ export const updateRole = (id: string, data: UpdateRoleDto): Response<void> => {
 };
 
 export const deleteUser = (id: string): Response<void> => {
-  return _delete(URL + `${id}`);
+  return _delete(URL + `/${id}`);
 };

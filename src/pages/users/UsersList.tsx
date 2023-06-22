@@ -3,7 +3,7 @@ import { HiOutlineTrash, HiUserAdd } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import { Button, Select, Table, TextInput } from "flowbite-react";
 
-import { getAllUsers, updateRole } from "@api/auth/user";
+import { deleteUser, getAllUsers, updateRole } from "@api/auth/user";
 import { useAuth } from "@hooks/auth";
 import type { UserRole } from "@typing/api/auth/users";
 import { type User, RolesList } from "@typing/api/auth/users";
@@ -25,9 +25,16 @@ const UsersList: React.FC = () => {
     setEmail(event.currentTarget.value);
   }
 
-  function handleRoleChange(id: string, event: React.ChangeEvent<HTMLSelectElement>): void {
+  function handleRoleChange(id: string | null, event: React.ChangeEvent<HTMLSelectElement>): void {
+    // find a better solution for id parameter
     const newRole = RolesList.find((role) => role === event.currentTarget.value) as UserRole;
-    updateRole(id, { role: newRole }).then();
+    updateRole(id ?? "", { role: newRole }).then();
+  }
+
+  function handleRemoveUser(id: string | null) {
+    deleteUser(id ?? "").then((response) => {
+      response;
+    });
   }
 
   useEffect(() => {
@@ -64,7 +71,7 @@ const UsersList: React.FC = () => {
                 <Table.Cell>{oneUser.firstName}</Table.Cell>
                 <Table.Cell>{oneUser.lastName}</Table.Cell>
                 <Table.Cell>
-                  {oneUser.role && (
+                  {oneUser.role && oneUser.id && (
                     <Select onChange={(e) => handleRoleChange(oneUser.id, e)} defaultValue={oneUser.role}>
                       {RolesList.map((role) => (
                         <option value={role} key={role}>
@@ -75,7 +82,7 @@ const UsersList: React.FC = () => {
                   )}
                 </Table.Cell>
                 <Table.Cell>
-                  <Button color={"failure"}>
+                  <Button color={"failure"} onClick={() => handleRemoveUser(oneUser.id)}>
                     <HiOutlineTrash className="w-4 h-4" />
                   </Button>
                 </Table.Cell>

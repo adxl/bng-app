@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Outlet, Route, Routes } from "react-router-dom
 import { Spinner } from "flowbite-react";
 
 import Guard from "@components/Guard";
+import UsersCreate from "@pages/users/UsersCreate";
 import UsersList from "@pages/users/UsersList";
 import { ADMINISTRATOR, INSTRUCTOR, ORGANIZER, TECHNICIAN, USER } from "@typing/api/auth/users";
 
@@ -43,7 +44,7 @@ const App: React.FC = () => {
               <Route path="/admin" element={<Outlet />}>
                 <Route path="users" element={<Outlet />}>
                   <Route index element={<Guard el={UsersList} roles={[ADMINISTRATOR]} />} />
-                  <Route path="create" element={<Guard el={Placeholder} roles={[ADMINISTRATOR]} />} />
+                  <Route path="create" element={<Guard el={UsersCreate} roles={[ADMINISTRATOR]} />} />
                   <Route path="edit" element={<Guard el={Placeholder} roles={[ADMINISTRATOR]} />} />
                 </Route>
                 <Route path="rides" element={<Outlet />}>
