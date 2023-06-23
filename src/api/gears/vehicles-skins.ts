@@ -6,7 +6,7 @@ import type { CreateVehicleSkinDto, UpdateVehicleSkinDto } from "./dto/vehicles-
 
 const URL = import.meta.env.VITE_API_URL + "/gears/vehicles-skins";
 
-export const getAllSkinss = (): Response<VehicleSkin[]> => {
+export const getAllSkins = (): Response<VehicleSkin[]> => {
   return _get(URL);
 };
 

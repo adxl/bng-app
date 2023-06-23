@@ -10,11 +10,16 @@ export const getAllRides = (): Response<Ride[]> => {
   return _get(URL);
 };
 
+export const getSelfCurrentRide = (id: string): Response<Ride> => {
+  return _get(URL + `/self/${id}`);
+};
+
 export const getOneRide = (id: string): Response<Ride> => {
   return _get(URL + `/${id}`);
 };
 
 export const createRide = (data: CreateRideDto): Response<void> => {
+  console.log(data);
   return _post(URL, data);
 };
 

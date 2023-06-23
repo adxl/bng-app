@@ -4,6 +4,8 @@ export type CreateRideDto = {
   vehicle: EntityReference;
 
   userId: string;
+
+  skin: EntityReference;
 };
 
 export type UpdateRideInformationDto = {
