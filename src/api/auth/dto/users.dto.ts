@@ -1,5 +1,15 @@
 import type { UserRole } from "@typing/api/auth/users";
 
+export type CreateDto = {
+  firstName: string;
+
+  lastName: string;
+
+  email: string;
+
+  role: string;
+};
+
 export type UpdatePasswordDto = {
   oldPwd: string;
 

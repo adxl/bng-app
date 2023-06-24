@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { Button } from "flowbite-react";
 
 import { useAuth } from "../hooks/auth";
@@ -43,7 +43,7 @@ const Login: React.FC = () => {
       <div className="flex items-center max-w-md w-1/2 py-4  rounded-lg">
         <div className="flex flex-col w-full items-center">
           <p className="text-red-600 font-bold mb-10">{_error}</p>
-          <form onSubmit={handleLogin} className="flex flex-col w-full items-center">
+          <form onSubmit={handleLogin} className="flex flex-col w-full items-center mb-2">
             <div className="mb-6">
               <label htmlFor="email" className="block mb-2 text-sm font-medium text-left">
                 Email :
@@ -74,6 +74,9 @@ const Login: React.FC = () => {
               Se connecter
             </Button>
           </form>
+          <Link to={"/register"} className="text-md underline">
+            <small>Créer un compte</small>
+          </Link>
         </div>
       </div>
     </div>

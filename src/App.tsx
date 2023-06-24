@@ -4,6 +4,7 @@ import { Spinner } from "flowbite-react";
 
 import Guard from "@components/Guard";
 import Profile from "@pages/Profile";
+import Register from "@pages/Register";
 import UsersCreate from "@pages/users/UsersCreate";
 import UsersList from "@pages/users/UsersList";
 import { ADMINISTRATOR, INSTRUCTOR, ORGANIZER, TECHNICIAN, USER } from "@typing/api/auth/users";
@@ -36,6 +37,7 @@ const App: React.FC = () => {
           <Router>
             <Routes>
               <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
 
               {/* ROUTES FOR FRONT OFFICE  */}
               <Route path="/" element={<Outlet />}>

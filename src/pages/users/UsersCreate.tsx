@@ -3,8 +3,8 @@ import { HiArrowLeft, HiInformationCircle } from "react-icons/hi";
 import { Link, useNavigate } from "react-router-dom";
 import { Alert, Button, Card, Label, Select, TextInput } from "flowbite-react";
 
-import { register } from "@api/auth/auth";
-import type { RegisterDto } from "@api/auth/dto/auth.dto";
+import type { CreateDto } from "@api/auth/dto/users.dto";
+import { createUser } from "@api/auth/user";
 import { RolesList } from "@typing/api/auth/users";
 
 const UsersCreate: React.FC = () => {
@@ -26,14 +26,14 @@ const UsersCreate: React.FC = () => {
   function handleSubmit(e: React.FormEvent): void {
     e.preventDefault();
 
-    const data: RegisterDto = {
+    const data: CreateDto = {
       firstName: _firstName,
       lastName: _lastName,
       email: _email,
       role: _role,
     };
 
-    register(data)
+    createUser(data)
       .then(() => navigate("/admin/users"))
       .catch(() => setError("une erreur est survenue"));
   }

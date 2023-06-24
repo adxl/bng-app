@@ -1,8 +1,8 @@
-import { _delete, _get, _patch } from "@api/gateway";
+import { _delete, _get, _patch, _post } from "@api/gateway";
 import type { User } from "@typing/api/auth/users";
 import type { Response } from "@typing/api/axios";
 
-import type { UpdatePasswordDto, UpdateProfileDto, UpdateRoleDto } from "./dto/users.dto";
+import type { CreateDto, UpdatePasswordDto, UpdateProfileDto, UpdateRoleDto } from "./dto/users.dto";
 
 const URL = import.meta.env.VITE_API_URL + "/auth/users";
 
@@ -12,6 +12,12 @@ export const getAllUsers = (): Response<User[]> => {
 
 export const getOneUser = (id: string): Response<User> => {
   return _get(URL + `/${id}`);
+};
+
+export const createUser = (data: CreateDto): Response<unknown> => {
+  console.log("api", data);
+
+  return _post(URL, data);
 };
 
 export const updatePassword = (id: string, data: UpdatePasswordDto): Response<void> => {
