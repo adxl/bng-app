@@ -3,7 +3,7 @@ import React from "react";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
 import { getCurrentUser, login } from "@api/auth/auth";
-import type { User } from "@typing/api/users";
+import type { User } from "@typing/api/auth/users";
 
 type AuthContextType = {
   _token: string | null;
@@ -18,6 +18,7 @@ const defaultAuthContext = {
   _token: "",
   setToken: () => void 0,
   user: {
+    id: null,
     firstName: null,
     lastName: null,
     email: null,
@@ -69,7 +70,7 @@ export function AuthProvider({ children }: IProps): ReactElement {
 
   const handleLogin = (email: string, password: string): Promise<void> => {
     return new Promise((resolve, reject) => {
-      login(email, password)
+      login({ email, password })
         .then(({ data: token }) => {
           setToken("Bearer " + token);
           resolve();

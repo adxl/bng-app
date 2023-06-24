@@ -1,7 +1,9 @@
+import type { User } from "@typing/api/auth/users";
 import type { Response } from "@typing/api/axios";
-import type { User } from "@typing/api/users";
 
 import { _get, _post } from "../gateway";
+
+import type { LoginDto, RegisterDto } from "./dto/auth.dto";
 
 const URL = import.meta.env.VITE_API_URL + "/auth/account";
 
@@ -11,13 +13,11 @@ export const getCurrentUser = (): Response<User> => {
 };
 
 // TODO: ADD REGISTER RETURN TYPE
-export const register = (name: string, email: string, password: string): Response<unknown> => {
-  const data = { name, email, password };
+export const register = (data: RegisterDto): Response<unknown> => {
   return _post(URL + "/register", data);
 };
 
 // TODO: ADD LOGIN RETURN TYPE
-export const login = (email: string, password: string): Response<unknown> => {
-  const data = { email, password };
+export const login = (data: LoginDto): Response<unknown> => {
   return _post(URL + "/login", data);
 };

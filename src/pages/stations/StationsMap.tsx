@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { MapContainer, Marker, Popup, TileLayer, useMapEvents } from "react-leaflet";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { Button, Card } from "flowbite-react";
 
-import { getAllStations } from "@api/gears";
+import { getAllStations } from "@api/gears/stations";
 import type { Station } from "@typing/api/gears/stations";
 
 import "leaflet/dist/leaflet.css";
@@ -17,7 +17,6 @@ const StationsMap: React.FC = () => {
 
   const handleSelectStation = (id: string) => {
     const station = _stations.find((station) => station.id === id);
-    console.log(station);
     setSelectedStation(station as Station);
   };
 
