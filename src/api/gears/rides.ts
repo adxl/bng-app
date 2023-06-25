@@ -10,8 +10,8 @@ export const getAllRides = (): Response<Ride[]> => {
   return _get(URL);
 };
 
-export const getSelfCurrentRide = (id: string): Response<Ride> => {
-  return _get(URL + `/self/${id}`);
+export const getSelfCurrentRide = (): Response<Ride> => {
+  return _get(URL + `/current`);
 };
 
 export const getOneRide = (id: string): Response<Ride> => {

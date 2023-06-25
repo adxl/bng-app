@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { HiInformationCircle, HiStar } from "react-icons/hi";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import { log } from "console";
-import { Accordion, Alert, Button, Card, Label, Modal, Rating, Select, Textarea } from "flowbite-react";
+import { Accordion, Alert, Button, Card, Label, Modal, Select, Textarea, TextInput } from "flowbite-react";
 import Lottie from "lottie-react";
 
 import { createRide, endRide, getSelfCurrentRide, reviewRide } from "@api/gears/rides";
@@ -70,7 +69,7 @@ const StationsMap: React.FC = () => {
   };
 
   const handleReservationSubmit = () => {
-    createRide({ vehicle: _selectedVehicle!, userId: user.id!, skin: _selectedSkin!, startStation: _selectedStation! })
+    createRide({ vehicle: _selectedVehicle!, userId: user.id!, skin: _selectedSkin! })
       .then(() => {
         setOpenModal(false);
         setSuccess("Réservation effectuée !");
@@ -100,8 +99,7 @@ const StationsMap: React.FC = () => {
   };
 
   function updateRide() {
-    setRide(null);
-    getSelfCurrentRide(user.id!)
+    getSelfCurrentRide()
       .then((response) => {
         setRide(response.data);
       })
@@ -115,7 +113,7 @@ const StationsMap: React.FC = () => {
           <p>{_success}</p>
         </Alert>
       )}
-      {!_ride ? (
+      {_ride ? (
         <>
           <div id="map" className="w-full">
             <MapContainer center={[48.865, 2.335]} zoom={12} scrollWheelZoom={false} className="z-0">
@@ -156,15 +154,15 @@ const StationsMap: React.FC = () => {
                   </Card>
                 ))}
               </div>
-              <form onSubmit={handleReservationSubmit}>
-                <Modal show={_openModal} onClose={() => setOpenModal(false)} className="z-10">
-                  <Modal.Header>
-                    Réservation du véhicule{" "}
-                    <b>
-                      {_selectedVehicle?.type.name} #{_selectedVehicle?.id.substring(30)}
-                    </b>
-                  </Modal.Header>
-                  <Modal.Body>
+              <Modal show={_openModal} onClose={() => setOpenModal(false)} className="z-10">
+                <Modal.Header>
+                  Réservation du véhicule{" "}
+                  <b>
+                    {_selectedVehicle?.type.name} #{_selectedVehicle?.id.substring(30)}
+                  </b>
+                </Modal.Header>
+                <Modal.Body>
+                  <form onSubmit={handleReservationSubmit} className="flex flex-col w-full gap-4">
                     <div className="grid grid-cols-6 gap-4">
                       <div className="col-span-4">
                         <div className="text-start mb-2 block">
@@ -185,17 +183,12 @@ const StationsMap: React.FC = () => {
                         <p>{_error}</p>
                       </Alert>
                     )}
-                  </Modal.Body>
-                  <Modal.Footer>
-                    <Button color="gray" onClick={() => setOpenModal(false)}>
-                      Annuler
-                    </Button>
-                    <Button type="submit" color="dark">
+                    <Button type="submit" color="dark" className="max-w-max self-end">
                       Réserver
                     </Button>
-                  </Modal.Footer>
-                </Modal>
-              </form>
+                  </form>
+                </Modal.Body>
+              </Modal>
             </div>
           ) : (
             <div>Clique sur une station pour voir ses informations</div>
@@ -265,7 +258,13 @@ const StationsMap: React.FC = () => {
                             <div className="text-start mb-2 block">
                               <Label value="Commentaire" />
                             </div>
-                            <Textarea onChange={(e) => setComment(e.currentTarget.value)} placeholder="Un petit commentaire ?" />
+                            <Textarea
+                              onInput={(e) => {
+                                e.stopPropagation();
+                                setComment(e.currentTarget.value);
+                              }}
+                              placeholder="Un petit commentaire ?"
+                            />
                           </div>
                         </div>
                       </div>
