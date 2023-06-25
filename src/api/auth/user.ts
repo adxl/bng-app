@@ -15,8 +15,6 @@ export const getOneUser = (id: string): Response<User> => {
 };
 
 export const createUser = (data: CreateDto): Response<unknown> => {
-  console.log("api", data);
-
   return _post(URL, data);
 };
 

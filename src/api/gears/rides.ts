@@ -19,7 +19,6 @@ export const getOneRide = (id: string): Response<Ride> => {
 };
 
 export const createRide = (data: CreateRideDto): Response<void> => {
-  console.log(data);
   return _post(URL, data);
 };
 

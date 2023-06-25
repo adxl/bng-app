@@ -80,8 +80,14 @@ const Home: React.FC = () => {
                       <Timeline.Content>
                         <Timeline.Point icon={LuPlaneLanding} />
                         <Timeline.Time>
-                          {ride.endedAt && new Date(ride.endedAt).toLocaleDateString("fr-FR")} à&nbsp;
-                          {ride.endedAt && new Date(ride.endedAt).toLocaleTimeString("fr-FR")}
+                          {ride.endedAt ? (
+                            <>
+                              {new Date(ride.endedAt).toLocaleDateString("fr-FR")} à&nbsp;
+                              {new Date(ride.endedAt).toLocaleTimeString("fr-FR")}
+                            </>
+                          ) : (
+                            <>Course non terminée</>
+                          )}
                         </Timeline.Time>
                         <Timeline.Title>{ride.endStation?.name}</Timeline.Title>
                       </Timeline.Content>
