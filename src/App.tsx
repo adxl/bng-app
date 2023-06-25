@@ -83,9 +83,9 @@ const App: React.FC = () => {
                   <Route path="edit/:id" element={<Guard el={ReportsEdit} roles={[TECHNICIAN]} />} />
                 </Route>
                 <Route path="exams" element={<Outlet />}>
-                  <Route index element={<Guard el={Placeholder} roles={[ADMINISTRATOR, INSTRUCTOR]} />} />
+                  <Route index element={<Guard el={ExamsList} roles={[ADMINISTRATOR, INSTRUCTOR]} />} />
                   <Route path="create" element={<Guard el={Placeholder} roles={[INSTRUCTOR]} />} />
-                  <Route path="edit" element={<Guard el={Placeholder} roles={[INSTRUCTOR]} />} />
+                  <Route path="edit/:id" element={<Guard el={ExamsEdit} roles={[INSTRUCTOR]} />} />
                 </Route>
                 <Route path="candidates" element={<Outlet />}>
                   <Route index element={<Guard el={Placeholder} roles={[ADMINISTRATOR, INSTRUCTOR]} />} />
