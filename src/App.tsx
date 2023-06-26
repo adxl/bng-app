@@ -24,6 +24,9 @@ const VehiclesList = React.lazy(() => import("@pages/vehicles/VehiclesList"));
 const VehiclesCreate = React.lazy(() => import("@pages/vehicles/VehiclesCreate"));
 const VehiclesEdit = React.lazy(() => import("@pages/vehicles/VehiclesEdit"));
 
+const EventsList = React.lazy(() => import("@pages/events/EventsList"));
+const EventsCreate = React.lazy(() => import("@pages/events/EventsCreate"));
+
 const Placeholder = React.Fragment;
 
 const Home = React.lazy(() => import("@pages/Home"));
@@ -82,8 +85,8 @@ const App: React.FC = () => {
                   <Route index element={<Guard el={Placeholder} roles={[ADMINISTRATOR, INSTRUCTOR]} />} />
                 </Route>
                 <Route path="events" element={<Outlet />}>
-                  <Route index element={<Guard el={Placeholder} roles={[ADMINISTRATOR, ORGANIZER]} />} />
-                  <Route path="create" element={<Guard el={Placeholder} roles={[ORGANIZER]} />} />
+                  <Route index element={<Guard el={EventsList} roles={[ADMINISTRATOR, ORGANIZER]} />} />
+                  <Route path="create" element={<Guard el={EventsCreate} roles={[ORGANIZER]} />} />
                   <Route path="edit" element={<Guard el={Placeholder} roles={[ORGANIZER]} />} />
                 </Route>
               </Route>
