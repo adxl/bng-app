@@ -7,3 +7,13 @@ export type EventWinner = {
 
   rank: number;
 };
+
+export type SelfEventWinner = {
+  firsts: string;
+
+  seconds: string;
+
+  thirds: string;
+
+  caps: string;
+};

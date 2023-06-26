@@ -2,24 +2,19 @@ import React, { useEffect, useState } from "react";
 import { LuPlaneLanding, LuPlaneTakeoff } from "react-icons/lu";
 import { Card, Timeline } from "flowbite-react";
 
+import { getAllEvents } from "@api/events/events";
 import { getAllRides } from "@api/gears/rides";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import FullCalendar from "@fullcalendar/react";
 import { useAuth } from "@hooks/auth";
 import { isUser } from "@typing/api/auth/users";
+import type { Event } from "@typing/api/events/events";
 import type { Ride } from "@typing/api/gears/rides";
 
-// type CalendarEvent = {
-//   title: string;
-//   start: string;
-//   end: string;
-//   url: string;
-// };
-
 const Home: React.FC = () => {
-  const [rides, setRides] = useState<Ride[]>([]);
-  // const [events, setEvents] = useState<CalendarEvent[]>([]);
-  const [preferedTypes, setPreferedTypes] = useState<[string, number][]>([]);
+  const [_rides, setRides] = useState<Ride[]>([]);
+  const [_events, setEvents] = useState<Event[]>([]);
+  const [_preferedTypes, setPreferedTypes] = useState<[string, number][]>([]);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -34,6 +29,10 @@ const Home: React.FC = () => {
           }, {})
         ).sort((a, b) => b[1] - a[1])
       );
+    });
+
+    getAllEvents().then((response) => {
+      setEvents(response.data);
     });
   }, []);
 
@@ -50,21 +49,18 @@ const Home: React.FC = () => {
               viewClassNames={"w-full"}
               plugins={[dayGridPlugin]}
               initialView="dayGridMonth"
-              events={[
-                {
-                  title: "ROCKET LEAAAGUE",
-                  start: "2023-06-23",
-                  end: "2023-06-2",
-                  url: "/events/ROCKET",
-                },
-              ]}
+              events={_events.map((event) => ({
+                title: event.name,
+                start: event.startsAt,
+                end: event.endedAt,
+              }))}
             />
           </Card>
           <Card>
             <h5 className="text-xl font-medium">Mes derniers trajets</h5>
             <div className="grid grid-cols-3">
-              {rides.length > 0 ? (
-                rides.slice(0, 3).map((ride) => (
+              {_rides.length > 0 ? (
+                _rides.slice(0, 3).map((ride) => (
                   <Timeline className="text-start" key={ride.id}>
                     <Timeline.Item>
                       <Timeline.Content>
@@ -105,25 +101,25 @@ const Home: React.FC = () => {
           <Card className="row-span-2 h-max">
             <h5 className="text-xl font-medium">Véhicules préférés</h5>
             <div className="grid grid-cols-3 gap-2">
-              {preferedTypes[1] && (
+              {_preferedTypes[1] && (
                 <div className="flex flex-col justify-end">
-                  <p>{preferedTypes[1][0]}</p>
+                  <p>{_preferedTypes[1][0]}</p>
                   <div className="flex justify-center items-center bg-gray-500 h-28 rounded-lg">
                     <img src="/medaille-dargent.png" alt="Médaille d'argent" className="h-2/3" />
                   </div>
                 </div>
               )}
-              {preferedTypes[0] && (
+              {_preferedTypes[0] && (
                 <div className="flex flex-col justify-end">
-                  <p>{preferedTypes[0][0]}</p>
+                  <p>{_preferedTypes[0][0]}</p>
                   <div className="flex justify-center items-center bg-yellow-400 h-40 rounded-lg">
                     <img src="/medaille-dor.png" alt="Médaille d'or" className="h-2/3" />
                   </div>
                 </div>
               )}
-              {preferedTypes[2] && (
+              {_preferedTypes[2] && (
                 <div className="flex flex-col justify-end">
-                  <p>{preferedTypes[2][0]}</p>
+                  <p>{_preferedTypes[2][0]}</p>
                   <div className="flex justify-center items-center bg-yellow-800 h-20 rounded-lg">
                     <img src="/medaille-de-bronze.png" alt="Médaille de bronze" className="h-2/3" />
                   </div>

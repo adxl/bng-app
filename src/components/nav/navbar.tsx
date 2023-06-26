@@ -1,14 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { HiOutlineAdjustments } from "react-icons/hi";
 import { HiArrowLeftOnRectangle } from "react-icons/hi2";
 import { Link } from "react-router-dom";
 import { Avatar, Badge, Dropdown, Navbar as FlowbiteNavbar } from "flowbite-react";
 
+import { getSelfEventsWinner } from "@api/events/events-winner";
 import { useAuth } from "@hooks/auth";
 import { isUser } from "@typing/api/auth/users";
+import type { SelfEventWinner } from "@typing/api/events/event-winner";
 
 const Navbar: React.FC = () => {
   const { user, logout } = useAuth();
+
+  const [_eventsWinner, setEventsWinner] = useState<SelfEventWinner | null>(null);
+
+  useEffect(() => {
+    getSelfEventsWinner(user.id!).then((response) => {
+      setEventsWinner(response.data);
+    });
+  }, []);
 
   return (
     <FlowbiteNavbar className="mb-5 bg-gray-50 shadow-lg rounded-md">
@@ -17,23 +27,23 @@ const Navbar: React.FC = () => {
       </FlowbiteNavbar.Brand>
       <div className="flex md:order-2 items-center">
         <FlowbiteNavbar.Toggle />
-        {isUser(user) && (
+        {isUser(user) && _eventsWinner && (
           <div className="flex items-center">
             <div className="flex mr-5">
               <img src="/cap.png" alt="cap" className="w-6 h-6 mr-2" />
-              <span>200</span>
+              <span>{_eventsWinner.caps}</span>
             </div>
             <div className="flex mr-2">
               <img src="/medaille-dor.png" alt="Médaille d'or" className="w-6 h-6" />
-              <span>5</span>
+              <span>{_eventsWinner.firsts}</span>
             </div>
             <div className="flex mr-2">
               <img src="/medaille-dargent.png" alt="Médaille d'or" className="w-6 h-6" />
-              <span>6</span>
+              <span>{_eventsWinner.seconds}</span>
             </div>
             <div className="flex mr-2">
               <img src="/medaille-de-bronze.png" alt="Médaille d'or" className="w-6 h-6" />
-              <span>1</span>
+              <span>{_eventsWinner.thirds}</span>
             </div>
           </div>
         )}
