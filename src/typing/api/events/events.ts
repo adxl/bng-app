@@ -1,3 +1,5 @@
+import type { EventWinner } from "./event-winner";
+
 export type Event = {
   id: string;
 
@@ -9,5 +11,5 @@ export type Event = {
 
   stationId: string;
 
-  capacity: number;
+  winners: EventWinner[];
 };

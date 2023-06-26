@@ -17,11 +17,16 @@ const EventsCreate: React.FC = () => {
   const [_stations, setStations] = useState<Station[]>([]);
 
   useEffect(() => {
-    getAllStations().then(({ data }) => setStations(data));
     setTimeout(() => {
       setError("");
     }, 2000);
   }, [_error]);
+
+  useEffect(() => {
+    getAllStations().then((response) => {
+      setStations(response.data);
+    });
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

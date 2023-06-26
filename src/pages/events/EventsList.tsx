@@ -61,6 +61,25 @@ const EventsList: React.FC = () => {
               <p className="text-gray-500 ml-3">Lieu: {event.stationId}</p>
               {/* todo : allez chercher le nom de la staion */}
             </div>
+            {event.endedAt ? (
+              <ul className="flex items-center">
+                {event.winners.map((winner, index) => (
+                  <div key={index} className="flex mr-5 i">
+                    {winner.rank === 1 ? (
+                      <img src="/medaille-dor.png" alt="Médaille d'or" className="w-6 h-6" />
+                    ) : winner.rank === 2 ? (
+                      <img src="/medaille-dargent.png" alt="Médaille d'argent" className="w-6 h-6" />
+                    ) : (
+                      <img src="/medaille-de-bronze.png" alt="Médaille de bronze" className="w-6 h-6" />
+                    )}
+                    {/* {winner.userId} */}
+                    Paul Richard
+                  </div>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-gray-500 ml-3">Résultats: A venir</p>
+            )}
           </Card>
         ))}
       </div>
