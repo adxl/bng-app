@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { HiInformationCircle, HiStar } from "react-icons/hi";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import { Accordion, Alert, Button, Card, Label, Modal, Select, Textarea, TextInput } from "flowbite-react";
+import { Accordion, Alert, Button, Card, Label, Modal, Select, Textarea } from "flowbite-react";
 import Lottie from "lottie-react";
 
 import { createRide, endRide, getSelfCurrentRide, reviewRide } from "@api/gears/rides";
@@ -30,7 +30,7 @@ const StationsMap: React.FC = () => {
 
   const [_review, setReview] = useState<number | null>(null);
   const [_hover, setHover] = useState<number | null>(null);
-  const [_comment, setComment] = useState<string>("");
+  const _comment = useRef<HTMLTextAreaElement>(null);
 
   const [_openModal, setOpenModal] = useState<boolean>();
 
@@ -91,20 +91,20 @@ const StationsMap: React.FC = () => {
           return;
         }
 
-        reviewRide(_ride!.id, { review: _review, comment: _comment })
+        reviewRide(_ride!.id, { review: _review, comment: _comment.current ? _comment.current.value : undefined })
           .then(() => setSuccess("Course terminée !"))
           .catch(() => setError("Une erreur est survenue"));
       })
       .catch(() => setError("Une erreur est survenue"));
   };
 
-  function updateRide() {
+  const updateRide = () => {
     getSelfCurrentRide()
       .then((response) => {
         setRide(response.data);
       })
       .catch(() => setRide(null));
-  }
+  };
 
   return (
     <div className="grid grid-cols-2 gap-4 relative w-full">
@@ -113,7 +113,7 @@ const StationsMap: React.FC = () => {
           <p>{_success}</p>
         </Alert>
       )}
-      {_ride ? (
+      {!_ride ? (
         <>
           <div id="map" className="w-full">
             <MapContainer center={[48.865, 2.335]} zoom={12} scrollWheelZoom={false} className="z-0">
@@ -258,13 +258,7 @@ const StationsMap: React.FC = () => {
                             <div className="text-start mb-2 block">
                               <Label value="Commentaire" />
                             </div>
-                            <Textarea
-                              onInput={(e) => {
-                                e.stopPropagation();
-                                setComment(e.currentTarget.value);
-                              }}
-                              placeholder="Un petit commentaire ?"
-                            />
+                            <Textarea ref={_comment} placeholder="Un petit commentaire ?" />
                           </div>
                         </div>
                       </div>
