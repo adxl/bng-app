@@ -10,6 +10,10 @@ export const getAllRides = (): Response<Ride[]> => {
   return _get(URL);
 };
 
+export const getSelfRides = (): Response<Ride[]> => {
+  return _get(URL + "/self");
+};
+
 export const getSelfCurrentRide = (): Response<Ride> => {
   return _get(URL + `/current`);
 };

@@ -145,9 +145,10 @@ const StationsMap: React.FC = () => {
               <div className="grid grid-cols-3 gap-4">
                 {_selectedStation.vehicles.map((vehicle) => (
                   <Card key={vehicle.id}>
-                    <p> {vehicle.type.name} </p>
+                    <p>
+                      {vehicle.type.name} ({vehicle.year})
+                    </p>
                     <small> #{vehicle.id.substring(30)} </small>
-                    <p> DDF: {vehicle.year}</p>
                     <Button color="dark" onClick={() => handleSelectVehicle(vehicle)}>
                       Réserver
                     </Button>
@@ -212,6 +213,7 @@ const StationsMap: React.FC = () => {
                   <Label value="Station d'arrivée" />
                 </div>
                 <Select required onChange={(e) => handleSelectStation(e.currentTarget.value)} className="mb-2">
+                  <option>---</option>
                   {_stations.map((station) => (
                     <option key={station.id} value={station.id}>
                       {station.name}
@@ -266,7 +268,7 @@ const StationsMap: React.FC = () => {
                   </Accordion.Panel>
                 </Accordion>
                 <Button type="submit" color="dark" className="max-w-max self-end">
-                  Réserver
+                  Finir la course
                 </Button>
                 {_error && (
                   <Alert color="failure" className="mb-5 absolute top-6 left-1/2 -translate-x-1/2" icon={HiInformationCircle}>

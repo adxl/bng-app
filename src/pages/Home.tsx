@@ -3,7 +3,7 @@ import { LuPlaneLanding, LuPlaneTakeoff } from "react-icons/lu";
 import { Card, Timeline } from "flowbite-react";
 
 import { getAllEvents } from "@api/events/events";
-import { getAllRides } from "@api/gears/rides";
+import { getSelfRides } from "@api/gears/rides";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import FullCalendar from "@fullcalendar/react";
 import { useAuth } from "@hooks/auth";
@@ -18,7 +18,7 @@ const Home: React.FC = () => {
   const { user } = useAuth();
 
   useEffect(() => {
-    getAllRides().then((response) => {
+    getSelfRides().then((response) => {
       setRides(response.data.filter((ride) => ride.userId === user.id));
 
       setPreferedTypes(
