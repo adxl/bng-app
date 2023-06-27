@@ -5,15 +5,26 @@ import { Link } from "react-router-dom";
 import { Badge, Button, Card } from "flowbite-react";
 
 import { getAllEvents } from "@api/events/events";
+import { findStationByIds } from "@api/gears/stations";
 import { useAuth } from "@hooks/auth";
 import { isOrganizer } from "@typing/api/auth/users";
-import type { Event } from "@typing/api/events/events";
+import type { Event as BaseEvent } from "@typing/api/events/events";
+import type { Station } from "@typing/api/gears/stations";
+
+type Event = BaseEvent & { station?: Station };
+
 const EventsList: React.FC = () => {
   const { user } = useAuth();
   const [_events, setEvents] = useState<Event[]>([]);
 
   useEffect(() => {
-    getAllEvents().then(({ data }) => setEvents(data));
+    getAllEvents().then(({ data: eventsData }) => {
+      const eventsStations = eventsData.map((e) => e.stationId);
+      findStationByIds({ ids: eventsStations }).then(({ data: stations }) => {
+        const events = eventsData.map((e) => ({ ...e, station: stations.find((s) => s.id === e.stationId) }));
+        setEvents(events);
+      });
+    });
   }, []);
 
   return (
@@ -56,11 +67,11 @@ const EventsList: React.FC = () => {
               {event.endedAt ? (
                 <p className="text-gray-500 ml-3">Fin: {new Date(event.endedAt).toLocaleDateString("fr-FR")}</p>
               ) : (
-                <p className="text-gray-500 ml-3">Fin: A venir</p>
+                <p className="text-gray-500 ml-3">Fin: À venir</p>
               )}
-              <p className="text-gray-500 ml-3">Lieu: {event.stationId}</p>
-              {/* todo : allez chercher le nom de la staion */}
+              <p className="text-gray-500 ml-3">Lieu: {event.station?.name || "Non disponible"}</p>
             </div>
+
             {event.endedAt ? (
               <ul className="flex items-center">
                 {event.winners.map((winner, index) => (
@@ -72,8 +83,7 @@ const EventsList: React.FC = () => {
                     ) : (
                       <img src="/medaille-de-bronze.png" alt="Médaille de bronze" className="w-6 h-6" />
                     )}
-                    {/* {winner.userId} */}
-                    Paul Richard
+                    {winner.userId}
                   </div>
                 ))}
               </ul>

@@ -15,7 +15,7 @@ export const getOneEvent = (id: string): Response<Event> => {
   return _get(URL + `/${id}`);
 };
 
-export const createEvent = (data: CreateEventDto): Response<void> => {
+export const createEvent = (data: CreateEventDto): Response<any> => {
   return _post(URL, data);
 };
 

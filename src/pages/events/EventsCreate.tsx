@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Alert, Button, Card, Label, Select, TextInput } from "flowbite-react";
 
 import { createEvent } from "@api/events/events";
-import { getAllStations } from "@api/gears/stations";
+import { getAllStations, updateStationEvent } from "@api/gears/stations";
 import type { Station } from "@typing/api/gears/stations";
 
 const EventsCreate: React.FC = () => {
@@ -38,11 +38,11 @@ const EventsCreate: React.FC = () => {
     };
 
     createEvent(data)
-      .then(() => {
-        navigate("/admin/events");
-      })
+      .then(({ data: response }) => updateStationEvent(_stationId, { eventId: response.identifiers[0].id }))
+      .then(() => navigate("/admin/events"))
       .catch(() => setError("Une erreur est survenue"));
   };
+
   return (
     <div>
       <div className="flex mb-5">
@@ -74,11 +74,13 @@ const EventsCreate: React.FC = () => {
               <Label value="Station" />
             </div>
             <Select required value={_stationId} onChange={(e) => setStationId(e.target.value)}>
-              {_stations.map((station) => (
-                <option key={station.id} value={station.id}>
-                  {station.name}
-                </option>
-              ))}
+              {_stations
+                .filter((s) => s.eventId === null)
+                .map((station) => (
+                  <option key={station.id} value={station.id}>
+                    {station.name}
+                  </option>
+                ))}
             </Select>
           </div>
 
