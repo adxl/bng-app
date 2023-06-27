@@ -4,14 +4,12 @@ import { HiPencilSquare } from "react-icons/hi2";
 import { Link } from "react-router-dom";
 import { Badge, Button, Card } from "flowbite-react";
 
+import { findUsersByIds } from "@api/auth/user";
 import { getAllEvents } from "@api/events/events";
 import { findStationByIds } from "@api/gears/stations";
 import { useAuth } from "@hooks/auth";
 import { isOrganizer } from "@typing/api/auth/users";
-import type { Event as BaseEvent } from "@typing/api/events/events";
-import type { Station } from "@typing/api/gears/stations";
-
-type Event = BaseEvent & { station?: Station };
+import type { Event } from "@typing/api/events/events";
 
 const EventsList: React.FC = () => {
   const { user } = useAuth();
@@ -20,8 +18,14 @@ const EventsList: React.FC = () => {
   useEffect(() => {
     getAllEvents().then(({ data: eventsData }) => {
       const eventsStations = eventsData.map((e) => e.stationId);
-      findStationByIds({ ids: eventsStations }).then(({ data: stations }) => {
-        const events = eventsData.map((e) => ({ ...e, station: stations.find((s) => s.id === e.stationId) }));
+      const eventsUsers = eventsData.flatMap((e) => e.winners.map((w) => w.userId)).filter((u) => u);
+
+      Promise.all([findStationByIds({ ids: eventsStations }), findUsersByIds({ ids: eventsUsers })]).then(([stations, users]) => {
+        const events = eventsData.map((e) => ({
+          ...e,
+          station: stations.data.find((s) => s.id === e.stationId),
+          winners: e.winners.map((w) => ({ ...w, user: users.data.find((u) => u.id === w.userId) })),
+        }));
         setEvents(events);
       });
     });
@@ -60,7 +64,7 @@ const EventsList: React.FC = () => {
                         <HiPencilSquare />
                       </Button>
                     </Link>
-                  )}
+                  )}{" "}
                 </div>
               </div>
               <p className="text-gray-500 ml-3">Début: {new Date(event.startsAt).toLocaleDateString("fr-FR")}</p>
@@ -83,7 +87,7 @@ const EventsList: React.FC = () => {
                     ) : (
                       <img src="/medaille-de-bronze.png" alt="Médaille de bronze" className="w-6 h-6" />
                     )}
-                    {winner.userId}
+                    {winner.user?.firstName || ""} - {winner.user?.lastName || ""}
                   </div>
                 ))}
               </ul>

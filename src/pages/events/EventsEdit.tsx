@@ -8,6 +8,15 @@ import { deleteEvent, getOneEvent, updateEvent } from "@api/events/events";
 import { updateEventWinners } from "@api/events/eventsWinners";
 import type { User } from "@typing/api/auth/users";
 
+const UsersListOptions: React.FC<{ users: User[] }> = ({ users }) =>
+  users.map((user) => (
+    <React.Fragment key={user.id}>
+      <option key={user.id} value={user.id!}>
+        {user.firstName} {user.lastName} - ({user.email})
+      </option>
+    </React.Fragment>
+  ));
+
 const EventsEdit: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -128,11 +137,7 @@ const EventsEdit: React.FC = () => {
             </div>
             <Select className="w-full" value={_firstPlace} onChange={(e) => setFirstPlace(e.target.value)}>
               <option value="">Aucun</option>
-              {_users.map((user) => (
-                <option key={user.id}>
-                  {user.firstName} {user.lastName} - ({user.email})
-                </option>
-              ))}
+              <UsersListOptions users={_users} />
             </Select>
           </div>
           <div>
@@ -141,11 +146,7 @@ const EventsEdit: React.FC = () => {
             </div>
             <Select className="w-full" value={_secondPlace} onChange={(e) => setSecondPlace(e.target.value)}>
               <option value="">Aucun</option>
-              {_users.map((user) => (
-                <option key={user.id}>
-                  {user.firstName} {user.lastName} - ({user.email})
-                </option>
-              ))}
+              <UsersListOptions users={_users} />
             </Select>
           </div>
           <div>
@@ -154,11 +155,7 @@ const EventsEdit: React.FC = () => {
             </div>
             <Select className="w-full" value={_thirdPlace} onChange={(e) => setThirdPlace(e.target.value)}>
               <option value="">Aucun</option>
-              {_users.map((user) => (
-                <option key={user.id}>
-                  {user.firstName} {user.lastName} - ({user.email})
-                </option>
-              ))}
+              <UsersListOptions users={_users} />
             </Select>
           </div>
           <Button color="dark" type="submit">

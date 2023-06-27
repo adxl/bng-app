@@ -25,3 +25,7 @@ export type UpdateProfileDto = {
 export type UpdateRoleDto = {
   role: UserRole;
 };
+
+export type ManysUsersDto = {
+  ids: string[];
+};
