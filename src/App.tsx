@@ -28,8 +28,13 @@ const EventsList = React.lazy(() => import("@pages/events/EventsList"));
 const EventsCreate = React.lazy(() => import("@pages/events/EventsCreate"));
 const EventsEdit = React.lazy(() => import("@pages/events/EventsEdit"));
 
-const RidesList = React.lazy(() => import("@pages/rides/RidesList"));
+const ExamsList = React.lazy(() => import("@pages/exams/ExamsList"));
+const ExamsListUser = React.lazy(() => import("@pages/exams/ExamsListUser"));
+const ExamsEdit = React.lazy(() => import("@pages/exams/ExamsEdit"));
+const ExamsLaunch = React.lazy(() => import("@pages/exams/ExamsLaunch"));
+const ExamsLaunchResult = React.lazy(() => import("@pages/exams/ExamsLaunchResult"));
 
+const RidesList = React.lazy(() => import("@pages/rides/RidesList"));
 const ReportsList = React.lazy(() => import("@pages/reports/ReportsList"));
 const ReportsEdit = React.lazy(() => import("@pages/reports/ReportsEdit"));
 
@@ -52,6 +57,9 @@ const App: React.FC = () => {
               <Route path="/" element={<Outlet />}>
                 <Route index element={<Guard el={Home} roles={["*"]} />} />
                 <Route path="stations" element={<Guard el={StationsMap} roles={[USER]} />} />
+                <Route path="licenses" element={<Guard el={ExamsListUser} roles={[USER]} />} />
+                <Route path="licenses/launch/:id" element={<Guard el={ExamsLaunch} roles={[USER]} />} />
+                <Route path="licenses/launch/:id/result" element={<Guard el={ExamsLaunchResult} roles={[USER]} />} />
                 <Route path="rides" element={<Guard el={RidesList} roles={[USER]} />} />
                 <Route path="events" element={<Guard el={EventsList} roles={[USER]} />} />
                 <Route path="profile" element={<Guard el={Profile} roles={["*"]} />} />

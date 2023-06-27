@@ -9,6 +9,7 @@ import {
   HiOutlineExclamationTriangle,
   HiOutlineRocketLaunch,
 } from "react-icons/hi2";
+import { TbJetpack } from "react-icons/tb";
 import { Sidebar as FlowbiteSidebar } from "flowbite-react";
 
 import { ADMINISTRATOR, INSTRUCTOR, ORGANIZER, TECHNICIAN, USER } from "@typing/api/auth/users";
@@ -33,6 +34,9 @@ const Sidebar: React.FC = () => {
           </Guard>
           <Guard roles={[USER]} el={Item} link to="/events" icon={HiOutlineCalendarDays}>
             Évènements
+          </Guard>
+          <Guard roles={[USER]} el={Item} link to="/licenses" icon={TbJetpack}>
+            Mes permis
           </Guard>
         </Guard>
 

@@ -1,6 +1,7 @@
 import type { VehicleType } from "../gears/vehicles-types";
 
 import type { Answer } from "./answers";
+import type { Attempt } from "./attempts";
 import type { Question } from "./questions";
 
 export type Exam = {
@@ -15,4 +16,6 @@ export type Exam = {
   questions: Question[];
 
   answers: Answer[];
+
+  attempts: Attempt[];
 };

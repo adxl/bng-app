@@ -10,6 +10,10 @@ export const getAllExams = (): Response<Exam[]> => {
   return _get(URL);
 };
 
+export const getAllExamsUser = (): Response<Exam[]> => {
+  return _get(URL + "/user");
+};
+
 export const getOneExam = (id: string): Response<Exam> => {
   return _get(URL + `/${id}`);
 };

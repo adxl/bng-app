@@ -1,5 +1,7 @@
 export type CreateAttemptDto = {
-  examId: string;
+  exam: {
+    id: string;
+  };
 
   userId: string;
 };
