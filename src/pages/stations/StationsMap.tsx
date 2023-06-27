@@ -170,6 +170,7 @@ const StationsMap: React.FC = () => {
                           <Label value="Skin du véhicule" />
                         </div>
                         <Select required onChange={(e) => handleSelectSkin(e.currentTarget.value)}>
+                          <option>---</option>
                           {_skins.map((skin) => (
                             <option key={skin.id} value={skin.id}>
                               {skin.name}
