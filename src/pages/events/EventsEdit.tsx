@@ -5,7 +5,7 @@ import { Alert, Button, Card, Label, Select, TextInput } from "flowbite-react";
 
 import { getAllUsers } from "@api/auth/user";
 import { deleteEvent, getOneEvent, updateEvent } from "@api/events/events";
-import { updateEventWinners } from "@api/events/eventsWinners";
+import { updateEventWinners } from "@api/events/events-winner";
 import type { User } from "@typing/api/auth/users";
 
 const UsersListOptions: React.FC<{ users: User[] }> = ({ users }) =>

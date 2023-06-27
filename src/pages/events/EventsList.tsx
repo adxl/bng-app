@@ -77,19 +77,21 @@ const EventsList: React.FC = () => {
             </div>
 
             {event.endedAt ? (
-              <ul className="flex items-center">
-                {event.winners.map((winner, index) => (
-                  <div key={index} className="flex mr-5 i">
-                    {winner.rank === 1 ? (
-                      <img src="/medaille-dor.png" alt="Médaille d'or" className="w-6 h-6" />
-                    ) : winner.rank === 2 ? (
-                      <img src="/medaille-dargent.png" alt="Médaille d'argent" className="w-6 h-6" />
-                    ) : (
-                      <img src="/medaille-de-bronze.png" alt="Médaille de bronze" className="w-6 h-6" />
-                    )}
-                    {winner.user?.firstName || ""} - {winner.user?.lastName || ""}
-                  </div>
-                ))}
+              <ul className="flex flex-col items-start">
+                {event.winners
+                  .sort((a, b) => a.rank - b.rank)
+                  .map((winner, index) => (
+                    <div key={index} className="flex gap-2 m-1 i">
+                      {winner.rank === 1 ? (
+                        <img src="/medaille-dor.png" alt="Médaille d'or" className="w-6 h-6" />
+                      ) : winner.rank === 2 ? (
+                        <img src="/medaille-dargent.png" alt="Médaille d'argent" className="w-6 h-6" />
+                      ) : (
+                        <img src="/medaille-de-bronze.png" alt="Médaille de bronze" className="w-6 h-6" />
+                      )}
+                      {winner.user?.firstName || ""} {winner.user?.lastName || ""}
+                    </div>
+                  ))}
               </ul>
             ) : (
               <p className="text-gray-500 ml-3">Résultats: A venir</p>

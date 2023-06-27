@@ -68,7 +68,8 @@ const StationsMap: React.FC = () => {
     setSelectedSkin(skin);
   };
 
-  const handleReservationSubmit = () => {
+  const handleReservationSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
     createRide({ vehicle: _selectedVehicle!, userId: user.id!, skin: _selectedSkin! })
       .then(() => {
         setOpenModal(false);
