@@ -18,6 +18,10 @@ export const getOneExam = (id: string): Response<Exam> => {
   return _get(URL + `/${id}`);
 };
 
+export const getOneExamPublic = (id: string): Response<Exam> => {
+  return _get(URL + `/public/${id}`);
+};
+
 export const createExam = (data: CreateExamDto): Response<void> => {
   return _post(URL, data);
 };

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button, Card, Label, TextInput } from "flowbite-react";
 
-import { getOneExam } from "@api/exams/exams";
+import { getOneExamPublic } from "@api/exams/exams";
 
 import { createAttempt, updateAttempt } from "../../api/exams/attempts";
 import { getOneType } from "../../api/gears/vehicles-types";
@@ -28,7 +28,7 @@ const ExamsLaunch: React.FC = () => {
   };
 
   useEffect(() => {
-    getOneExam(id!)
+    getOneExamPublic(id!)
       .then(({ data: exam }) => {
         getOneType(exam.typeId).then(({ data: type }) => {
           const oneExam = { ...exam, type };
