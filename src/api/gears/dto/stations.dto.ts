@@ -8,12 +8,15 @@ export type CreateStationDto = {
 
 export type UpdateStationDto = {
   name?: string;
-
   latitude?: number;
-
   longitude?: number;
-
   active?: boolean;
+};
 
-  eventId?: string;
+export type UpdateStationEventDto = {
+  eventId: string;
+};
+
+export type ManyStationsDto = {
+  ids: string[];
 };
