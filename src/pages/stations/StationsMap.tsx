@@ -223,9 +223,9 @@ const StationsMap: React.FC = () => {
                   ))}
                 </Select>
 
-                <Accordion collapseAll className="w-full mb-2">
+                <Accordion className="w-full mb-2">
                   <Accordion.Panel>
-                    <Accordion.Title>Laisser un avis (facultatif)</Accordion.Title>
+                    <Accordion.Title> Laisser un avis</Accordion.Title>
                     <Accordion.Content>
                       <div className="flex justify-center w-full">
                         <div className="flex flex-col max-w-md w-1/2 gap-4 w-full">
