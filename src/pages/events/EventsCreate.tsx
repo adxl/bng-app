@@ -44,13 +44,13 @@ const EventsCreate: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col w-full">
       <div className="flex mb-5">
         <Button color="dark">
           <Link to="/admin/events">Retour</Link>
         </Button>
       </div>
-      <Card>
+      <Card className="self-center">
         {_error && (
           <Alert color="failure" icon={HiInformationCircle}>
             <p>{_error}</p>

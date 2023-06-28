@@ -66,7 +66,7 @@ const EventsList: React.FC = () => {
                           <HiPencilSquare />
                         </Button>
                       </Link>
-                    )}{" "}
+                    )}
                   </div>
                 </div>
                 <p className="text-gray-500 ml-3">Début: {new Date(event.startsAt).toLocaleDateString("fr-FR")}</p>
