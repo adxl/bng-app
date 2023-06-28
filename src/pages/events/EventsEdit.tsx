@@ -8,15 +8,17 @@ import { deleteEvent, getOneEvent, updateEvent } from "@api/events/events";
 import { updateEventWinners } from "@api/events/events-winner";
 import type { User } from "@typing/api/auth/users";
 
-const UsersListOptions: React.FC<{ users: User[] }> = ({ users }) =>
-  users.map((user) => (
-    <React.Fragment key={user.id}>
-      <option key={user.id} value={user.id!}>
-        {user.firstName} {user.lastName} - ({user.email})
-      </option>
-    </React.Fragment>
-  ));
-
+const UsersListOptions: React.FC<{ users: User[] }> = ({ users }) => (
+  <React.Fragment>
+    {users.map((user) => (
+      <React.Fragment key={user.id}>
+        <option key={user.id} value={user.id!}>
+          {user.firstName} {user.lastName} - ({user.email})
+        </option>
+      </React.Fragment>
+    ))}
+  </React.Fragment>
+);
 const EventsEdit: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
