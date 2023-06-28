@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { FaQuestion } from "react-icons/fa";
-import { HiUserCircle } from "react-icons/hi";
+import { HiInformationCircle, HiUserCircle } from "react-icons/hi";
 import { MdDashboard } from "react-icons/md";
 import { PiHourglassLowFill } from "react-icons/pi";
-import { Link } from "react-router-dom";
-import { Button, Card, Tabs } from "flowbite-react";
+import { Link, useLocation } from "react-router-dom";
+import { Alert, Button, Card, Tabs } from "flowbite-react";
 
 import { getAllExamsUser } from "../../api/exams/exams";
 import { getAllTypes } from "../../api/gears/vehicles-types";
 import type { Exam } from "../../typing/api/exams/exams";
 
 const ExamsListUser: React.FC = () => {
+  const { state } = useLocation();
+
   const [_examsPassed, setExamsPassed] = useState<Exam[]>([]);
   const [_examsNotPassed, setExamsNotPassed] = useState<Exam[]>([]);
+  const [_error, setError] = useState<string>("");
 
   useEffect(() => {
     Promise.all([getAllExamsUser(), getAllTypes()]).then(([{ data: exams }, { data: types }]) => {
@@ -22,6 +25,10 @@ const ExamsListUser: React.FC = () => {
       setExamsPassed(exams.filter((exam) => exam.attempts));
       setExamsNotPassed(exams.filter((exam) => !exam.attempts));
     });
+
+    if (state) {
+      if (state.error) setError(state.error);
+    }
   }, []);
 
   const fromMinutesToHours = (minutes: number) => {
@@ -30,8 +37,19 @@ const ExamsListUser: React.FC = () => {
     return hours > 0 ? `${hours}h${remainingMinutes}` : `${remainingMinutes}min`;
   };
 
+  useEffect(() => {
+    setTimeout(() => {
+      setError("");
+    }, 3500);
+  }, [_error]);
+
   return (
     <>
+      {_error && (
+        <Alert color="failure" className="mb-5" icon={HiInformationCircle}>
+          <p>{_error}</p>
+        </Alert>
+      )}
       <h1 className="text-5xl font-extrabold dark:text-white text-center w-full my-4">Mes licenses</h1>
       <Tabs.Group aria-label="Default tabs" style="default" className="w-full justify-center">
         <Tabs.Item active icon={HiUserCircle} title="Licenses validées">

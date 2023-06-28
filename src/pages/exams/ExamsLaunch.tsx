@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button, Card, Label, TextInput } from "flowbite-react";
+import { Button, Card, Label, Progress, TextInput } from "flowbite-react";
 
 import { getOneExamPublic } from "@api/exams/exams";
 
@@ -16,6 +16,7 @@ const ExamsLaunch: React.FC = () => {
 
   const [_exam, setExam] = useState<Exam>();
   const [_attemptId, setAttemptId] = useState<string>("");
+  const [_progressBar, setProgressBar] = useState<number>(100);
   const formData = useRef<HTMLFormElement>(null);
 
   const fromMinutesToHours = (minutes: number) => {
@@ -27,6 +28,29 @@ const ExamsLaunch: React.FC = () => {
     return `${hoursString}${minutesString}`;
   };
 
+  const launchTimer = (duration: number) => {
+    const startDate = new Date().toISOString();
+    const endDate = new Date(new Date().getTime() + duration * 60000).toISOString();
+    const remainingTime = new Date(endDate).getTime() - new Date(startDate).getTime();
+    const durationInSec = duration * 60;
+    const interval = remainingTime / durationInSec;
+    const progressIncrement = 100 / durationInSec / 2;
+
+    const timer = setInterval(() => {
+      setProgressBar((prev) => {
+        return prev - progressIncrement;
+      });
+    }, interval);
+
+    const timeout = setTimeout(() => {
+      clearInterval(timer);
+
+      const form = formData.current;
+      if (!form) return;
+      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+    }, remainingTime);
+  };
+
   useEffect(() => {
     getOneExamPublic(id!)
       .then(({ data: exam }) => {
@@ -35,6 +59,7 @@ const ExamsLaunch: React.FC = () => {
           setExam(oneExam);
           createAttempt({ exam: { id: id! }, userId: user.id ?? "" }).then(({ data: attempt }) => {
             setAttemptId(attempt.identifiers[0].id);
+            launchTimer(exam.duration);
           });
         });
       })
@@ -54,15 +79,28 @@ const ExamsLaunch: React.FC = () => {
       return { questionId: question.id, answerId };
     });
 
-    updateAttempt(_attemptId, { userAnswers: answers }).then(({ data: attempt }) => {
-      navigate("/licenses/launch/" + id + "/result", { state: { typeExam: _exam!.type.name, score: attempt.score, isSuccess: attempt.score >= 80 } });
-    });
+    let error: string | null = null;
+
+    if (answers.some((answer) => !answer.answerId)) {
+      error = "Veuillez répondre à toutes les questions";
+    }
+
+    updateAttempt(_attemptId, { userAnswers: answers })
+      .then(({ data: attempt }) => {
+        navigate("/licenses/launch/" + id + "/result", {
+          state: { typeExam: _exam!.type.name, score: attempt.score, isSuccess: attempt.score >= 80 },
+        });
+      })
+      .catch((_) => {
+        navigate("/licenses", { state: { error: error ?? "Une erreur est survenue" } });
+      });
   };
 
   return (
     <>
       {_exam && (
         <div className="w-full">
+          <Progress color="indigo" progress={_progressBar} />
           <div className="flex justify-between my-10">
             {/* eslint-disable-next-line react/no-unescaped-entities */}
             <h4 className="text-4xl font-bold dark:text-white text-left mb-4 ">Type de l'examen : {_exam.type.name} </h4>
