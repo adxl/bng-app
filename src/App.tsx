@@ -28,6 +28,7 @@ const EventsList = React.lazy(() => import("@pages/events/EventsList"));
 const EventsCreate = React.lazy(() => import("@pages/events/EventsCreate"));
 const EventsEdit = React.lazy(() => import("@pages/events/EventsEdit"));
 
+const RidesList = React.lazy(() => import("@pages/rides/RidesList"));
 const Placeholder = React.Fragment;
 
 const Home = React.lazy(() => import("@pages/Home"));
@@ -47,8 +48,8 @@ const App: React.FC = () => {
               <Route path="/" element={<Outlet />}>
                 <Route index element={<Guard el={Home} roles={["*"]} />} />
                 <Route path="stations" element={<Guard el={StationsMap} roles={[USER]} />} />
-                <Route path="rides" element={<Guard el={Placeholder} roles={[USER]} />} />
-                <Route path="events" element={<Guard el={Placeholder} roles={[USER]} />} />
+                <Route path="rides" element={<Guard el={RidesList} roles={[USER]} />} />
+                <Route path="events" element={<Guard el={EventsList} roles={[USER]} />} />
                 <Route path="profile" element={<Guard el={Profile} roles={["*"]} />} />
               </Route>
 
