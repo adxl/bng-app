@@ -4,6 +4,7 @@ import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { Accordion, Alert, Button, Card, Label, Modal, Select, Textarea } from "flowbite-react";
 import Lottie from "lottie-react";
 
+import { createReport } from "@api/gears/reports";
 import { createRide, endRide, getSelfCurrentRide, reviewRide } from "@api/gears/rides";
 import { getAllStations } from "@api/gears/stations";
 import { getAllSkins } from "@api/gears/vehicles-skins";
@@ -93,7 +94,12 @@ const StationsMap: React.FC = () => {
         }
 
         reviewRide(_ride!.id, { review: _review, comment: _comment.current ? _comment.current.value : undefined })
-          .then(() => setSuccess("Course terminée !"))
+          .then(() => {
+            setSuccess("Course terminée !");
+            if (_review === 1) {
+              createReport({ ride: _ride! });
+            }
+          })
           .catch(() => setError("Une erreur est survenue"));
       })
       .catch(() => setError("Une erreur est survenue"));
