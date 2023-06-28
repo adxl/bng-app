@@ -1,8 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { GiJetPack, GiJetpack, GiRocket, GiRocketFlight, GiRocketThruster } from "react-icons/gi";
 import { HiStar } from "react-icons/hi";
-import { LuCar, LuPlaneLanding, LuPlaneTakeoff } from "react-icons/lu";
+import { LuPlaneLanding, LuPlaneTakeoff } from "react-icons/lu";
 import { Card, Timeline } from "flowbite-react";
 
 import { getSelfRides } from "@api/gears/rides";
@@ -18,7 +17,6 @@ const RidesList: React.FC = () => {
     getSelfRides().then((response) => {
       setRides(response.data.filter((ride) => ride.userId === user.id));
     });
-    console.log(_rides);
   }, []);
 
   return (
@@ -61,13 +59,13 @@ const RidesList: React.FC = () => {
                       </Timeline.Content>
                     </Timeline.Item>
                   </Timeline>
-                  {ride.endedAt && ride.review != null ? (
+                  {ride.endedAt && ride.review !== null ? (
                     <div className="flex">
                       {[...Array(5)].map((_, index) => {
                         const currentRating = index + 1;
                         return (
                           <label key={currentRating}>
-                            <HiStar className="star" size={32} color={currentRating <= ride?.review ? "#ffc107" : "#e4e5e9"} />
+                            <HiStar className="star" size={32} color={currentRating <= ride.review! ? "#ffc107" : "#e4e5e9"} />
                           </label>
                         );
                       })}
