@@ -33,3 +33,7 @@ export const endRide = (id: string, data: UpdateRideInformationDto): Response<vo
 export const reviewRide = (id: string, data: UpdateRideReviewDto): Response<void> => {
   return _patch(URL + `/${id}/review`, data);
 };
+
+export const getEndRideUri = (id: string, stationId: string): string => {
+  return URL + `/${id}/end/${stationId}`;
+};

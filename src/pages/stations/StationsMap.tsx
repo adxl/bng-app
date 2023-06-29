@@ -4,10 +4,11 @@ import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { Link } from "react-router-dom";
 import { Accordion, Alert, Badge, Button, Card, Label, Modal, Select, Textarea } from "flowbite-react";
 import Lottie from "lottie-react";
+import { QRCodeCanvas } from "qrcode.react";
 
 import { getSelfEventsWinner } from "@api/events/events-winner";
 import { createReport } from "@api/gears/reports";
-import { createRide, endRide, getSelfCurrentRide, reviewRide } from "@api/gears/rides";
+import { createRide, endRide, getEndRideUri, getSelfCurrentRide, reviewRide } from "@api/gears/rides";
 import { getAllStations } from "@api/gears/stations";
 import { getAllSkins } from "@api/gears/vehicles-skins";
 import { useAuth } from "@hooks/auth";
@@ -48,16 +49,19 @@ const StationsMap: React.FC = () => {
   useEffect(() => {
     updateRide();
 
-    Promise.all([getAllExamsUser(), getAllStations(), getAllSkins()]).then(([{ data: exams }, { data: stations }, { data: skins }]) => {
+    Promise.all([getAllExamsUser(), getAllStations(), getAllSkins()]).then(([{ data: exams }, { data: stationsData }, { data: skins }]) => {
       const allowedVehiclesTypes = exams.filter((exam) => exam.attempts).map((exam) => exam.typeId);
+      const stations = stationsData
+        .filter((s) => s.active)
+        .map((s) => ({
+          ...s,
+          vehicles: s.vehicles.filter((v) => v.active && allowedVehiclesTypes.includes(v.type.id)),
+        }));
+
       setAllowedVehiclesTypes(allowedVehiclesTypes);
-      stations.map((station) => {
-        station.vehicles = station.vehicles.filter((vehicle) => allowedVehiclesTypes.includes(vehicle.type.id));
-      });
       setStations(stations);
       setSkins(skins);
     });
-    getAllStations().then(({ data }) => setStations(data));
     getAllSkins().then(({ data }) => setSkins(data));
     getSelfEventsWinner(user.id!).then(({ data }) => {
       setUserCaps(data.caps);
@@ -178,7 +182,7 @@ const StationsMap: React.FC = () => {
                 {_selectedStation.vehicles
                   .sort((v1, v2) => (v1.type.capsMilestone < v2.type.capsMilestone ? -1 : 1))
                   .map((vehicle) => {
-                    const isUnlocked = vehicle.type.capsMilestone < _userCaps;
+                    const isUnlocked = vehicle.type.capsMilestone <= _userCaps;
 
                     return (
                       <Card key={vehicle.id}>
@@ -293,6 +297,18 @@ const StationsMap: React.FC = () => {
                     </option>
                   ))}
                 </Select>
+
+                {_ride.id && _selectedStation && (
+                  <div className="w-full flex flex-col justify-center items-center mb-10">
+                    <div className="mb-5">
+                      <h4>Scanne ce QR-Code qui vient de s&apos;afficher sur le tableau de bord de ton véhicule</h4>
+                      <p>Afin de mettre fin à ta course</p>
+                    </div>
+                    <div>
+                      <QRCodeCanvas value={getEndRideUri(_ride.id, _selectedStation.id)} />
+                    </div>
+                  </div>
+                )}
 
                 <Accordion className="w-full mb-2">
                   <Accordion.Panel>
