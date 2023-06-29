@@ -111,9 +111,8 @@ const ExamsList: React.FC = () => {
                 </div>
                 <Button gradientDuoTone="greenToBlue" onClick={handleCreate} className="ml-4">
                   Ajouter un exam
-                 </Button>
+                </Button>
               </div>
-             
             </div>
           ) : (
             <div className="flex flex-col items-center w-full">
