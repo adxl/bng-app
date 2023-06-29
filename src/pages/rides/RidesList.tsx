@@ -7,7 +7,7 @@ import { Card, Timeline } from "flowbite-react";
 import { findUsersByIds } from "@api/auth/user";
 import { getAllRides, getSelfRides } from "@api/gears/rides";
 import { useAuth } from "@hooks/auth";
-import { isTechnician, isUser } from "@typing/api/auth/users";
+import { hasBackScope, isUser } from "@typing/api/auth/users";
 import type { Ride } from "@typing/api/gears/rides";
 
 const RidesList: React.FC = () => {
@@ -22,7 +22,7 @@ const RidesList: React.FC = () => {
       });
     }
 
-    if (isTechnician(user)) {
+    if (hasBackScope(user)) {
       getAllRides().then(({ data: ridesData }) => {
         const ridesUsers = ridesData.map((ride) => ride.userId);
         findUsersByIds({ ids: ridesUsers }).then(({ data: users }) => {
