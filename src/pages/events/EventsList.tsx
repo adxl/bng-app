@@ -4,7 +4,7 @@ import { HiPencilSquare } from "react-icons/hi2";
 import { Link } from "react-router-dom";
 import { Badge, Button, Card } from "flowbite-react";
 
-import { findUsersByIds } from "@api/auth/user";
+import { findPublicUsersByIds } from "@api/auth/user";
 import { getAllEvents } from "@api/events/events";
 import { findStationByIds } from "@api/gears/stations";
 import { useAuth } from "@hooks/auth";
@@ -20,7 +20,7 @@ const EventsList: React.FC = () => {
       const eventsStations = eventsData.map((e) => e.stationId);
       const eventsUsers = eventsData.flatMap((e) => e.winners.map((w) => w.userId)).filter((u) => u);
 
-      Promise.all([findStationByIds({ ids: eventsStations }), findUsersByIds({ ids: eventsUsers })]).then(([stations, users]) => {
+      Promise.all([findStationByIds({ ids: eventsStations }), findPublicUsersByIds({ ids: eventsUsers })]).then(([stations, users]) => {
         const events = eventsData.map((e) => ({
           ...e,
           station: stations.data.find((s) => s.id === e.stationId),
@@ -50,12 +50,12 @@ const EventsList: React.FC = () => {
                   <div className="flex align-center">
                     <p className="whitespace-nowrap">{event.name}</p>
                     {event.endedAt ? (
-                      <Badge color="red" size="sm" className="ml-3">
+                      <Badge color="green" size="sm" className="ml-3">
                         Terminé
                       </Badge>
                     ) : (
-                      <Badge color="warning" size="sm" className="ml-3">
-                        A_venir
+                      <Badge color="warning" size="sm" className="ml-3 whitespace-nowrap">
+                        À venir
                       </Badge>
                     )}
                   </div>
@@ -84,19 +84,36 @@ const EventsList: React.FC = () => {
                     .sort((a, b) => a.rank - b.rank)
                     .map((winner, index) => (
                       <div key={index} className="flex gap-2 m-1 i">
-                        {winner.rank === 1 ? (
-                          <img src="/medaille-dor.png" alt="Médaille d'or" className="w-6 h-6" />
-                        ) : winner.rank === 2 ? (
-                          <img src="/medaille-dargent.png" alt="Médaille d'argent" className="w-6 h-6" />
-                        ) : (
-                          <img src="/medaille-de-bronze.png" alt="Médaille de bronze" className="w-6 h-6" />
+                        {winner.rank === 1 && (
+                          <div className="flex align-center">
+                            <img src="/medaille-dor.png" alt="Médaille d'or" className="w-6 h-6" />
+                            <strong>1ère place:</strong>
+                          </div>
                         )}
-                        {winner.user?.firstName || ""} {winner.user?.lastName || ""}
+                        {winner.rank === 2 && (
+                          <div className="flex align-center">
+                            <img src="/medaille-dargent.png" alt="Médaille d'argent" className="w-6 h-6" />
+                            <strong>2e place:</strong>
+                          </div>
+                        )}
+                        {winner.rank === 3 && (
+                          <div className="flex align-center">
+                            <img src="/medaille-de-bronze.png" alt="Médaille de bronze" className="w-6 h-6" />
+                            <strong>3e place:</strong>
+                          </div>
+                        )}
+                        {winner.user ? (
+                          <span>
+                            {winner.user?.firstName || ""} {winner.user?.lastName || ""}
+                          </span>
+                        ) : (
+                          <i>-</i>
+                        )}
                       </div>
                     ))}
                 </ul>
               ) : (
-                <p className="text-gray-500 ml-3">Résultats: A venir</p>
+                <p className="text-gray-500 ml-3">Résultats à venir</p>
               )}
             </Card>
           ))}

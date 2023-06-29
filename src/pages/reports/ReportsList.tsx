@@ -15,8 +15,8 @@ const ReportsList: React.FC = () => {
   const [_reports, setReports] = useState<Report[]>([]);
 
   useEffect(() => {
-    getReports().then((response) => {
-      setReports(response.data);
+    getReports().then(({ data }) => {
+      setReports(data);
     });
   }, []);
 

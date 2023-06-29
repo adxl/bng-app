@@ -4,8 +4,10 @@ import { HiStar } from "react-icons/hi";
 import { LuPlaneLanding, LuPlaneTakeoff } from "react-icons/lu";
 import { Card, Timeline } from "flowbite-react";
 
-import { getSelfRides } from "@api/gears/rides";
+import { findUsersByIds } from "@api/auth/user";
+import { getAllRides, getSelfRides } from "@api/gears/rides";
 import { useAuth } from "@hooks/auth";
+import { isTechnician, isUser } from "@typing/api/auth/users";
 import type { Ride } from "@typing/api/gears/rides";
 
 const RidesList: React.FC = () => {
@@ -14,9 +16,21 @@ const RidesList: React.FC = () => {
   const [_rides, setRides] = useState<Ride[]>([]);
 
   useEffect(() => {
-    getSelfRides().then((response) => {
-      setRides(response.data.filter((ride) => ride.userId === user.id));
-    });
+    if (isUser(user)) {
+      getSelfRides().then(({ data }) => {
+        setRides(data);
+      });
+    }
+
+    if (isTechnician(user)) {
+      getAllRides().then(({ data: ridesData }) => {
+        const ridesUsers = ridesData.map((ride) => ride.userId);
+        findUsersByIds({ ids: ridesUsers }).then(({ data: users }) => {
+          const rides = ridesData.map((r) => ({ ...r, user: users.find((u) => u.id === r.userId) }));
+          setRides(rides);
+        });
+      });
+    }
   }, []);
 
   return (
@@ -28,7 +42,7 @@ const RidesList: React.FC = () => {
             <Card key={ride.id}>
               <div className="flex flex-col">
                 <div className="w-full flex items-center justify-between gap-2">
-                  <Timeline horizontal>
+                  <Timeline horizontal className="w-full flex justify-between">
                     <Timeline.Item>
                       <Timeline.Point icon={LuPlaneTakeoff} />
                       <Timeline.Content>
@@ -59,20 +73,6 @@ const RidesList: React.FC = () => {
                       </Timeline.Content>
                     </Timeline.Item>
                   </Timeline>
-                  {ride.endedAt && ride.review !== null ? (
-                    <div className="flex">
-                      {[...Array(5)].map((_, index) => {
-                        const currentRating = index + 1;
-                        return (
-                          <label key={currentRating}>
-                            <HiStar className="star" size={32} color={currentRating <= ride.review! ? "#ffc107" : "#e4e5e9"} />
-                          </label>
-                        );
-                      })}
-                    </div>
-                  ) : (
-                    <p className="text-gray-500 ml-3">Pas de review</p>
-                  )}
                 </div>
                 <hr className="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700" />
                 {ride.comment ? (
@@ -95,6 +95,28 @@ const RidesList: React.FC = () => {
                   </figure>
                 ) : (
                   <p className="text-gray-500 ml-3">Pas de commentaire</p>
+                )}
+                <div className="flex justify-center mt-4">
+                  {ride.endedAt && ride.review !== null ? (
+                    <div className="flex">
+                      {[...Array(5)].map((_, index) => {
+                        const currentRating = index + 1;
+                        return (
+                          <label key={currentRating}>
+                            <HiStar className="star" size={32} color={currentRating <= ride.review! ? "#ffc107" : "#e4e5e9"} />
+                          </label>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <p className="text-gray-500 ml-3">Pas de review</p>
+                  )}
+                </div>
+                {ride.user && (
+                  <div className="mt-3">
+                    <span>{ride.user.firstName}</span>&nbsp;
+                    <span>{ride.user.lastName?.toUpperCase()}</span>
+                  </div>
                 )}
               </div>
             </Card>
