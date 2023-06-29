@@ -5,18 +5,20 @@ import { Alert, Button, Card, Label, Select, TextInput } from "flowbite-react";
 
 import { getAllUsers } from "@api/auth/user";
 import { deleteEvent, getOneEvent, updateEvent } from "@api/events/events";
-import { updateEventWinners } from "@api/events/eventsWinners";
+import { updateEventWinners } from "@api/events/events-winner";
 import type { User } from "@typing/api/auth/users";
 
-const UsersListOptions: React.FC<{ users: User[] }> = ({ users }) =>
-  users.map((user) => (
-    <React.Fragment key={user.id}>
-      <option key={user.id} value={user.id!}>
-        {user.firstName} {user.lastName} - ({user.email})
-      </option>
-    </React.Fragment>
-  ));
-
+const UsersListOptions: React.FC<{ users: User[] }> = ({ users }) => (
+  <React.Fragment>
+    {users.map((user) => (
+      <React.Fragment key={user.id}>
+        <option key={user.id} value={user.id!}>
+          {user.firstName} {user.lastName} - ({user.email})
+        </option>
+      </React.Fragment>
+    ))}
+  </React.Fragment>
+);
 const EventsEdit: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -103,7 +105,7 @@ const EventsEdit: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col w-full">
       <div className="flex justify-between mb-5">
         <Button color="dark">
           <Link to="/admin/events">Retour</Link>
@@ -112,7 +114,7 @@ const EventsEdit: React.FC = () => {
           Supprimer
         </Button>
       </div>
-      <Card>
+      <Card className="self-center">
         {_error && (
           <Alert color="failure" icon={HiInformationCircle}>
             <p>{_error}</p>

@@ -69,7 +69,10 @@ const Home: React.FC = () => {
                           {new Date(ride.createdAt).toLocaleDateString("fr-FR")} à&nbsp;
                           {new Date(ride.createdAt).toLocaleTimeString("fr-FR")}
                         </Timeline.Time>
-                        <Timeline.Title>{ride.startStation.name}</Timeline.Title>
+                        <Timeline.Title>De: {ride.startStation.name}</Timeline.Title>
+                        <Timeline.Body>
+                          <p className="text-gray-500 text-sm">{ride.vehicle.type.name}</p>
+                        </Timeline.Body>
                       </Timeline.Content>
                     </Timeline.Item>
                     <Timeline.Item>
@@ -85,7 +88,10 @@ const Home: React.FC = () => {
                             <>Course non terminée</>
                           )}
                         </Timeline.Time>
-                        <Timeline.Title>{ride.endStation?.name}</Timeline.Title>
+                        <Timeline.Title>À: {ride.endStation?.name}</Timeline.Title>
+                        <Timeline.Body>
+                          <p className="text-gray-500 text-sm">{ride.vehicle.type.name}</p>
+                        </Timeline.Body>
                       </Timeline.Content>
                     </Timeline.Item>
                   </Timeline>

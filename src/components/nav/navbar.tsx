@@ -15,9 +15,11 @@ const Navbar: React.FC = () => {
   const [_eventsWinner, setEventsWinner] = useState<SelfEventWinner | null>(null);
 
   useEffect(() => {
-    getSelfEventsWinner(user.id!).then((response) => {
-      setEventsWinner(response.data);
-    });
+    if (isUser(user)) {
+      getSelfEventsWinner(user.id!).then(({ data }) => {
+        setEventsWinner(data);
+      });
+    }
   }, []);
 
   return (
@@ -28,7 +30,7 @@ const Navbar: React.FC = () => {
       <div className="flex md:order-2 items-center">
         <FlowbiteNavbar.Toggle />
         {isUser(user) && _eventsWinner && (
-          <div className="flex items-center">
+          <div className="flex items-center mr-6">
             <div className="flex mr-5">
               <img src="/cap.png" alt="cap" className="w-6 h-6 mr-2" />
               <span>{_eventsWinner.caps}</span>
@@ -48,9 +50,6 @@ const Navbar: React.FC = () => {
           </div>
         )}
 
-        <Badge color="indigo" className="mr-3">
-          {user.role}
-        </Badge>
         <Dropdown inline label={<Avatar alt="User" img="/jetpack.png" rounded />} className="rounded-md" arrowIcon={false}>
           <Dropdown.Header>
             <span className="block text-sm">
@@ -74,6 +73,13 @@ const Navbar: React.FC = () => {
             <p>Se déconnecter</p>
           </Dropdown.Item>
         </Dropdown>
+
+        <div className="flex items-baseline ml-3">
+          <span>{user.firstName}</span>
+          <Badge color="indigo" className="ml-3">
+            {user.role}
+          </Badge>
+        </div>
       </div>
     </FlowbiteNavbar>
   );

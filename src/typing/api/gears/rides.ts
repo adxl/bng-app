@@ -1,3 +1,5 @@
+import type { User } from "../auth/users";
+
 import type { Report } from "./reports";
 import type { Station } from "./stations";
 import type { Vehicle } from "./vehicles";
@@ -17,6 +19,7 @@ export type Ride = {
   report: Report;
 
   userId: string;
+  user?: User;
 
   createdAt: Date;
 

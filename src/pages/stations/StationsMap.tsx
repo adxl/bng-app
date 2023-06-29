@@ -4,6 +4,7 @@ import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { Accordion, Alert, Button, Card, Label, Modal, Select, Textarea } from "flowbite-react";
 import Lottie from "lottie-react";
 
+import { createReport } from "@api/gears/reports";
 import { createRide, endRide, getSelfCurrentRide, reviewRide } from "@api/gears/rides";
 import { getAllStations } from "@api/gears/stations";
 import { getAllSkins } from "@api/gears/vehicles-skins";
@@ -68,7 +69,8 @@ const StationsMap: React.FC = () => {
     setSelectedSkin(skin);
   };
 
-  const handleReservationSubmit = () => {
+  const handleReservationSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
     createRide({ vehicle: _selectedVehicle!, userId: user.id!, skin: _selectedSkin! })
       .then(() => {
         setOpenModal(false);
@@ -92,7 +94,12 @@ const StationsMap: React.FC = () => {
         }
 
         reviewRide(_ride!.id, { review: _review, comment: _comment.current ? _comment.current.value : undefined })
-          .then(() => setSuccess("Course terminée !"))
+          .then(() => {
+            setSuccess("Course terminée !");
+            if (_review === 1) {
+              createReport({ ride: _ride! });
+            }
+          })
           .catch(() => setError("Une erreur est survenue"));
       })
       .catch(() => setError("Une erreur est survenue"));
@@ -222,9 +229,9 @@ const StationsMap: React.FC = () => {
                   ))}
                 </Select>
 
-                <Accordion collapseAll className="w-full mb-2">
+                <Accordion className="w-full mb-2">
                   <Accordion.Panel>
-                    <Accordion.Title>Laisser un avis (facultatif)</Accordion.Title>
+                    <Accordion.Title> Laisser un avis</Accordion.Title>
                     <Accordion.Content>
                       <div className="flex justify-center w-full">
                         <div className="flex flex-col max-w-md w-1/2 gap-4 w-full">
