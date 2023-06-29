@@ -13,8 +13,10 @@ import type { Answer } from "../../typing/api/exams/answers";
 type Props = {
   answers: Answer[];
   questionId: string;
+  reloadExam: () => void;
 };
-const AnswersList: React.FC<Props> = ({ answers, questionId }) => {
+
+const AnswersList: React.FC<Props> = ({ answers, questionId, reloadExam }) => {
   const [_answers, setAnswers] = useState<Answer[]>(answers);
   const [_title, setTitle] = useState<string>("");
   const [_error, setError] = useState<string>("");
@@ -42,13 +44,22 @@ const AnswersList: React.FC<Props> = ({ answers, questionId }) => {
     e.preventDefault();
 
     const answer = _answers.find((answer) => answer.id === id);
+
     if (!answer) return;
     if (!answer.title.length) return;
+
+    if (_answers.filter((a) => a.isCorrect).length !== 1) {
+      return setError("Erreur: une seule bonne réponse par question");
+    }
+
     const data = {
       title: answer.title,
       isCorrect: answer.isCorrect,
     };
-    updateAnswer(id, data).catch(() => setError("Une erreur est survenue"));
+
+    updateAnswer(id, data)
+      .then(reloadExam)
+      .catch(() => setError("Une erreur est survenue"));
   };
 
   const handleCreate = () => {
@@ -90,6 +101,13 @@ const AnswersList: React.FC<Props> = ({ answers, questionId }) => {
           <p>{_error}</p>
         </Alert>
       )}
+
+      {_answers.filter((a) => a.isCorrect).length !== 1 && (
+        <Alert color="failure" icon={HiInformationCircle}>
+          <p>ATTENTION: Une seule réponse seulement doit être spécifié comme étant la bonne réponse</p>
+        </Alert>
+      )}
+
       {_answers.map((answer) => (
         <div key={answer.id}>
           <form key={answer.id} onSubmit={(e) => handleUpdate(e, answer.id)} className="w-full">

@@ -83,13 +83,13 @@ const ExamsListUser: React.FC = () => {
                       <strong>
                         <FaQuestion />
                       </strong>
-                      <span>{exam.questions.length}</span>
+                      <span>{exam.questions.length} questions</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <strong>
                         <BsHourglassSplit />
                       </strong>
-                      <span>{fromMinutesToHours(exam.duration)} minutes</span>
+                      <span>{fromMinutesToHours(exam.duration)} </span>
                     </div>
                   </div>
                   <div className=" flex justify-end">

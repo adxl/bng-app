@@ -32,7 +32,7 @@ const ExamsEdit: React.FC = () => {
     exam: { id: id! },
   };
 
-  useEffect(() => {
+  const reloadExam = () => {
     getOneExam(id!).then(({ data }) => {
       setDuration(data.duration);
       setQuestions(data.questions);
@@ -40,6 +40,10 @@ const ExamsEdit: React.FC = () => {
         setName(data.name);
       });
     });
+  };
+
+  useEffect(() => {
+    reloadExam();
   }, []);
 
   useEffect(() => {
@@ -175,7 +179,7 @@ const ExamsEdit: React.FC = () => {
               </form>
 
               <h4 className="text-2xl font-bold dark:text-white text-left mb-4 mt-6">Réponses</h4>
-              <AnswersList questionId={question.id} answers={question.answers} />
+              <AnswersList questionId={question.id} answers={question.answers} reloadExam={reloadExam} />
             </div>
           </Card>
         ))}

@@ -25,14 +25,17 @@ const ExamsList: React.FC = () => {
 
   const refreshData = () => {
     getAllExams().then(({ data }) => setExams(data));
-    Promise.all([getAllExams(), getAllTypes()]).then(([{ data: exams }, { data: types }]) => {
-      exams.map((exam) => {
-        exam.type = types.find((type) => type.id === exam.typeId);
-      });
-      setExams(exams);
-      types = types.filter((type) => exams.find((exam) => exam.typeId === type.id) === undefined);
-      setTypes(types);
+    Promise.all([getAllExams(), getAllTypes()]).then(([{ data: examsData }, { data: typesData }]) => {
+      const exams = examsData.map((exam) => ({
+        ...exam,
+        type: typesData.find((type) => type.id === exam.typeId),
+      }));
+
+      const types = typesData.filter((type) => exams.find((exam) => exam.typeId === type.id) === undefined);
       if (types.length) setType(types[0].id);
+
+      setTypes(types);
+      setExams(exams);
     });
   };
 
