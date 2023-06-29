@@ -123,10 +123,10 @@ const AnswersList: React.FC<Props> = ({ answers, questionId, reloadExam }) => {
               <div>
                 <ToggleSwitch checked={answer.isCorrect} value={""} onChange={(value) => handleFormChangeSwitch(answer.id, value)} label={""} />
               </div>
-              <Button type="submit">
+              <Button gradientDuoTone="greenToBlue" type="submit">
                 <BiSave />
               </Button>
-              <Button color="failure" onClick={() => handleDelete(answer.id)}>
+              <Button gradientDuoTone="pinkToOrange" onClick={() => handleDelete(answer.id)}>
                 <MdDeleteOutline />
               </Button>
             </div>
@@ -137,7 +137,7 @@ const AnswersList: React.FC<Props> = ({ answers, questionId, reloadExam }) => {
         <div className="w-full">
           <Label>Ajouter une réponse</Label>
           <TextInput maxLength={150} minLength={1} required onChange={(e) => setTitle(e.target.value)} value={_title} />
-          <Button onClick={handleCreate} className="w-full mt-2">
+          <Button gradientDuoTone="greenToBlue" onClick={handleCreate} className="w-full mt-2">
             <BiSave />
           </Button>
         </div>

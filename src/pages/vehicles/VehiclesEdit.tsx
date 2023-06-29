@@ -67,16 +67,16 @@ const VehiclesEdit: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col w-full">
       <div className="flex justify-between mb-5">
-        <Button color="dark">
-          <Link to="/admin/vehicles">Retour</Link>
-        </Button>
-        <Button color="failure" onClick={handleDelete}>
+        <Link to="/admin/vehicles">
+          <Button gradientDuoTone="greenToBlue">Retour</Button>
+        </Link>
+        <Button gradientDuoTone="pinkToOrange" onClick={handleDelete}>
           Supprimer
         </Button>
       </div>
-      <Card>
+      <Card className="self-center">
         {_error && (
           <Alert color="failure" icon={HiInformationCircle}>
             <p>{_error}</p>
@@ -120,7 +120,7 @@ const VehiclesEdit: React.FC = () => {
             <ToggleSwitch checked={_active} label="Véhicule opérationnel" onChange={(value) => setActive(value)} />
           </div>
 
-          <Button color="dark" type="submit">
+          <Button gradientDuoTone="greenToBlue" type="submit">
             Enregistrer
           </Button>
         </form>

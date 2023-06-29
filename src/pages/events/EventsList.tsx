@@ -35,9 +35,9 @@ const EventsList: React.FC = () => {
     <>
       {isOrganizer(user) && (
         <div className="flex justify-end mb-4">
-          <Button color="dark">
-            <Link to="create">Ajouter un évènement</Link>
-          </Button>
+          <Link to="create">
+            <Button gradientDuoTone="greenToBlue">Ajouter un évènement</Button>
+          </Link>
         </div>
       )}
       <div className="w-full grid grid-cols-3 gap-4">
@@ -62,7 +62,7 @@ const EventsList: React.FC = () => {
                   <div className="w-full flex justify-end">
                     {isOrganizer(user) && (
                       <Link to={`edit/${event.id}`}>
-                        <Button color="dark">
+                        <Button gradientDuoTone="greenToBlue">
                           <HiPencilSquare />
                         </Button>
                       </Link>

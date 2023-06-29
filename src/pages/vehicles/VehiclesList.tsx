@@ -21,9 +21,9 @@ const VehiclesList: React.FC = () => {
     <>
       {isTechnician(user) && (
         <div className="flex justify-end my-4">
-          <Button color="dark">
-            <Link to="create">Ajouter un véhicule</Link>
-          </Button>
+          <Link to="create">
+            <Button gradientDuoTone="greenToBlue">Ajouter un véhicule</Button>
+          </Link>
         </div>
       )}
       <div className="w-full grid grid-cols-3 gap-4">
@@ -46,7 +46,7 @@ const VehiclesList: React.FC = () => {
                 <div className="w-full flex justify-end">
                   {isTechnician(user) && (
                     <Link to={`edit/${vehicle.id}`}>
-                      <Button color="dark">
+                      <Button gradientDuoTone="greenToBlue">
                         <HiPencilSquare />
                       </Button>
                     </Link>
@@ -71,9 +71,9 @@ const VehiclesList: React.FC = () => {
       </div>
       {isTechnician(user) && _vehicles.length > 9 && (
         <div className="flex justify-end my-4">
-          <Button color="dark">
-            <Link to="create">Ajouter un véhicule</Link>
-          </Button>
+          <Link to="create">
+            <Button gradientDuoTone="greenToBlue">Ajouter un véhicule</Button>
+          </Link>
         </div>
       )}
     </>

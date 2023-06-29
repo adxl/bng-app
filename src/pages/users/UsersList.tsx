@@ -70,7 +70,7 @@ const UsersList: React.FC = () => {
         <div className="flex items-center">
           <h3 className="text-2xl font-bold mr-2">Utilisateurs</h3>
           <Link to={"create"}>
-            <Button color="success">
+            <Button gradientDuoTone="greenToBlue">
               <HiUserAdd className="w-4 h-4" />
               Créer
             </Button>
@@ -115,7 +115,7 @@ const UsersList: React.FC = () => {
                   )}
                 </Table.Cell>
                 <Table.Cell>
-                  <Button color={"failure"} onClick={() => handleRemoveUser(oneUser.id!)}>
+                  <Button gradientDuoTone="pinkToOrange" onClick={() => handleRemoveUser(oneUser.id!)}>
                     <HiOutlineTrash className="w-4 h-4" />
                   </Button>
                 </Table.Cell>

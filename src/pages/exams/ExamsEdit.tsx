@@ -115,9 +115,9 @@ const ExamsEdit: React.FC = () => {
     <div className="w-full">
       <div className="flex justify-between mb-10">
         <Link to="/admin/exams">
-          <Button color="dark">Retour</Button>
+          <Button gradientDuoTone="greenToBlue">Retour</Button>
         </Link>
-        <Button color="failure" onClick={handleDelete}>
+        <Button gradientDuoTone="pinkToOrange" onClick={handleDelete}>
           Supprimer
         </Button>
       </div>
@@ -140,7 +140,7 @@ const ExamsEdit: React.FC = () => {
         <div className="flex justify-between items-center gap-5">
           <h4 className="text-2xl font-bold dark:text-white w-1/2">Durée</h4>
           <TextInput min="1" required type="number" value={_duration} onChange={(e) => setDuration(Number(e.target.value))} />
-          <Button onClick={handleUpdate}>
+          <Button gradientDuoTone="greenToBlue" onClick={handleUpdate}>
             <BiSave />
           </Button>
         </div>
@@ -149,7 +149,7 @@ const ExamsEdit: React.FC = () => {
         <div className="w-full">
           <Label>Ajouter une question</Label>
           <TextInput maxLength={150} minLength={1} required onChange={(e) => setQuestionTitle(e.target.value)} value={_questionTitle} />
-          <Button onClick={handleCreateQuestion} className="w-full mt-2">
+          <Button gradientDuoTone="greenToBlue" onClick={handleCreateQuestion} className="w-full mt-2">
             <BiSave />
           </Button>
         </div>
@@ -169,10 +169,10 @@ const ExamsEdit: React.FC = () => {
                     onChange={(e) => handleFormChangeQuestion(question.id, e.target.value)}
                     className=" w-3/4"
                   />
-                  <Button type="submit">
+                  <Button gradientDuoTone="greenToBlue" type="submit">
                     <BiSave />
                   </Button>
-                  <Button color="failure" onClick={() => handleDeleteQuestion(question.id)}>
+                  <Button gradientDuoTone="pinkToOrange" onClick={() => handleDeleteQuestion(question.id)}>
                     <MdDeleteOutline />
                   </Button>
                 </div>

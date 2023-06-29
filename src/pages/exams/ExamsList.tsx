@@ -102,7 +102,7 @@ const ExamsList: React.FC = () => {
                   ""
                 )}
               </div>
-              <Button onClick={handleCreate} className="ml-4">
+              <Button gradientDuoTone="greenToBlue" onClick={handleCreate} className="ml-4">
                 Ajouter un exam
               </Button>
             </div>
@@ -120,7 +120,7 @@ const ExamsList: React.FC = () => {
                   <div className=" text-start">{exam.type && "Exam de type : " + exam.type.name}</div>
                   <div className=" flex justify-end">
                     <Link to={`edit/${exam.id}`}>
-                      <Button color="dark">
+                      <Button gradientDuoTone="greenToBlue">
                         <HiPencilSquare />
                       </Button>
                     </Link>
