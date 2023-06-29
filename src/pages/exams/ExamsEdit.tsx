@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { CiSaveDown1 } from "react-icons/ci";
+import { BiSave } from "react-icons/bi";
 import { HiInformationCircle } from "react-icons/hi";
 import { MdDeleteOutline } from "react-icons/md";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -67,7 +67,7 @@ const ExamsEdit: React.FC = () => {
 
   const handleUpdate = () => {
     updateExam(id!, data)
-      .then(() => console.log("success"))
+      .then(() => setSuccess("Modification réussie"))
       .catch(() => setError("Une erreur est survenue"));
   };
 
@@ -80,7 +80,7 @@ const ExamsEdit: React.FC = () => {
       title: question.title,
     };
     updateQuestion(id, data)
-      .then(() => console.log("success"))
+      .then(() => setSuccess("Modification réussie"))
       .catch(() => setError("Une erreur est survenue"));
   };
 
@@ -110,47 +110,51 @@ const ExamsEdit: React.FC = () => {
   return (
     <div className="w-full">
       <div className="flex justify-between mb-10">
-        <Button color="dark">
-          <Link to="/admin/exams">Retour</Link>
-        </Button>
+        <Link to="/admin/exams">
+          <Button color="dark">Retour</Button>
+        </Link>
         <Button color="failure" onClick={handleDelete}>
           Supprimer
         </Button>
       </div>
+
+      <div>
+        {_success && (
+          <Alert color="success" icon={HiInformationCircle}>
+            <p>{_success}</p>
+          </Alert>
+        )}
+        {_error && (
+          <Alert color="failure" icon={HiInformationCircle}>
+            <p>{_error}</p>
+          </Alert>
+        )}
+      </div>
+
       <div className="flex justify-between my-10">
-        <h4 className="text-4xl font-bold dark:text-white text-left mb-4 ">Type de l'examen : {_name}</h4>
+        <h4 className="text-4xl font-bold dark:text-white text-left mb-4 ">Type de l&apos;examen : {_name}</h4>
         <div className="flex justify-between items-center gap-5">
           <h4 className="text-2xl font-bold dark:text-white w-1/2">Durée</h4>
           <TextInput min="1" required type="number" value={_duration} onChange={(e) => setDuration(Number(e.target.value))} />
           <Button onClick={handleUpdate}>
-            <CiSaveDown1 />
+            <BiSave />
           </Button>
         </div>
       </div>
       <div className="flex justify-center items-end gap-11 mb-9">
-        <div className="w-1/3">
-          {_success && (
-            <Alert color="success" icon={HiInformationCircle}>
-              <p>{_success}</p>
-            </Alert>
-          )}
+        <div className="w-full">
           <Label>Ajouter une question</Label>
           <TextInput maxLength={150} minLength={1} required onChange={(e) => setQuestionTitle(e.target.value)} value={_questionTitle} />
           <Button onClick={handleCreateQuestion} className="w-full mt-2">
-            <CiSaveDown1 />
+            <BiSave />
           </Button>
         </div>
       </div>
       <div className="flex flex-col gap-8 w-full">
-        {_questions.map((question) => (
+        {_questions.map((question, index) => (
           <Card key={question.id} className="w-full">
-            {_error && (
-              <Alert color="failure" icon={HiInformationCircle}>
-                <p>{_error}</p>
-              </Alert>
-            )}
-
             <div className="flex flex-col gap-4 w-full">
+              <h4 className="text-2xl font-bold dark:text-white text-left mb-4 mt-6">Question {index + 1}</h4>
               <form onSubmit={(e) => handleSubmitQuestion(e, question.id)} className="w-full">
                 <div className="flex gap-7">
                   <TextInput
@@ -159,10 +163,10 @@ const ExamsEdit: React.FC = () => {
                     minLength={1}
                     maxLength={150}
                     onChange={(e) => handleFormChangeQuestion(question.id, e.target.value)}
-                    className=" w-1/4"
+                    className=" w-3/4"
                   />
                   <Button type="submit">
-                    <CiSaveDown1 />
+                    <BiSave />
                   </Button>
                   <Button color="failure" onClick={() => handleDeleteQuestion(question.id)}>
                     <MdDeleteOutline />

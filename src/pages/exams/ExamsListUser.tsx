@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { BsHourglassSplit } from "react-icons/bs";
 import { FaQuestion } from "react-icons/fa";
 import { HiInformationCircle, HiUserCircle } from "react-icons/hi";
 import { MdDashboard } from "react-icons/md";
-import { PiHourglassLowFill } from "react-icons/pi";
 import { Link, useLocation } from "react-router-dom";
 import { Alert, Button, Card, Tabs } from "flowbite-react";
 
@@ -50,9 +50,9 @@ const ExamsListUser: React.FC = () => {
           <p>{_error}</p>
         </Alert>
       )}
-      <h1 className="text-5xl font-extrabold dark:text-white text-center w-full my-4">Mes licenses</h1>
+      <h1 className="text-5xl font-extrabold dark:text-white text-center w-full my-4">Mes permis</h1>
       <Tabs.Group aria-label="Default tabs" style="default" className="w-full justify-center">
-        <Tabs.Item active icon={HiUserCircle} title="Licenses validées">
+        <Tabs.Item active icon={HiUserCircle} title="Permis validées">
           {_examsPassed.length ? (
             <div className="w-full flex flex-wrap gap-14 justify-center">
               {_examsPassed.map((exam) => (
@@ -67,10 +67,10 @@ const ExamsListUser: React.FC = () => {
               ))}
             </div>
           ) : (
-            <p className="text-center">Aucune license validée</p>
+            <p className="text-center">Aucun permis validée</p>
           )}
         </Tabs.Item>
-        <Tabs.Item icon={MdDashboard} title="Licenses non validées">
+        <Tabs.Item icon={MdDashboard} title="Permis non validées">
           {_examsNotPassed.length ? (
             <div className="w-full flex flex-wrap gap-14 justify-center">
               {_examsNotPassed.map((exam) => (
@@ -87,7 +87,7 @@ const ExamsListUser: React.FC = () => {
                     </div>
                     <div className="flex items-center gap-2">
                       <strong>
-                        <PiHourglassLowFill />
+                        <BsHourglassSplit />
                       </strong>
                       <span>{fromMinutesToHours(exam.duration)} minutes</span>
                     </div>

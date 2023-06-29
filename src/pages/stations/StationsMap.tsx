@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { HiInformationCircle, HiStar } from "react-icons/hi";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { Link } from "react-router-dom";
 import { Accordion, Alert, Button, Card, Label, Modal, Select, Textarea } from "flowbite-react";
 import Lottie from "lottie-react";
 
@@ -45,11 +46,7 @@ const StationsMap: React.FC = () => {
     updateRide();
 
     Promise.all([getAllExamsUser(), getAllStations(), getAllSkins()]).then(([{ data: exams }, { data: stations }, { data: skins }]) => {
-      const allowedVehiclesTypes: string[] = exams
-        .filter((exam) => exam.attempts)
-        .map((exam) => {
-          return exam.typeId;
-        });
+      const allowedVehiclesTypes = exams.filter((exam) => exam.attempts).map((exam) => exam.typeId);
       setAllowedVehiclesTypes(allowedVehiclesTypes);
       stations.map((station) => {
         station.vehicles = station.vehicles.filter((vehicle) => allowedVehiclesTypes.includes(vehicle.type.id));
@@ -180,6 +177,16 @@ const StationsMap: React.FC = () => {
                     </Button>
                   </Card>
                 ))}
+              </div>
+              <div className="bg-red-200 rounded p-5 mt-5">
+                <p>Tu cherches un véhicule en particulier ?</p>
+                <p>
+                  Assure-toi d&apos;avoir le&nbsp;
+                  <Link className="underline text-blue-500" to="/licenses">
+                    permis adéquat
+                  </Link>
+                  &nbsp;pour piloter ce dernier
+                </p>
               </div>
               <Modal show={_openModal} onClose={() => setOpenModal(false)} className="z-10">
                 <Modal.Header>

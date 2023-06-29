@@ -1,8 +1,8 @@
-import { Alert, Button, Label, TextInput, ToggleSwitch } from "flowbite-react";
 import React, { useEffect, useState } from "react";
-import { CiSaveDown1 } from "react-icons/ci";
+import { BiSave } from "react-icons/bi";
 import { HiInformationCircle } from "react-icons/hi";
 import { MdDeleteOutline } from "react-icons/md";
+import { Alert, Button, Label, TextInput, ToggleSwitch } from "flowbite-react";
 
 import { createAnswer, deleteAnswer, updateAnswer } from "@api/exams/answers";
 
@@ -90,15 +90,6 @@ const AnswersList: React.FC<Props> = ({ answers, questionId }) => {
           <p>{_error}</p>
         </Alert>
       )}
-      <div className="flex justify-start items-end gap-11 mb-9">
-        <div className="w-1/3">
-          <Label>Ajouter une réponse</Label>
-          <TextInput maxLength={150} minLength={1} required onChange={(e) => setTitle(e.target.value)} value={_title} />
-          <Button onClick={handleCreate} className="w-full mt-2">
-            <CiSaveDown1 />
-          </Button>
-        </div>
-      </div>
       {_answers.map((answer) => (
         <div key={answer.id}>
           <form key={answer.id} onSubmit={(e) => handleUpdate(e, answer.id)} className="w-full">
@@ -109,12 +100,13 @@ const AnswersList: React.FC<Props> = ({ answers, questionId }) => {
                 required
                 value={answer.title}
                 onChange={(e) => handleFormChange(answer.id, e.target.value)}
-                className=" w-1/4"
+                className=" w-3/4"
               />
-              <ToggleSwitch checked={answer.isCorrect} value={""} onChange={(value) => handleFormChangeSwitch(answer.id, value)} label={""} />
-
+              <div>
+                <ToggleSwitch checked={answer.isCorrect} value={""} onChange={(value) => handleFormChangeSwitch(answer.id, value)} label={""} />
+              </div>
               <Button type="submit">
-                <CiSaveDown1 />
+                <BiSave />
               </Button>
               <Button color="failure" onClick={() => handleDelete(answer.id)}>
                 <MdDeleteOutline />
@@ -123,6 +115,15 @@ const AnswersList: React.FC<Props> = ({ answers, questionId }) => {
           </form>
         </div>
       ))}
+      <div className="flex justify-start items-end gap-11 mb-9">
+        <div className="w-full">
+          <Label>Ajouter une réponse</Label>
+          <TextInput maxLength={150} minLength={1} required onChange={(e) => setTitle(e.target.value)} value={_title} />
+          <Button onClick={handleCreate} className="w-full mt-2">
+            <BiSave />
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };

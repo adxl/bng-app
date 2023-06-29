@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { BsHourglassSplit } from "react-icons/bs";
 import { FaQuestion } from "react-icons/fa";
 import { HiInformationCircle, HiPencilSquare } from "react-icons/hi2";
-import { PiHourglassLowFill } from "react-icons/pi";
 import { Link } from "react-router-dom";
 import { Alert, Button, Card, Label, Select, TextInput } from "flowbite-react";
 
@@ -75,8 +75,7 @@ const ExamsList: React.FC = () => {
           <div className="w-full justify-center">
             <div className="flex  my-9 justify-center w-50 items-end">
               <div>
-                {/* eslint-disable-next-line react/no-unescaped-entities */}
-                <Label>Durée de l'examen (en minutes)</Label>
+                <Label>Durée de l&apos;examen (en minutes)</Label>
                 <TextInput
                   type="number"
                   className="mr-4"
@@ -87,8 +86,7 @@ const ExamsList: React.FC = () => {
                 />
               </div>
               <div>
-                {/* eslint-disable-next-line react/no-unescaped-entities */}
-                <Label>Type de l'examen</Label>
+                <Label>Type de l&apos;examen</Label>
                 {_types.length ? (
                   <Select required onChange={(e) => setType(e.target.value)} value={_type}>
                     {_types.map((type) => (
@@ -111,9 +109,9 @@ const ExamsList: React.FC = () => {
             <span className="text-lg">Tous les exams ont été crées</span>
           </div>
         )}
-        <div className="w-full flex flex-wrap gap-14 justify-center">
+        <div className="grid grid-cols-2  gap-5 mt-10">
           {_exams.map((exam) => (
-            <Card key={exam.id} className=" w-1/4">
+            <Card key={exam.id} className=" w-full">
               <div className="flex flex-col items-start">
                 <div className="w-full flex items-center justify-between gap-2">
                   <div className=" text-start">{exam.type && "Exam de type : " + exam.type.name}</div>
@@ -133,9 +131,9 @@ const ExamsList: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <strong>
-                    <PiHourglassLowFill />
+                    <BsHourglassSplit />
                   </strong>
-                  <span>{fromMinutesToHours(exam.duration)} minutes</span>
+                  <span>{fromMinutesToHours(exam.duration)}</span>
                 </div>
               </div>
             </Card>
