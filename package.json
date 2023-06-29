@@ -14,6 +14,7 @@
     "@fullcalendar/daygrid": "^6.1.8",
     "@fullcalendar/interaction": "^6.1.8",
     "@fullcalendar/react": "^6.1.8",
+    "@lottiefiles/react-lottie-player": "^3.5.3",
     "axios": "^1.4.0",
     "flowbite": "^1.6.6",
     "flowbite-react": "^0.4.7",

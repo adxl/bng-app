@@ -18,22 +18,24 @@ const Home: React.FC = () => {
   const { user } = useAuth();
 
   useEffect(() => {
-    getSelfRides().then((response) => {
-      setRides(response.data.filter((ride) => ride.userId === user.id));
+    if (isUser(user)) {
+      getSelfRides().then((response) => {
+        setRides(response.data.filter((ride) => ride.userId === user.id));
 
-      setPreferedTypes(
-        Object.entries(
-          response.data.reduce((acc: Record<string, number>, ride) => {
-            acc[ride.vehicle.type.name] = (acc[ride.vehicle.type.name] || 0) + 1;
-            return acc;
-          }, {})
-        ).sort((a, b) => b[1] - a[1])
-      );
-    });
+        setPreferedTypes(
+          Object.entries(
+            response.data.reduce((acc: Record<string, number>, ride) => {
+              acc[ride.vehicle.type.name] = (acc[ride.vehicle.type.name] || 0) + 1;
+              return acc;
+            }, {})
+          ).sort((a, b) => b[1] - a[1])
+        );
+      });
 
-    getAllEvents().then((response) => {
-      setEvents(response.data);
-    });
+      getAllEvents().then((response) => {
+        setEvents(response.data);
+      });
+    }
   }, []);
 
   return (

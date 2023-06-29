@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { HiInformationCircle, HiStar } from "react-icons/hi";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { Link } from "react-router-dom";
 import { Accordion, Alert, Button, Card, Label, Modal, Select, Textarea } from "flowbite-react";
 import Lottie from "lottie-react";
 
@@ -15,6 +16,7 @@ import type { Vehicle } from "@typing/api/gears/vehicles";
 import type { VehicleSkin } from "@typing/api/gears/vehicles-skins";
 
 import JetpackData from "../../../public/28991-jetpack-man-gsb.json";
+import { getAllExamsUser } from "../../api/exams/exams";
 
 import "leaflet/dist/leaflet.css";
 
@@ -35,13 +37,23 @@ const StationsMap: React.FC = () => {
 
   const [_openModal, setOpenModal] = useState<boolean>();
 
+  const [_allowedVehiclesTypes, setAllowedVehiclesTypes] = useState<string[]>([]);
+
   const [_error, setError] = useState<string>("");
   const [_success, setSuccess] = useState<string>("");
 
   useEffect(() => {
     updateRide();
-    getAllStations().then(({ data }) => setStations(data));
-    getAllSkins().then((response) => setSkins(response.data));
+
+    Promise.all([getAllExamsUser(), getAllStations(), getAllSkins()]).then(([{ data: exams }, { data: stations }, { data: skins }]) => {
+      const allowedVehiclesTypes = exams.filter((exam) => exam.attempts).map((exam) => exam.typeId);
+      setAllowedVehiclesTypes(allowedVehiclesTypes);
+      stations.map((station) => {
+        station.vehicles = station.vehicles.filter((vehicle) => allowedVehiclesTypes.includes(vehicle.type.id));
+      });
+      setStations(stations);
+      setSkins(skins);
+    });
   }, []);
 
   useEffect(() => {
@@ -57,6 +69,10 @@ const StationsMap: React.FC = () => {
   };
 
   const handleSelectVehicle = (vehicle: Vehicle) => {
+    if (!_allowedVehiclesTypes.includes(vehicle.type.id)) {
+      setError("Vous n'avez pas le droit d'utiliser ce véhicule");
+      return;
+    }
     setSelectedVehicle(vehicle);
     setOpenModal(true);
   };
@@ -161,6 +177,16 @@ const StationsMap: React.FC = () => {
                     </Button>
                   </Card>
                 ))}
+              </div>
+              <div className="bg-red-200 rounded p-5 mt-5">
+                <p>Tu cherches un véhicule en particulier ?</p>
+                <p>
+                  Assure-toi d&apos;avoir le&nbsp;
+                  <Link className="underline text-blue-500" to="/licenses">
+                    permis adéquat
+                  </Link>
+                  &nbsp;pour piloter ce dernier
+                </p>
               </div>
               <Modal show={_openModal} onClose={() => setOpenModal(false)} className="z-10">
                 <Modal.Header>

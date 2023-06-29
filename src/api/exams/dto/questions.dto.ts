@@ -1,7 +1,9 @@
 export type CreateQuestionDto = {
   title: string;
 
-  examId: string;
+  exam: {
+    id: string;
+  };
 };
 
 export type UpdateQuestionDto = {
