@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { FaBrush, FaPaintBrush } from "react-icons/fa";
+import { IoColorFill } from "react-icons/io5";
 import { LuPlaneLanding, LuPlaneTakeoff } from "react-icons/lu";
-import { Card, Timeline } from "flowbite-react";
+import { Link } from "react-router-dom";
+import { Button, Card, Timeline } from "flowbite-react";
 
 import { getAllEvents } from "@api/events/events";
 import { getSelfRides } from "@api/gears/rides";
@@ -10,7 +13,6 @@ import { useAuth } from "@hooks/auth";
 import { isUser } from "@typing/api/auth/users";
 import type { Event } from "@typing/api/events/events";
 import type { Ride } from "@typing/api/gears/rides";
-
 const Home: React.FC = () => {
   const [_rides, setRides] = useState<Ride[]>([]);
   const [_events, setEvents] = useState<Event[]>([]);
@@ -47,17 +49,26 @@ const Home: React.FC = () => {
         <div className="w-full grid grid-cols-2 gap-4">
           <Card className="row-span-2">
             <h5 className="text-xl font-medium">Évènements</h5>
+            <div className="flex items-baseline">
+              <span className="text-gray-600">A venir </span>
+              <FaPaintBrush className="ml-1" color="#10B981" size={15}></FaPaintBrush>
+              <span className="text-gray-600">- Terminé </span>
+              <FaPaintBrush className="ml-1" color="#F59E0B" size={15}></FaPaintBrush>
+            </div>
             <FullCalendar
               viewClassNames={"w-full"}
               plugins={[dayGridPlugin]}
               initialView="dayGridMonth"
               events={_events.map((event) => ({
                 title: event.name,
-                start: event.startsAt,
-                end: event.endedAt,
+                date: event.startsAt,
+                allDay: true,
+                backgroundColor: event.endedAt ? "#10B981" : "#F59E0B",
+                borderColor: event.endedAt ? "#10B981" : "#F59E0B",
               }))}
             />
           </Card>
+
           <Card>
             <h5 className="text-xl font-medium">Mes derniers trajets</h5>
             <div className="grid grid-cols-3">
@@ -135,6 +146,9 @@ const Home: React.FC = () => {
               )}
             </div>
           </Card>
+          <Button color="dark">
+            <Link to="events">Voir tous les évènements</Link>
+          </Button>
         </div>
       )}
     </React.Fragment>
