@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { HiInformationCircle, HiLockClosed, HiStar } from "react-icons/hi";
+import { HiInformationCircle, HiStar } from "react-icons/hi";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { Link } from "react-router-dom";
 import { Accordion, Alert, Badge, Button, Card, Label, Modal, Select, Textarea } from "flowbite-react";

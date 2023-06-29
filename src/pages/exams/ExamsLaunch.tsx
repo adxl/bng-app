@@ -14,7 +14,7 @@ const ExamsLaunch: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  const [_exam, setExam] = useState<Exam>();
+  const [_exam, setExam] = useState<Exam | null>(null);
   const [_attemptId, setAttemptId] = useState<string>("");
   const [_progressBar, setProgressBar] = useState<number>(100);
   const formData = useRef<HTMLFormElement>(null);
@@ -37,12 +37,10 @@ const ExamsLaunch: React.FC = () => {
     const progressIncrement = 100 / durationInSec / 2;
 
     const timer = setInterval(() => {
-      setProgressBar((prev) => {
-        return prev - progressIncrement;
-      });
+      setProgressBar((prev) => prev - progressIncrement);
     }, interval);
 
-    const timeout = setTimeout(() => {
+    setTimeout(() => {
       clearInterval(timer);
 
       const form = formData.current;
@@ -88,7 +86,7 @@ const ExamsLaunch: React.FC = () => {
     updateAttempt(_attemptId, { userAnswers: answers })
       .then(({ data: attempt }) => {
         navigate("/licenses/launch/" + id + "/result", {
-          state: { typeExam: _exam!.type.name, score: attempt.score, isSuccess: attempt.score >= 80 },
+          state: { typeExam: _exam?.type?.name || "", score: attempt.score, isSuccess: attempt.score >= 80 },
         });
       })
       .catch((_) => {
@@ -103,7 +101,7 @@ const ExamsLaunch: React.FC = () => {
           <Progress color="indigo" progress={_progressBar} />
           <div className="flex justify-between my-10">
             {/* eslint-disable-next-line react/no-unescaped-entities */}
-            <h4 className="text-4xl font-bold dark:text-white text-left mb-4 ">Type de l'examen : {_exam.type.name} </h4>
+            <h4 className="text-4xl font-bold dark:text-white text-left mb-4 ">Type de l'examen : {_exam.type?.name} </h4>
             <div className="flex justify-between items-center gap-5">
               <h4 className="text-2xl font-bold dark:text-white w-1/2">Durée</h4>
               <h4 className="text-2xl font-bold dark:text-white w-1/2">{fromMinutesToHours(_exam.duration)}</h4>
