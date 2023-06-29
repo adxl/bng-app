@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaBrush, FaPaintBrush } from "react-icons/fa";
-import { IoColorFill } from "react-icons/io5";
+import { FaPaintBrush } from "react-icons/fa";
 import { LuPlaneLanding, LuPlaneTakeoff } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import { Button, Card, Timeline } from "flowbite-react";
