@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { HiInformationCircle, HiStar } from "react-icons/hi";
+import { HiInformationCircle, HiLockClosed, HiStar } from "react-icons/hi";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { Link } from "react-router-dom";
-import { Accordion, Alert, Button, Card, Label, Modal, Select, Textarea } from "flowbite-react";
+import { Accordion, Alert, Badge, Button, Card, Label, Modal, Select, Textarea } from "flowbite-react";
 import Lottie from "lottie-react";
 
+import { getSelfEventsWinner } from "@api/events/events-winner";
 import { createReport } from "@api/gears/reports";
 import { createRide, endRide, getSelfCurrentRide, reviewRide } from "@api/gears/rides";
 import { getAllStations } from "@api/gears/stations";
@@ -31,6 +32,8 @@ const StationsMap: React.FC = () => {
   const [_selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
   const [_selectedSkin, setSelectedSkin] = useState<VehicleSkin | null>(_skins[0]);
 
+  const [_userCaps, setUserCaps] = useState<number>(0);
+
   const [_review, setReview] = useState<number | null>(null);
   const [_hover, setHover] = useState<number | null>(null);
   const _comment = useRef<HTMLTextAreaElement>(null);
@@ -54,6 +57,11 @@ const StationsMap: React.FC = () => {
       setStations(stations);
       setSkins(skins);
     });
+    getAllStations().then(({ data }) => setStations(data));
+    getAllSkins().then(({ data }) => setSkins(data));
+    getSelfEventsWinner(user.id!).then(({ data }) => {
+      setUserCaps(data.caps);
+    });
   }, []);
 
   useEffect(() => {
@@ -69,6 +77,10 @@ const StationsMap: React.FC = () => {
   };
 
   const handleSelectVehicle = (vehicle: Vehicle) => {
+    if (vehicle.type.capsMilestone > _userCaps) {
+      return setError("Tu n'as pas encore débloqué ce véhicule");
+    }
+
     if (!_allowedVehiclesTypes.includes(vehicle.type.id)) {
       setError("Vous n'avez pas le droit d'utiliser ce véhicule");
       return;
@@ -78,7 +90,7 @@ const StationsMap: React.FC = () => {
   };
 
   const handleSelectSkin = (id: string) => {
-    const skin = _skins.find((ride) => ride.id === id);
+    const skin = _skins.find((skin) => skin.id === id);
 
     if (!skin) return setError("Skin invalide");
 
@@ -87,6 +99,7 @@ const StationsMap: React.FC = () => {
 
   const handleReservationSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
     createRide({ vehicle: _selectedVehicle!, userId: user.id!, skin: _selectedSkin! })
       .then(() => {
         setOpenModal(false);
@@ -122,11 +135,7 @@ const StationsMap: React.FC = () => {
   };
 
   const updateRide = () => {
-    getSelfCurrentRide()
-      .then((response) => {
-        setRide(response.data);
-      })
-      .catch(() => setRide(null));
+    getSelfCurrentRide().then(({ data }) => setRide(data));
   };
 
   return (
@@ -162,21 +171,42 @@ const StationsMap: React.FC = () => {
 
           {_selectedStation ? (
             <div>
-              <h2>
+              <h2 className="mb-6">
                 Véhicules disponibles dans <strong>{_selectedStation.name}</strong>
               </h2>
               <div className="grid grid-cols-3 gap-4">
-                {_selectedStation.vehicles.map((vehicle) => (
-                  <Card key={vehicle.id}>
-                    <p>
-                      {vehicle.type.name} ({vehicle.year})
-                    </p>
-                    <small> #{vehicle.id.substring(30)} </small>
-                    <Button color="dark" onClick={() => handleSelectVehicle(vehicle)}>
-                      Réserver
-                    </Button>
-                  </Card>
-                ))}
+                {_selectedStation.vehicles
+                  .sort((v1, v2) => (v1.type.capsMilestone < v2.type.capsMilestone ? -1 : 1))
+                  .map((vehicle) => {
+                    const isUnlocked = vehicle.type.capsMilestone < _userCaps;
+
+                    return (
+                      <Card key={vehicle.id}>
+                        <div>
+                          <h4 className="font-medium">{vehicle.type.name}</h4>
+                          <small> Fabriqué en {vehicle.year}</small>
+                        </div>
+
+                        {isUnlocked ? (
+                          <Badge color="green">Débloqué</Badge>
+                        ) : (
+                          <Badge color="red">
+                            <div className="flex mr-5">Non disponible</div>
+                          </Badge>
+                        )}
+                        {isUnlocked ? (
+                          <Button color="dark" onClick={() => handleSelectVehicle(vehicle)}>
+                            Réserver
+                          </Button>
+                        ) : (
+                          <Button color="dark" disabled>
+                            <img src="/cap.png" alt="cap" className="w-6 h-6 mr-2" />
+                            {vehicle.type.capsMilestone} capsules requises
+                          </Button>
+                        )}
+                      </Card>
+                    );
+                  })}
               </div>
               <div className="bg-red-200 rounded p-5 mt-5">
                 <p>Tu cherches un véhicule en particulier ?</p>
@@ -190,7 +220,7 @@ const StationsMap: React.FC = () => {
               </div>
               <Modal show={_openModal} onClose={() => setOpenModal(false)} className="z-10">
                 <Modal.Header>
-                  Réservation du véhicule{" "}
+                  Réservation du véhicule
                   <b>
                     {_selectedVehicle?.type.name} #{_selectedVehicle?.id.substring(30)}
                   </b>
@@ -204,14 +234,23 @@ const StationsMap: React.FC = () => {
                         </div>
                         <Select required onChange={(e) => handleSelectSkin(e.currentTarget.value)}>
                           <option>---</option>
-                          {_skins.map((skin) => (
-                            <option key={skin.id} value={skin.id}>
-                              {skin.name}
-                            </option>
-                          ))}
+                          {_skins.map((skin) => {
+                            const isUnlocked = _userCaps >= skin.tier * 50;
+                            return (
+                              <option
+                                disabled={!isUnlocked}
+                                className="flex justify-center align-center"
+                                key={skin.id}
+                                value={isUnlocked ? skin.id : ""}
+                              >
+                                {!isUnlocked && "🔒 "}
+                                {`${skin.name} ${!isUnlocked ? `(${skin.tier * 50} capsules)` : ""}  `}
+                              </option>
+                            );
+                          })}
                         </Select>
                       </div>
-                      <img src={_selectedSkin?.image} className="col-span-2 border rounded-md" />
+                      <img src={_selectedSkin?.image} className="col-span-2 border rounded-md h-28 w-full" style={{ objectFit: "cover" }} />
                     </div>
                     {_error && (
                       <Alert color="failure" className="mb-5 absolute top-6 left-1/2 -translate-x-1/2" icon={HiInformationCircle}>
