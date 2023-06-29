@@ -28,6 +28,10 @@ export const getAllByType = (id: string): Response<Attempt[]> => {
   return _get(URL + `/type/${id}`);
 };
 
+export const getAllEnded = (): Response<Attempt[]> => {
+  return _get(URL + `/allEnded`);
+};
+
 export const getOneAttempt = (id: string): Response<Attempt> => {
   return _get(URL + `/${id}`);
 };
