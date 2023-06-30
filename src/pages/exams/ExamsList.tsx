@@ -28,7 +28,6 @@ const ExamsList: React.FC = () => {
   };
 
   const refreshData = () => {
-    getAllExams().then(({ data }) => setExams(data));
     Promise.all([getAllExams(), getAllTypes()]).then(([{ data: examsData }, { data: typesData }]) => {
       const exams = examsData.map((exam) => ({
         ...exam,
