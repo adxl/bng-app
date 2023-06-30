@@ -70,7 +70,7 @@ const Home: React.FC = () => {
 
           <Card>
             <h5 className="text-xl font-medium">Mes derniers trajets</h5>
-            <div className="grid grid-cols-3 hidden md:flex">
+            <div className="grid-cols-3 hidden md:grid">
               {_rides.length > 0 ? (
                 _rides.slice(0, 3).map((ride) => (
                   <Timeline className="text-start" key={ride.id}>
