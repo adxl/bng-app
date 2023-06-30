@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaPaintBrush } from "react-icons/fa";
 import { LuPlaneLanding, LuPlaneTakeoff } from "react-icons/lu";
 import { Link } from "react-router-dom";
-import { Button, Card, Timeline } from "flowbite-react";
+import { Button, Card, Carousel, Timeline } from "flowbite-react";
 
 import { getAllEvents } from "@api/events/events";
 import { getSelfRides } from "@api/gears/rides";
@@ -45,8 +45,8 @@ const Home: React.FC = () => {
         <h5 className="text-2xl font-bold">Bienvenue sur Board N&apos; Go !</h5>
       </Card>
       {isUser(user) && (
-        <div className="w-full grid grid-cols-2 gap-4">
-          <Card className="row-span-2">
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Card className="row-span-2 hidden md:flex">
             <h5 className="text-xl font-medium">Évènements</h5>
             <div className="flex items-baseline">
               <span className="text-gray-600">A venir </span>
@@ -70,7 +70,7 @@ const Home: React.FC = () => {
 
           <Card>
             <h5 className="text-xl font-medium">Mes derniers trajets</h5>
-            <div className="grid grid-cols-3">
+            <div className="grid grid-cols-3 hidden md:flex">
               {_rides.length > 0 ? (
                 _rides.slice(0, 3).map((ride) => (
                   <Timeline className="text-start" key={ride.id}>
@@ -115,6 +115,51 @@ const Home: React.FC = () => {
                 </div>
               )}
             </div>
+            <Carousel className="col-span-3 ml-2 md:hidden">
+              {_rides.length > 0 ? (
+                _rides.slice(0, 3).map((ride) => (
+                  <Timeline className="text-start" key={ride.id}>
+                    <Timeline.Item>
+                      <Timeline.Content className="relative">
+                        <Timeline.Point icon={LuPlaneTakeoff} />
+                        <Timeline.Time>
+                          {new Date(ride.createdAt).toLocaleDateString("fr-FR")} à&nbsp;
+                          {new Date(ride.createdAt).toLocaleTimeString("fr-FR")}
+                        </Timeline.Time>
+                        <Timeline.Title>De: {ride.startStation.name}</Timeline.Title>
+                        <Timeline.Body>
+                          <p className="text-gray-500 text-sm">{ride.vehicle.type.name}</p>
+                        </Timeline.Body>
+                      </Timeline.Content>
+                    </Timeline.Item>
+                    <Timeline.Item>
+                      <Timeline.Content className="relative">
+                        <Timeline.Point icon={LuPlaneLanding} />
+                        <Timeline.Time>
+                          {ride.endedAt ? (
+                            <>
+                              {new Date(ride.endedAt).toLocaleDateString("fr-FR")} à&nbsp;
+                              {new Date(ride.endedAt).toLocaleTimeString("fr-FR")}
+                            </>
+                          ) : (
+                            <>Course non terminée</>
+                          )}
+                        </Timeline.Time>
+                        <Timeline.Title>À: {ride.endStation?.name}</Timeline.Title>
+                        <Timeline.Body>
+                          <p className="text-gray-500 text-sm">{ride.vehicle.type.name}</p>
+                        </Timeline.Body>
+                      </Timeline.Content>
+                    </Timeline.Item>
+                  </Timeline>
+                ))
+              ) : (
+                <div className="flex flex-wrap justify-center col-span-3 ">
+                  <img src="/ticket.png" className="h-20 mb-2" />
+                  <p className="text-center w-full">Vous n&apos;avez aucun trajet...</p>
+                </div>
+              )}
+            </Carousel>
           </Card>
           <Card className="row-span-2 h-max">
             <h5 className="text-xl font-medium">Véhicules préférés</h5>

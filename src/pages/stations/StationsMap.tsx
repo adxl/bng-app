@@ -139,7 +139,7 @@ const StationsMap: React.FC = () => {
   };
 
   return (
-    <div className="grid grid-cols-2 gap-4 relative w-full">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 relative w-full">
       {_success && (
         <Alert color="success" className="mb-5 absolute top-6 left-1/2 -translate-x-1/2 z-20" icon={HiInformationCircle}>
           <p>{_success}</p>
@@ -174,7 +174,7 @@ const StationsMap: React.FC = () => {
               <h2 className="mb-6">
                 Véhicules disponibles dans <strong>{_selectedStation.name}</strong>
               </h2>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {_selectedStation.vehicles
                   .sort((v1, v2) => (v1.type.capsMilestone < v2.type.capsMilestone ? -1 : 1))
                   .map((vehicle) => {

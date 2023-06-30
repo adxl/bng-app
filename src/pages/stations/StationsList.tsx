@@ -26,7 +26,7 @@ const StationsList: React.FC = () => {
           </Link>
         </div>
       )}
-      <div className="w-full grid grid-cols-3 gap-4">
+      <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4">
         {_stations.map((station) => (
           <Card key={station.id}>
             <div className="flex flex-col items-start">

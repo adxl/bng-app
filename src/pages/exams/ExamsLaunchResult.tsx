@@ -22,7 +22,7 @@ const ExamsLaunchResult: React.FC = () => {
   return (
     <>
       {isSuccess ? (
-        <div className="flex w-full justify-center relative">
+        <div className="md:flex w-full justify-center relative">
           <div className=" absolute">
             <h1 className="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-6xl">
               <span className="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">Félicitation</span> <br />
@@ -53,7 +53,7 @@ const ExamsLaunchResult: React.FC = () => {
           </div>
         </div>
       ) : (
-        <div className="flex w-full gap-16 justify-center relative">
+        <div className="md:flex w-full gap-16 justify-center relative">
           <div className="  top-80">
             <Player
               src="https://assets7.lottiefiles.com/packages/lf20_Dy6fnTXaf4.json"

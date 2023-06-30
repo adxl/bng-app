@@ -86,7 +86,7 @@ const UsersList: React.FC = () => {
             <p>{_success}</p>
           </Alert>
         )}
-        <TextInput icon={HiSearch} type="text" className="mr-2" placeholder="E-mail..." value={_email} onChange={handleEmailChange} />
+        <TextInput icon={HiSearch} type="text" className="mr-2 hidden md:flex" placeholder="E-mail..." value={_email} onChange={handleEmailChange} />
       </div>
       <Table striped>
         <Table.Head>

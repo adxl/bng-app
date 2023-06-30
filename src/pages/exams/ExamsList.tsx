@@ -112,7 +112,7 @@ const ExamsList: React.FC = () => {
             <span className="text-lg">Tous les exams ont été crées</span>
           </div>
         )}
-        <div className="grid grid-cols-2  gap-5 mt-10">
+        <div className="grid grid-cols-1 md:grid-cols-2  gap-5 mt-10">
           {_exams.map((exam) => (
             <Card key={exam.id} className=" w-full">
               <div className="flex flex-col items-start">

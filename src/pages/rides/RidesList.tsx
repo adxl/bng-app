@@ -35,7 +35,7 @@ const RidesList: React.FC = () => {
 
   return (
     <>
-      <div className="w-full grid grid-cols-3 gap-2">
+      <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-2">
         {_rides
           .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
           .map((ride) => (

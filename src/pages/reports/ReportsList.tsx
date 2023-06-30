@@ -22,7 +22,7 @@ const ReportsList: React.FC = () => {
 
   return (
     <>
-      <div className="w-full grid grid-cols-3 gap-2">
+      <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-2">
         {_reports
           .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
           .map((report) => (
@@ -30,7 +30,11 @@ const ReportsList: React.FC = () => {
               <div className="flex flex-col items-start">
                 <div className="w-full flex items-center justify-between gap-2">
                   <div className="flex align-center">
-                    <p className="whitespace-nowrap font-bold">
+                    <p className="whitespace-nowrap font-bold md:hidden">
+                      {new Date(report.createdAt).toLocaleDateString("fr-FR")} à&nbsp;
+                      {new Date(report.createdAt).toLocaleTimeString("fr-FR")}
+                    </p>
+                    <p className="whitespace-nowrap font-bold hidden md:block">
                       Rapport du : {new Date(report.createdAt).toLocaleDateString("fr-FR")} à&nbsp;
                       {new Date(report.createdAt).toLocaleTimeString("fr-FR")}
                     </p>

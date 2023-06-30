@@ -135,7 +135,7 @@ const ExamsEdit: React.FC = () => {
         )}
       </div>
 
-      <div className="flex justify-between my-10">
+      <div className="md:flex justify-between my-10">
         <h4 className="text-4xl font-bold dark:text-white text-left mb-4 ">Type de l&apos;examen : {_name}</h4>
         <div className="flex justify-between items-center gap-5">
           <h4 className="text-2xl font-bold dark:text-white w-1/2">Durée</h4>

@@ -54,9 +54,9 @@ const ExamsListUser: React.FC = () => {
       <Tabs.Group aria-label="Default tabs" style="default" className="w-full justify-center">
         <Tabs.Item active icon={HiUserCircle} title="Permis validées">
           {_examsPassed.length ? (
-            <div className="w-full flex flex-wrap gap-14 justify-center">
+            <div className="w-full md:flex md:flex-wrap md:gap-14 justify-center">
               {_examsPassed.map((exam) => (
-                <Card key={exam.id} className=" w-1/4 border-emerald-500 border-2">
+                <Card key={exam.id} className=" md:w-1/4 mt-1 border-emerald-500 border-2">
                   <div className="flex flex-col items-start">
                     <div className="w-full flex items-center justify-between gap-2">
                       <div className=" text-start">{exam.type && "Exam de type : " + exam.type.name}</div>
@@ -74,7 +74,7 @@ const ExamsListUser: React.FC = () => {
           {_examsNotPassed.length ? (
             <div className="w-full flex flex-wrap gap-14 justify-center">
               {_examsNotPassed.map((exam) => (
-                <Card key={exam.id} className=" w-1/4 border-rose-500 border-2">
+                <Card key={exam.id} className=" md:w-1/4 border-rose-500 border-2">
                   <div className="flex flex-col items-start">
                     <div className="w-full flex items-center justify-between gap-2">
                       <div className=" text-start">{exam.type && "Exam de type : " + exam.type.name}</div>
