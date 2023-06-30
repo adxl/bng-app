@@ -42,7 +42,7 @@ const AttemptsList: React.FC = () => {
     <>
       <h1 className="text-5xl font-extrabold dark:text-white text-center w-full my-4">Candidats</h1>
       {_attempts.length > 0 ? (
-        <div className=" w-full grid grid-cols-4 gap-5 mt-10">
+        <div className=" w-full grid grid-cols-1 md:grid-cols-4 gap-5 mt-10">
           {_attempts.map((attempt) => (
             <Card key={attempt.id} className={attempt.score >= 80 ? "border-emerald-500" : " border-rose-500"}>
               <div className="flex flex-col justify-between text-left">
