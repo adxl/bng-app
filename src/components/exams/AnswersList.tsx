@@ -111,24 +111,28 @@ const AnswersList: React.FC<Props> = ({ answers, questionId, reloadExam }) => {
       {_answers.map((answer) => (
         <div key={answer.id}>
           <form key={answer.id} onSubmit={(e) => handleUpdate(e, answer.id)} className="w-full">
-            <div className="flex gap-7">
-              <TextInput
-                minLength={1}
-                maxLength={150}
-                required
-                value={answer.title}
-                onChange={(e) => handleFormChange(answer.id, e.target.value)}
-                className=" w-3/4"
-              />
-              <div>
-                <ToggleSwitch checked={answer.isCorrect} value={""} onChange={(value) => handleFormChangeSwitch(answer.id, value)} label={""} />
+            <div className="md:flex  md:gap-7">
+              <div className="w-full flex flex-nowrap items-center gap-3">
+                <TextInput
+                  minLength={1}
+                  maxLength={150}
+                  required
+                  value={answer.title}
+                  onChange={(e) => handleFormChange(answer.id, e.target.value)}
+                  className="w-full"
+                />
+                <div className="">
+                  <ToggleSwitch checked={answer.isCorrect} value={""} onChange={(value) => handleFormChangeSwitch(answer.id, value)} label={""} />
+                </div>
               </div>
-              <Button gradientDuoTone="greenToBlue" type="submit">
-                <BiSave />
-              </Button>
-              <Button gradientDuoTone="pinkToOrange" onClick={() => handleDelete(answer.id)}>
-                <MdDeleteOutline />
-              </Button>
+              <div className="flex grid-col-2 mt-1 md:mt-0 gap-1">
+                <Button className="w-full" gradientDuoTone="greenToBlue" type="submit">
+                  <BiSave />
+                </Button>
+                <Button className="w-full" gradientDuoTone="pinkToOrange" onClick={() => handleDelete(answer.id)}>
+                  <MdDeleteOutline />
+                </Button>
+              </div>
             </div>
           </form>
         </div>

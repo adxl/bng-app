@@ -160,21 +160,23 @@ const ExamsEdit: React.FC = () => {
             <div className="flex flex-col gap-4 w-full">
               <h4 className="text-2xl font-bold dark:text-white text-left mb-4 mt-6">Question {index + 1}</h4>
               <form onSubmit={(e) => handleSubmitQuestion(e, question.id)} className="w-full">
-                <div className="flex gap-7">
+                <div className="md:flex md:gap-7">
                   <TextInput
                     required
                     value={question.title}
                     minLength={1}
                     maxLength={150}
                     onChange={(e) => handleFormChangeQuestion(question.id, e.target.value)}
-                    className=" w-3/4"
+                    className="w-full md:w-3/4"
                   />
-                  <Button gradientDuoTone="greenToBlue" type="submit">
-                    <BiSave />
-                  </Button>
-                  <Button gradientDuoTone="pinkToOrange" onClick={() => handleDeleteQuestion(question.id)}>
-                    <MdDeleteOutline />
-                  </Button>
+                  <div className="flex grid-col-2 mt-1 md:mt-0 gap-1">
+                    <Button className="w-full" gradientDuoTone="greenToBlue" type="submit">
+                      <BiSave />
+                    </Button>
+                    <Button className="w-full" gradientDuoTone="pinkToOrange" onClick={() => handleDeleteQuestion(question.id)}>
+                      <MdDeleteOutline />
+                    </Button>
+                  </div>
                 </div>
               </form>
 
