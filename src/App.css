@@ -38,3 +38,7 @@
   background-color: rgb(117, 91, 235);
   border-radius: 5px;
 }
+
+#users-table > div.relative {
+  overflow-x: scroll;
+}
