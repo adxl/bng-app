@@ -1,22 +1,63 @@
 import React, { useEffect, useState } from "react";
+import { Doughnut } from "react-chartjs-2";
 import { FaPaintBrush } from "react-icons/fa";
 import { LuPlaneLanding, LuPlaneTakeoff } from "react-icons/lu";
 import { Link } from "react-router-dom";
+import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
 import { Button, Card, Carousel, Timeline } from "flowbite-react";
 
+import { getAllUsers } from "@api/auth/user";
 import { getAllEvents } from "@api/events/events";
 import { getSelfRides } from "@api/gears/rides";
+import { getAllStations } from "@api/gears/stations";
+import { getAllVehicles } from "@api/gears/vehicles";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import FullCalendar from "@fullcalendar/react";
 import { useAuth } from "@hooks/auth";
-import { isUser } from "@typing/api/auth/users";
+import type { User } from "@typing/api/auth/users";
+import {
+  ADMINISTRATOR,
+  INSTRUCTOR,
+  isAdmin,
+  isInstructor,
+  isOrganizer,
+  isTechnician,
+  isUser,
+  ORGANIZER,
+  RolesList,
+  TECHNICIAN,
+  USER,
+} from "@typing/api/auth/users";
 import type { Event } from "@typing/api/events/events";
 import type { Ride } from "@typing/api/gears/rides";
+import type { Station } from "@typing/api/gears/stations";
+import type { Vehicle } from "@typing/api/gears/vehicles";
+
+interface ChartSkeleton {
+  labels: string[];
+  datasets: {
+    label: string;
+    data: number[];
+    backgroundColor: string[];
+    hoverOffset: number;
+  }[];
+  redraw: boolean;
+}
+ChartJS.register(ArcElement, Tooltip, Legend);
+
 const Home: React.FC = () => {
   const [_rides, setRides] = useState<Ride[]>([]);
   const [_events, setEvents] = useState<Event[]>([]);
   const [_preferedTypes, setPreferedTypes] = useState<[string, number][]>([]);
   const { user } = useAuth();
+  const [_vehicles, setVehicles] = useState<Vehicle[]>([]);
+  const [_stations, setStations] = useState<Station[]>([]);
+  const [_users, setUsers] = useState<User[]>([]);
+  const [_eventsDashboard, setEventsDashboard] = useState<Event[]>([]);
+  const [_chartVehicle, setChartVehicle] = useState<ChartSkeleton>({ labels: [], datasets: [], redraw: false });
+  const [_chartStation, setChartStation] = useState<ChartSkeleton>({ labels: [], datasets: [], redraw: false });
+  const [_chartUser, setChartUser] = useState<ChartSkeleton>({ labels: [], datasets: [], redraw: false });
+  const [_chartEvent, setChartEvent] = useState<ChartSkeleton>({ labels: [], datasets: [], redraw: false });
 
   useEffect(() => {
     if (isUser(user)) {
@@ -39,6 +80,135 @@ const Home: React.FC = () => {
     }
   }, []);
 
+  const getStationData = () => {
+    getAllStations().then((response) => {
+      setStations(response.data);
+    });
+  };
+
+  const getVehicleData = () => {
+    getAllVehicles().then((response) => {
+      setVehicles(response.data);
+    });
+  };
+
+  const getUsersData = () => {
+    getAllUsers().then((response) => {
+      setUsers(response.data);
+    });
+  };
+
+  const getEventsData = () => {
+    getAllEvents().then((response) => {
+      setEventsDashboard(response.data);
+    });
+  };
+
+  const chartVehicleOptions = () => {
+    const brokenVehicles = _vehicles.filter((vehicle) => vehicle.active === false).length;
+    const activeVehicles = _vehicles.filter((vehicle) => vehicle.active === true).length;
+    setChartVehicle({
+      labels: ["En panne", "En service"],
+      datasets: [
+        {
+          label: "Véhicules",
+          data: [brokenVehicles, activeVehicles],
+          backgroundColor: ["#E11469", "#4CE0D2"],
+          hoverOffset: 4,
+        },
+      ],
+      redraw: true,
+    });
+  };
+
+  const chartUserOptions = () => {
+    const AdminUsers = _users.filter((user) => user.role == RolesList.find((role) => role === ADMINISTRATOR)).length;
+    const UserUsers = _users.filter((user) => user.role === RolesList.find((role) => role === USER)).length;
+    const TechnicianUsers = _users.filter((user) => user.role === RolesList.find((role) => role === TECHNICIAN)).length;
+    const OrganizerUsers = _users.filter((user) => user.role === RolesList.find((role) => role === ORGANIZER)).length;
+    const InstructorUsers = _users.filter((user) => user.role === RolesList.find((role) => role === INSTRUCTOR)).length;
+    setChartUser({
+      labels: ["Admin", "Utilisateur", "Technicien", "Organisateur", "Instructeur"],
+      datasets: [
+        {
+          label: "Utilisateurs",
+          data: [AdminUsers, UserUsers, TechnicianUsers, OrganizerUsers, InstructorUsers],
+          backgroundColor: ["#E11469", "#4CE0D2", "#7E86C8", "#FEC601", "#2C2C54"],
+          hoverOffset: 4,
+        },
+      ],
+      redraw: true,
+    });
+  };
+
+  const chartEventOptions = () => {
+    const eventsFuture = _eventsDashboard.filter((event) => !event.endedAt).length;
+    const eventsPast = _eventsDashboard.filter((event) => event.endedAt).length;
+
+    setChartEvent({
+      labels: ["A venir", "Passé"],
+      datasets: [
+        {
+          label: "Evènements",
+          data: [eventsFuture, eventsPast],
+          backgroundColor: ["#E11469", "#4CE0D2"],
+          hoverOffset: 4,
+        },
+      ],
+      redraw: true,
+    });
+  };
+
+  const chartStationOptions = () => {
+    const brokenStations = _stations.filter((station) => station.active === false).length;
+    const activeStations = _stations.filter((station) => station.active === true).length;
+    setChartStation({
+      labels: ["Fermé", "Ouverte"],
+      datasets: [
+        {
+          label: "Stations",
+          data: [brokenStations, activeStations],
+          backgroundColor: ["#E11469", "#4CE0D2"],
+          hoverOffset: 4,
+        },
+      ],
+      redraw: true,
+    });
+  };
+  useEffect(() => {
+    if (!isUser(user)) {
+      if (isTechnician(user)) {
+        getStationData();
+        getVehicleData();
+
+        chartVehicleOptions();
+        chartStationOptions();
+      }
+
+      if (isOrganizer(user)) {
+        getEventsData();
+        getStationData();
+
+        chartEventOptions();
+        chartStationOptions();
+      }
+
+      if (isAdmin(user)) {
+        getUsersData();
+        getStationData();
+        getVehicleData();
+        getEventsData();
+
+        chartUserOptions();
+        chartVehicleOptions();
+        chartStationOptions();
+        chartEventOptions();
+      }
+      if (isInstructor(user)) {
+        //todo get reussite exam
+      }
+    }
+  }, []);
   return (
     <React.Fragment>
       <Card className="w-full mb-5">
@@ -193,6 +363,54 @@ const Home: React.FC = () => {
           <Button color="dark">
             <Link to="events">Voir tous les évènements</Link>
           </Button>
+        </div>
+      )}
+      {!isUser(user) && (
+        <div className="w-full grid grid-cols-1 md:grid-cols-4 gap-4">
+          {isTechnician(user) && (
+            <>
+              <Card className="col-1">
+                <h5 className="text-xl font-medium">Véhicules</h5>
+                <Doughnut data={_chartVehicle} />
+              </Card>
+              <Card className="col-1">
+                <h5 className="text-xl font-medium">Stations</h5>
+                <Doughnut data={_chartStation} />
+              </Card>
+            </>
+          )}
+          {isAdmin(user) && (
+            <>
+              <Card className="col-1">
+                <h5 className="text-xl font-medium">Véhicules</h5>
+                <Doughnut data={_chartVehicle} />
+              </Card>
+              <Card className="col-1">
+                <h5 className="text-xl font-medium">Stations</h5>
+                <Doughnut data={_chartStation} />
+              </Card>
+              <Card className="col-span-1">
+                <h5 className="text-xl font-medium">Evenements</h5>
+                <Doughnut data={_chartEvent} />
+              </Card>
+              <Card className="col-span-1">
+                <h5 className="text-xl font-medium">Utilisateurs</h5>
+                <Doughnut data={_chartUser} />
+              </Card>
+            </>
+          )}
+          {isOrganizer(user) && (
+            <>
+              <Card className="col-1">
+                <h5 className="text-xl font-medium">Stations</h5>
+                <Doughnut data={_chartStation} />
+              </Card>
+              <Card className="col-span-1">
+                <h5 className="text-xl font-medium">Evenements</h5>
+                <Doughnut data={_chartEvent} />
+              </Card>
+            </>
+          )}
         </div>
       )}
     </React.Fragment>
