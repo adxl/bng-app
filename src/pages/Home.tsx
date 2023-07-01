@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
+import CountUp from "react-countup";
 import { FaPaintBrush } from "react-icons/fa";
 import { LuPlaneLanding, LuPlaneTakeoff } from "react-icons/lu";
 import { Link } from "react-router-dom";
-import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
+import { ArcElement, Legend, Tooltip } from "chart.js";
+import { CategoryScale, Chart as ChartJS, LinearScale, LineElement, PointElement, Title } from "chart.js";
 import { Button, Card, Carousel, Timeline } from "flowbite-react";
 
 import { getAllUsers } from "@api/auth/user";
 import { getAllEvents } from "@api/events/events";
+import { getAllEnded } from "@api/exams/attempts";
 import { getSelfRides } from "@api/gears/rides";
 import { getAllStations } from "@api/gears/stations";
 import { getAllVehicles } from "@api/gears/vehicles";
@@ -24,11 +28,11 @@ import {
   isTechnician,
   isUser,
   ORGANIZER,
-  RolesList,
   TECHNICIAN,
   USER,
 } from "@typing/api/auth/users";
 import type { Event } from "@typing/api/events/events";
+import type { Attempt } from "@typing/api/exams/attempts";
 import type { Ride } from "@typing/api/gears/rides";
 import type { Station } from "@typing/api/gears/stations";
 import type { Vehicle } from "@typing/api/gears/vehicles";
@@ -43,21 +47,44 @@ interface ChartSkeleton {
   }[];
   redraw: boolean;
 }
+
+interface ChartSkeletonLine {
+  labels: string[];
+  datasets: {
+    label: string;
+    data: number[];
+    backgroundColor: string;
+    borderColor: string;
+  }[];
+  redraw: boolean;
+}
 ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+
+type AttemptMonthStat = {
+  month: string;
+  count: number;
+};
 
 const Home: React.FC = () => {
+  const { user } = useAuth();
+
   const [_rides, setRides] = useState<Ride[]>([]);
   const [_events, setEvents] = useState<Event[]>([]);
   const [_preferedTypes, setPreferedTypes] = useState<[string, number][]>([]);
-  const { user } = useAuth();
+
   const [_vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [_stations, setStations] = useState<Station[]>([]);
   const [_users, setUsers] = useState<User[]>([]);
   const [_eventsDashboard, setEventsDashboard] = useState<Event[]>([]);
+  const [_attempts, setAttempts] = useState<Attempt[]>([]);
+
   const [_chartVehicle, setChartVehicle] = useState<ChartSkeleton>({ labels: [], datasets: [], redraw: false });
   const [_chartStation, setChartStation] = useState<ChartSkeleton>({ labels: [], datasets: [], redraw: false });
   const [_chartUser, setChartUser] = useState<ChartSkeleton>({ labels: [], datasets: [], redraw: false });
   const [_chartEvent, setChartEvent] = useState<ChartSkeleton>({ labels: [], datasets: [], redraw: false });
+  const [_chartAttempt, setChartAttempt] = useState<ChartSkeleton>({ labels: [], datasets: [], redraw: false });
+  const [_chartAttemptsLine, setChartAttemptsLine] = useState<ChartSkeletonLine>({ labels: [], datasets: [], redraw: false });
 
   useEffect(() => {
     if (isUser(user)) {
@@ -74,8 +101,8 @@ const Home: React.FC = () => {
         );
       });
 
-      getAllEvents().then((response) => {
-        setEvents(response.data);
+      getAllEvents().then(({ data }) => {
+        setEvents(data);
       });
     }
   }, []);
@@ -104,44 +131,65 @@ const Home: React.FC = () => {
     });
   };
 
-  const chartVehicleOptions = () => {
-    const brokenVehicles = _vehicles.filter((vehicle) => vehicle.active === false).length;
-    const activeVehicles = _vehicles.filter((vehicle) => vehicle.active === true).length;
+  const getAttemptsData = () => {
+    getAllEnded().then((response) => {
+      setAttempts(response.data);
+    });
+  };
+
+  const labels = ["janvier", "févirer", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "décembre"];
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top" as const,
+      },
+      title: {
+        display: true,
+        text: "Nombre d'examens par mois",
+      },
+    },
+  };
+
+  const chartVehicleOptions = React.useCallback(() => {
+    const brokenVehicles = _vehicles.filter((vehicle) => !vehicle.active).length;
+    const activeVehicles = _vehicles.filter((vehicle) => vehicle.active).length;
+
     setChartVehicle({
       labels: ["En panne", "En service"],
       datasets: [
         {
           label: "Véhicules",
           data: [brokenVehicles, activeVehicles],
-          backgroundColor: ["#E11469", "#4CE0D2"],
+          backgroundColor: ["rgb(249 115 22)", "rgb(6 182 212)"],
           hoverOffset: 4,
         },
       ],
       redraw: true,
     });
-  };
+  }, [_vehicles]);
 
-  const chartUserOptions = () => {
-    const AdminUsers = _users.filter((user) => user.role == RolesList.find((role) => role === ADMINISTRATOR)).length;
-    const UserUsers = _users.filter((user) => user.role === RolesList.find((role) => role === USER)).length;
-    const TechnicianUsers = _users.filter((user) => user.role === RolesList.find((role) => role === TECHNICIAN)).length;
-    const OrganizerUsers = _users.filter((user) => user.role === RolesList.find((role) => role === ORGANIZER)).length;
-    const InstructorUsers = _users.filter((user) => user.role === RolesList.find((role) => role === INSTRUCTOR)).length;
+  const chartUserOptions = React.useCallback(() => {
+    const AdminUsers = _users.filter((user) => user.role === ADMINISTRATOR).length;
+    const UserUsers = _users.filter((user) => user.role === USER).length;
+    const TechnicianUsers = _users.filter((user) => user.role === TECHNICIAN).length;
+    const OrganizerUsers = _users.filter((user) => user.role === ORGANIZER).length;
+    const InstructorUsers = _users.filter((user) => user.role === INSTRUCTOR).length;
     setChartUser({
       labels: ["Admin", "Utilisateur", "Technicien", "Organisateur", "Instructeur"],
       datasets: [
         {
           label: "Utilisateurs",
           data: [AdminUsers, UserUsers, TechnicianUsers, OrganizerUsers, InstructorUsers],
-          backgroundColor: ["#E11469", "#4CE0D2", "#7E86C8", "#FEC601", "#2C2C54"],
+          backgroundColor: ["rgb(249 115 22)", "rgb(6 182 212)", "rgb(99 102 241)", "rgb(236 72 153)", "#2C2C54"],
           hoverOffset: 4,
         },
       ],
       redraw: true,
     });
-  };
+  }, [_users.length]);
 
-  const chartEventOptions = () => {
+  const chartEventOptions = React.useCallback(() => {
     const eventsFuture = _eventsDashboard.filter((event) => !event.endedAt).length;
     const eventsPast = _eventsDashboard.filter((event) => event.endedAt).length;
 
@@ -151,15 +199,15 @@ const Home: React.FC = () => {
         {
           label: "Evènements",
           data: [eventsFuture, eventsPast],
-          backgroundColor: ["#E11469", "#4CE0D2"],
+          backgroundColor: ["rgb(249 115 22)", "rgb(6 182 212)"],
           hoverOffset: 4,
         },
       ],
       redraw: true,
     });
-  };
+  }, [_eventsDashboard]);
 
-  const chartStationOptions = () => {
+  const chartStationOptions = React.useCallback(() => {
     const brokenStations = _stations.filter((station) => station.active === false).length;
     const activeStations = _stations.filter((station) => station.active === true).length;
     setChartStation({
@@ -168,47 +216,132 @@ const Home: React.FC = () => {
         {
           label: "Stations",
           data: [brokenStations, activeStations],
-          backgroundColor: ["#E11469", "#4CE0D2"],
+          backgroundColor: ["rgb(249 115 22)", "rgb(6 182 212)"],
           hoverOffset: 4,
         },
       ],
       redraw: true,
     });
-  };
+  }, [_stations]);
+
+  const chartAttemptOptions = React.useCallback(() => {
+    const successAttempts = _attempts.filter((attempt) => attempt.score >= 80).length;
+    const failedAttempts = _attempts.filter((attempt) => attempt.score < 80).length;
+    setChartAttempt({
+      labels: ["Echoué", "Reussi"],
+      datasets: [
+        {
+          label: "Examens",
+          data: [failedAttempts, successAttempts],
+          backgroundColor: ["rgb(249 115 22)", "rgb(6 182 212)"],
+          hoverOffset: 4,
+        },
+      ],
+      redraw: true,
+    });
+  }, [_attempts]);
+
+  const calculateAttemptsByMonthSucces = React.useCallback(() => {
+    const filteredAttempts = _attempts.filter((attempt) => attempt.score >= 80);
+
+    return filteredAttempts.reduce((countByMonth: AttemptMonthStat[], attempt) => {
+      const month = new Date(attempt.createdAt).toLocaleString("default", { month: "long" });
+      const monthIndex = countByMonth.findIndex((item) => item.month === month);
+
+      if (monthIndex !== -1) {
+        countByMonth[monthIndex].count += 1;
+      } else {
+        countByMonth.push({ month, count: 1 });
+      }
+
+      return countByMonth;
+    }, []);
+  }, [_attempts]);
+
+  const calculateAttemptsByMonthFailes = React.useCallback(() => {
+    const filteredAttempts = _attempts.filter((attempt) => attempt.score < 80);
+
+    return filteredAttempts.reduce((countByMonth: AttemptMonthStat[], attempt) => {
+      const month = new Date(attempt.createdAt).toLocaleString("default", { month: "long" });
+      const monthIndex = countByMonth.findIndex((item) => item.month === month);
+
+      if (monthIndex !== -1) {
+        countByMonth[monthIndex].count += 1;
+      } else {
+        countByMonth.push({ month: month, count: 1 });
+      }
+
+      return countByMonth;
+    }, []);
+  }, [_attempts]);
+
+  const chartAttemptLineOptions = React.useCallback(() => {
+    const attemptsByMonthSuccess = calculateAttemptsByMonthSucces();
+    const attemptsByMonthFailed = calculateAttemptsByMonthFailes();
+
+    const countsByMonthSucces = labels.map((label) => {
+      const monthItem = attemptsByMonthSuccess.find((item) => item.month === label);
+      return monthItem ? monthItem.count : 0;
+    });
+
+    const countsByMonthFailed = labels.map((label) => {
+      const monthItem = attemptsByMonthFailed.find((item) => item.month === label);
+      return monthItem ? monthItem.count : 0;
+    });
+
+    setChartAttemptsLine({
+      labels,
+      datasets: [
+        {
+          label: "Réussies",
+          data: countsByMonthSucces,
+          borderColor: "rgb(6 182 212)",
+          backgroundColor: "rgb(6 182 212)",
+        },
+        {
+          label: "Echouées",
+          data: countsByMonthFailed,
+          borderColor: "rgb(249 115 22)",
+          backgroundColor: "rgb(249 115 22)",
+        },
+      ],
+      redraw: true,
+    });
+  }, [_attempts]);
+
   useEffect(() => {
-    if (!isUser(user)) {
-      if (isTechnician(user)) {
-        getStationData();
-        getVehicleData();
+    if (isTechnician(user)) {
+      getStationData();
+      getVehicleData();
+    }
 
-        chartVehicleOptions();
-        chartStationOptions();
-      }
+    if (isOrganizer(user)) {
+      getEventsData();
+      getStationData();
+    }
 
-      if (isOrganizer(user)) {
-        getEventsData();
-        getStationData();
+    if (isInstructor(user)) {
+      getAttemptsData();
+    }
 
-        chartEventOptions();
-        chartStationOptions();
-      }
-
-      if (isAdmin(user)) {
-        getUsersData();
-        getStationData();
-        getVehicleData();
-        getEventsData();
-
-        chartUserOptions();
-        chartVehicleOptions();
-        chartStationOptions();
-        chartEventOptions();
-      }
-      if (isInstructor(user)) {
-        //todo get reussite exam
-      }
+    if (isAdmin(user)) {
+      getUsersData();
+      getStationData();
+      getVehicleData();
+      getEventsData();
+      getAttemptsData();
     }
   }, []);
+
+  useEffect(() => {
+    chartUserOptions();
+    chartVehicleOptions();
+    chartStationOptions();
+    chartEventOptions();
+    chartAttemptOptions();
+    chartAttemptLineOptions();
+  }, [_users, _vehicles, _stations, _events, _attempts]);
+
   return (
     <React.Fragment>
       <Card className="w-full mb-5">
@@ -377,6 +510,16 @@ const Home: React.FC = () => {
                 <h5 className="text-xl font-medium">Stations</h5>
                 <Doughnut data={_chartStation} />
               </Card>
+              <div className="grid-cols-2 gap-4">
+                <Card className=" mb-1 bg-gradient-to-r from-cyan-500 to-indigo-500 text-white font-bold">
+                  <CountUp style={{ fontSize: "xx-large" }} end={_vehicles.length} duration={5} />
+                  <h5 className="text-xl font-medium">Véhicules</h5>
+                </Card>
+                <Card className=" mb-1 bg-gradient-to-r from-pink-500 to-orange-500 text-white font-bold">
+                  <CountUp style={{ fontSize: "xx-large" }} end={_stations.length} duration={5} />
+                  <h5 className="text-xl font-medium">Stations</h5>
+                </Card>
+              </div>
             </>
           )}
           {isAdmin(user) && (
@@ -393,9 +536,30 @@ const Home: React.FC = () => {
                 <h5 className="text-xl font-medium">Evenements</h5>
                 <Doughnut data={_chartEvent} />
               </Card>
+              <Card className="col-1">
+                <h5 className="text-xl font-medium">Examen</h5>
+                <Doughnut data={_chartAttempt} />
+              </Card>
               <Card className="col-span-1">
                 <h5 className="text-xl font-medium">Utilisateurs</h5>
                 <Doughnut data={_chartUser} />
+              </Card>
+              <div className="grid-cols-2 gap-4">
+                <Card className=" mb-1 bg-gradient-to-r from-cyan-500 to-indigo-500 text-white font-bold">
+                  <CountUp style={{ fontSize: "xx-large" }} end={_vehicles.length} duration={5} />
+                  <h5 className="text-xl font-medium">Véhicules</h5>
+                </Card>
+                <Card className=" mb-1 bg-gradient-to-r from-pink-500 to-orange-500 text-white font-bold">
+                  <CountUp style={{ fontSize: "xx-large" }} end={_stations.length} duration={5} />
+                  <h5 className="text-xl font-medium">Stations</h5>
+                </Card>
+                <Card className=" mb-1 bg-gradient-to-r from-cyan-500 to-indigo-500 text-white font-bold">
+                  <CountUp style={{ fontSize: "xx-large" }} end={_eventsDashboard.length} duration={5} />
+                  <h5 className="text-xl font-medium">Evenements</h5>
+                </Card>
+              </div>
+              <Card className="col-span-2">
+                <Line data={_chartAttemptsLine} options={options} />
               </Card>
             </>
           )}
@@ -408,6 +572,23 @@ const Home: React.FC = () => {
               <Card className="col-span-1">
                 <h5 className="text-xl font-medium">Evenements</h5>
                 <Doughnut data={_chartEvent} />
+              </Card>
+              <div className="grid-cols-2 gap-4">
+                <Card className=" mb-1 bg-gradient-to-r from-cyan-500 to-indigo-500 text-white font-bold">
+                  <CountUp style={{ fontSize: "xx-large" }} end={_eventsDashboard.length} duration={5} />
+                  <h5 className="text-xl font-medium">Evenements</h5>
+                </Card>
+              </div>
+            </>
+          )}
+          {isInstructor(user) && (
+            <>
+              <Card className="col-1">
+                <h5 className="text-xl font-medium">Examen</h5>
+                <Doughnut data={_chartAttempt} />
+              </Card>
+              <Card className="col-span-2">
+                <Line data={_chartAttemptsLine} options={options} />
               </Card>
             </>
           )}
