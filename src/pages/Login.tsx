@@ -37,10 +37,10 @@ const Login: React.FC = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 p-20 pt-3">
-      <div className="w-full max-h-full h-full">
+      <div className="w-full flex justify-center max-h-full h-full">
         <img src="/logo.png" className="w-50 h-50 mb-5" />
       </div>
-      <div className="flex items-center max-w-md w-full md:w-1/2 py-4  rounded-lg">
+      <div className="flex justify-center items-center max-w-md w-full py-4 rounded-lg">
         <div className="flex flex-col w-full items-center">
           <h1 className="text-3xl">Board n&apos; Go</h1>
           <p className="text-red-600 font-bold mb-10">{_error}</p>
