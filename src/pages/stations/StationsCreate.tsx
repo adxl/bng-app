@@ -37,13 +37,13 @@ const StationsCreate: React.FC = () => {
   };
 
   return (
-    <div>
-      <div className="flex mb-5">
-        <Button color="dark">
-          <Link to="/admin/stations">Retour</Link>
-        </Button>
+    <div className="flex flex-col w-full">
+      <div className="flex justify-between mb-5">
+        <Link to="/admin/stations">
+          <Button gradientDuoTone="greenToBlue">Retour</Button>
+        </Link>
       </div>
-      <Card>
+      <Card className="self-center">
         {_error && (
           <Alert color="failure" icon={HiInformationCircle}>
             <p>{_error}</p>
@@ -71,7 +71,7 @@ const StationsCreate: React.FC = () => {
               <TextInput required type="number" value={_longitude} onChange={(e) => setLongitude(Number(e.target.value))} />
             </div>
           </div>
-          <Button color="dark" type="submit">
+          <Button gradientDuoTone="greenToBlue" type="submit">
             Enregistrer
           </Button>
         </form>

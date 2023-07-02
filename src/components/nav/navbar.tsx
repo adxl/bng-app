@@ -15,9 +15,11 @@ const Navbar: React.FC = () => {
   const [_eventsWinner, setEventsWinner] = useState<SelfEventWinner | null>(null);
 
   useEffect(() => {
-    getSelfEventsWinner(user.id!).then((response) => {
-      setEventsWinner(response.data);
-    });
+    if (isUser(user)) {
+      getSelfEventsWinner(user.id!).then(({ data }) => {
+        setEventsWinner(data);
+      });
+    }
   }, []);
 
   return (
@@ -25,10 +27,9 @@ const Navbar: React.FC = () => {
       <FlowbiteNavbar.Brand as={Link} to="/">
         <img src="/logo.png" alt="BNG Logo" className="w-16 h-16 mr-3" />
       </FlowbiteNavbar.Brand>
-      <div className="flex md:order-2 items-center">
-        <FlowbiteNavbar.Toggle />
+      <div className="flex  items-center">
         {isUser(user) && _eventsWinner && (
-          <div className="flex items-center">
+          <div className="flex items-center mr-6">
             <div className="flex mr-5">
               <img src="/cap.png" alt="cap" className="w-6 h-6 mr-2" />
               <span>{_eventsWinner.caps}</span>
@@ -47,11 +48,7 @@ const Navbar: React.FC = () => {
             </div>
           </div>
         )}
-
-        <Badge color="indigo" className="mr-3">
-          {user.role}
-        </Badge>
-        <Dropdown inline label={<Avatar alt="User" img="/jetpack.png" rounded />} className="rounded-md" arrowIcon={false}>
+        <Dropdown inline label={<Avatar alt="User" img="/jetpack.png" rounded />} className="rounded-md " arrowIcon={false}>
           <Dropdown.Header>
             <span className="block text-sm">
               Bonjour&nbsp;
@@ -65,7 +62,12 @@ const Navbar: React.FC = () => {
           <Link to={"/profile"}>
             <Dropdown.Item>
               <HiOutlineAdjustments className="w-6 h-6 mr-2" />
-              <p>Profil</p>
+              <p className="flex">
+                Profil
+                <Badge color="indigo" className="ml-3 md:hidden">
+                  {user.role}
+                </Badge>
+              </p>
             </Dropdown.Item>
           </Link>
           <Dropdown.Divider />
@@ -74,6 +76,13 @@ const Navbar: React.FC = () => {
             <p>Se déconnecter</p>
           </Dropdown.Item>
         </Dropdown>
+
+        <div className="items-baseline ml-3 hidden md:flex">
+          <span>{user.firstName}</span>
+          <Badge color="indigo" className="ml-3">
+            {user.role}
+          </Badge>
+        </div>
       </div>
     </FlowbiteNavbar>
   );

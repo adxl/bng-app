@@ -8,8 +8,8 @@ import { useAuth } from "../hooks/auth";
 const Login: React.FC = () => {
   const { login, _token } = useAuth();
 
-  const [_email, setEmail] = useState<string>("@bng.fr");
-  const [_password, setPassword] = useState<string>("password");
+  const [_email, setEmail] = useState<string>("");
+  const [_password, setPassword] = useState<string>("");
 
   const [_error, setError] = useState<string>("");
 
@@ -36,12 +36,13 @@ const Login: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-row justify-center mt-20 p-10">
-      <div className="w-1/2 mt-10 mr-5 max-h-full h-full">
-        <img src="/logo.png" className="w-100 h-100 mb-5 p-2 rounded-full" />
+    <div className="grid grid-cols-1 md:grid-cols-2 p-20 pt-3">
+      <div className="w-full flex justify-center max-h-full h-full">
+        <img src="/logo.png" className="w-50 h-50 mb-5" />
       </div>
-      <div className="flex items-center max-w-md w-1/2 py-4  rounded-lg">
+      <div className="flex justify-center items-center max-w-md w-full py-4 rounded-lg">
         <div className="flex flex-col w-full items-center">
+          <h1 className="text-3xl">Board n&apos; Go</h1>
           <p className="text-red-600 font-bold mb-10">{_error}</p>
           <form onSubmit={handleLogin} className="flex flex-col w-full items-center mb-2">
             <div className="mb-6">

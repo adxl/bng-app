@@ -12,11 +12,8 @@ export type EventWinner = {
 };
 
 export type SelfEventWinner = {
-  firsts: string;
-
-  seconds: string;
-
-  thirds: string;
-
-  caps: string;
+  firsts: number;
+  seconds: number;
+  thirds: number;
+  caps: number;
 };

@@ -89,7 +89,7 @@ const Profile: React.FC = () => {
                   <TextInput type="text" required defaultValue={user.lastName!} onChange={(e) => setLastName(e.target.value)} />
                 </div>
 
-                <Button color="dark" type="submit">
+                <Button gradientDuoTone="greenToBlue" type="submit">
                   Enregistrer
                 </Button>
               </form>
@@ -128,7 +128,7 @@ const Profile: React.FC = () => {
                   />
                 </div>
 
-                <Button color="dark" type="submit">
+                <Button gradientDuoTone="greenToBlue" type="submit">
                   Enregistrer
                 </Button>
               </form>

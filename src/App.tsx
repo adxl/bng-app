@@ -28,6 +28,18 @@ const EventsList = React.lazy(() => import("@pages/events/EventsList"));
 const EventsCreate = React.lazy(() => import("@pages/events/EventsCreate"));
 const EventsEdit = React.lazy(() => import("@pages/events/EventsEdit"));
 
+const ExamsList = React.lazy(() => import("@pages/exams/ExamsList"));
+const ExamsListUser = React.lazy(() => import("@pages/exams/ExamsListUser"));
+const ExamsEdit = React.lazy(() => import("@pages/exams/ExamsEdit"));
+const ExamsLaunch = React.lazy(() => import("@pages/exams/ExamsLaunch"));
+const ExamsLaunchResult = React.lazy(() => import("@pages/exams/ExamsLaunchResult"));
+
+const RidesList = React.lazy(() => import("@pages/rides/RidesList"));
+const ReportsList = React.lazy(() => import("@pages/reports/ReportsList"));
+const ReportsEdit = React.lazy(() => import("@pages/reports/ReportsEdit"));
+
+const AttemptsList = React.lazy(() => import("@pages/attempts/AttemptsList"));
+
 const Placeholder = React.Fragment;
 
 const Home = React.lazy(() => import("@pages/Home"));
@@ -47,8 +59,11 @@ const App: React.FC = () => {
               <Route path="/" element={<Outlet />}>
                 <Route index element={<Guard el={Home} roles={["*"]} />} />
                 <Route path="stations" element={<Guard el={StationsMap} roles={[USER]} />} />
-                <Route path="rides" element={<Guard el={Placeholder} roles={[USER]} />} />
-                <Route path="events" element={<Guard el={Placeholder} roles={[USER]} />} />
+                <Route path="licenses" element={<Guard el={ExamsListUser} roles={[USER]} />} />
+                <Route path="licenses/launch/:id" element={<Guard el={ExamsLaunch} roles={[USER]} />} />
+                <Route path="licenses/launch/:id/result" element={<Guard el={ExamsLaunchResult} roles={[USER]} />} />
+                <Route path="rides" element={<Guard el={RidesList} roles={[USER]} />} />
+                <Route path="events" element={<Guard el={EventsList} roles={[USER]} />} />
                 <Route path="profile" element={<Guard el={Profile} roles={["*"]} />} />
               </Route>
 
@@ -60,7 +75,7 @@ const App: React.FC = () => {
                   <Route path="edit" element={<Guard el={Placeholder} roles={[ADMINISTRATOR]} />} />
                 </Route>
                 <Route path="rides" element={<Outlet />}>
-                  <Route index element={<Guard el={Placeholder} roles={[ADMINISTRATOR, TECHNICIAN]} />} />
+                  <Route index element={<Guard el={RidesList} roles={[ADMINISTRATOR, TECHNICIAN]} />} />
                 </Route>
                 <Route path="stations" element={<Outlet />}>
                   <Route index element={<Guard el={StationsList} roles={[ADMINISTRATOR, TECHNICIAN, INSTRUCTOR, ORGANIZER]} />} />
@@ -73,17 +88,18 @@ const App: React.FC = () => {
                   <Route path="edit/:id" element={<Guard el={VehiclesEdit} roles={[TECHNICIAN]} />} />
                 </Route>
                 <Route path="reports" element={<Outlet />}>
-                  <Route index element={<Guard el={Placeholder} roles={[ADMINISTRATOR, TECHNICIAN]} />} />
+                  <Route index element={<Guard el={ReportsList} roles={[ADMINISTRATOR, TECHNICIAN]} />} />
                   <Route path="create" element={<Guard el={Placeholder} roles={[TECHNICIAN]} />} />
-                  <Route path="edit" element={<Guard el={Placeholder} roles={[TECHNICIAN]} />} />
+                  <Route path="edit/:id" element={<Guard el={ReportsEdit} roles={[TECHNICIAN]} />} />
                 </Route>
                 <Route path="exams" element={<Outlet />}>
-                  <Route index element={<Guard el={Placeholder} roles={[ADMINISTRATOR, INSTRUCTOR]} />} />
+                  <Route index element={<Guard el={ExamsList} roles={[ADMINISTRATOR, INSTRUCTOR]} />} />
                   <Route path="create" element={<Guard el={Placeholder} roles={[INSTRUCTOR]} />} />
-                  <Route path="edit" element={<Guard el={Placeholder} roles={[INSTRUCTOR]} />} />
+                  <Route path="edit/:id" element={<Guard el={ExamsEdit} roles={[INSTRUCTOR]} />} />
+                  <Route path=":id" element={<Guard el={ExamsEdit} roles={[ADMINISTRATOR]} />} />
                 </Route>
                 <Route path="candidates" element={<Outlet />}>
-                  <Route index element={<Guard el={Placeholder} roles={[ADMINISTRATOR, INSTRUCTOR]} />} />
+                  <Route index element={<Guard el={AttemptsList} roles={[ADMINISTRATOR, INSTRUCTOR]} />} />
                 </Route>
                 <Route path="events" element={<Outlet />}>
                   <Route index element={<Guard el={EventsList} roles={[ADMINISTRATOR, ORGANIZER]} />} />

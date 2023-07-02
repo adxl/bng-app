@@ -42,7 +42,7 @@ const UsersCreate: React.FC = () => {
     <div className="flex flex-col w-full">
       <div className="flex mb-5">
         <Link to="/admin/users">
-          <Button color="dark">
+          <Button gradientDuoTone="greenToBlue">
             <HiArrowLeft className="w-4 h-4 mr-2" /> Retour
           </Button>
         </Link>
@@ -88,7 +88,7 @@ const UsersCreate: React.FC = () => {
             </Select>
           </div>
 
-          <Button color="dark" type="submit">
+          <Button gradientDuoTone="greenToBlue" type="submit">
             Enregistrer
           </Button>
         </form>

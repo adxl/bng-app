@@ -1,7 +1,8 @@
 import { _delete, _get, _patch, _post } from "@api/gateway";
 import type { User } from "@typing/api/auth/users";
 import type { Response } from "@typing/api/axios";
-import type { ManysUsersDto, CreateDto, UpdatePasswordDto, UpdateProfileDto, UpdateRoleDto } from "./dto/users.dto";
+
+import type { CreateDto, ManysUsersDto, UpdatePasswordDto, UpdateProfileDto, UpdateRoleDto } from "./dto/users.dto";
 
 const URL = import.meta.env.VITE_API_URL + "/auth/users";
 
@@ -35,4 +36,7 @@ export const deleteUser = (id: string): Response<void> => {
 
 export const findUsersByIds = (data: ManysUsersDto): Response<User[]> => {
   return _post(URL + "/many", data);
+};
+export const findPublicUsersByIds = (data: ManysUsersDto): Response<User[]> => {
+  return _post(URL + "/many/public", data);
 };

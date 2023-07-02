@@ -3,7 +3,9 @@ export type CreateAnswerDto = {
 
   isCorrect: boolean;
 
-  questionId: string;
+  question: {
+    id: string;
+  };
 };
 
 export type UpdateAnswerDto = {

@@ -65,12 +65,12 @@ const UsersList: React.FC = () => {
   }, [_email]);
 
   return (
-    <div className="flex flex-col w-full">
-      <div className="flex justify-between items-center w-full mb-5">
+    <div className="flex flex-col w-full overflow-x-scrool">
+      <div className="flex justify-between items-center w-full mb-5 ">
         <div className="flex items-center">
           <h3 className="text-2xl font-bold mr-2">Utilisateurs</h3>
           <Link to={"create"}>
-            <Button color="success">
+            <Button gradientDuoTone="greenToBlue">
               <HiUserAdd className="w-4 h-4" />
               Créer
             </Button>
@@ -86,53 +86,59 @@ const UsersList: React.FC = () => {
             <p>{_success}</p>
           </Alert>
         )}
-        <TextInput icon={HiSearch} type="text" className="mr-2" placeholder="E-mail..." value={_email} onChange={handleEmailChange} />
+        <TextInput icon={HiSearch} type="text" className="mr-2 hidden md:flex" placeholder="E-mail..." value={_email} onChange={handleEmailChange} />
       </div>
-      <Table striped>
-        <Table.Head>
-          <Table.HeadCell>E-mail</Table.HeadCell>
-          <Table.HeadCell>Nom</Table.HeadCell>
-          <Table.HeadCell>Prénom</Table.HeadCell>
-          <Table.HeadCell>Rôle</Table.HeadCell>
-          <Table.HeadCell>Actions</Table.HeadCell>
-        </Table.Head>
-        <Table.Body className="divide-y">
-          {_filteredUsers.length > 0 ? (
-            _filteredUsers.map((oneUser) => (
-              <Table.Row className="bg-white" key={oneUser.id}>
-                <Table.Cell>{oneUser.email}</Table.Cell>
-                <Table.Cell>{oneUser.firstName}</Table.Cell>
-                <Table.Cell>{oneUser.lastName}</Table.Cell>
-                <Table.Cell>
-                  {oneUser.role && oneUser.id && (
-                    <Select onChange={(e) => handleRoleChange(oneUser.id!, e.target.value)} defaultValue={oneUser.role}>
-                      {RolesList.map((role) => (
-                        <option value={role} key={role}>
-                          {role}
-                        </option>
-                      ))}
-                    </Select>
-                  )}
-                </Table.Cell>
-                <Table.Cell>
-                  <Button color={"failure"} onClick={() => handleRemoveUser(oneUser.id!)}>
-                    <HiOutlineTrash className="w-4 h-4" />
-                  </Button>
+      <div id="users-table">
+        <Table striped>
+          <Table.Head>
+            <Table.HeadCell>E-mail</Table.HeadCell>
+            <Table.HeadCell>Nom</Table.HeadCell>
+            <Table.HeadCell>Prénom</Table.HeadCell>
+            <Table.HeadCell>Rôle</Table.HeadCell>
+            <Table.HeadCell>Actions</Table.HeadCell>
+          </Table.Head>
+          <Table.Body className="divide-y">
+            {_filteredUsers.length > 0 ? (
+              _filteredUsers.map((oneUser) => (
+                <Table.Row className="bg-white" key={oneUser.id}>
+                  <Table.Cell>{oneUser.email}</Table.Cell>
+                  <Table.Cell>{oneUser.firstName}</Table.Cell>
+                  <Table.Cell>{oneUser.lastName}</Table.Cell>
+                  <Table.Cell>
+                    {oneUser.role && oneUser.id && (
+                      <Select
+                        style={{ minWidth: "fit-content" }}
+                        onChange={(e) => handleRoleChange(oneUser.id!, e.target.value)}
+                        defaultValue={oneUser.role}
+                      >
+                        {RolesList.map((role) => (
+                          <option value={role} key={role}>
+                            {role}
+                          </option>
+                        ))}
+                      </Select>
+                    )}
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Button gradientDuoTone="pinkToOrange" onClick={() => handleRemoveUser(oneUser.id!)}>
+                      <HiOutlineTrash className="w-4 h-4" />
+                    </Button>
+                  </Table.Cell>
+                </Table.Row>
+              ))
+            ) : (
+              <Table.Row className="bg-white">
+                <Table.Cell colSpan={5}>
+                  <div className="flex flex-col items-center w-full">
+                    <img src="/confus.png" className="w-32 h-32 mb-2" />
+                    <span className="text-lg">Aucun utilisateur trouvé...</span>
+                  </div>
                 </Table.Cell>
               </Table.Row>
-            ))
-          ) : (
-            <Table.Row className="bg-white">
-              <Table.Cell colSpan={5}>
-                <div className="flex flex-col items-center w-full">
-                  <img src="/confus.png" className="w-32 h-32 mb-2" />
-                  <span className="text-lg">Aucun utilisateur trouvé...</span>
-                </div>
-              </Table.Cell>
-            </Table.Row>
-          )}
-        </Table.Body>
-      </Table>
+            )}
+          </Table.Body>
+        </Table>
+      </div>
     </div>
   );
 };
