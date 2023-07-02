@@ -7,17 +7,14 @@ import type { LoginDto, RegisterDto } from "./dto/auth.dto";
 
 const URL = import.meta.env.VITE_API_URL + "/auth/account";
 
-// TODO: ADD USER RETURN TYPE
 export const getCurrentUser = (): Response<User> => {
   return _get(URL + "/me");
 };
 
-// TODO: ADD REGISTER RETURN TYPE
 export const register = (data: RegisterDto): Response<unknown> => {
   return _post(URL + "/register", data);
 };
 
-// TODO: ADD LOGIN RETURN TYPE
-export const login = (data: LoginDto): Response<unknown> => {
+export const login = (data: LoginDto) => {
   return _post(URL + "/login", data);
 };

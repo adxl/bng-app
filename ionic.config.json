@@ -1,0 +1,7 @@
+{
+  "name": "bng-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "custom"
+}

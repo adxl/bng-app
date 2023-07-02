@@ -1,0 +1,6 @@
+#! /bin/bash
+
+export CAPACITOR_ANDROID_STUDIO_PATH="$HOME/.local/share/JetBrains/Toolbox/apps/AndroidStudio/ch-0/222.4459.24.2221.10121639/bin/studio.sh"
+
+npm run android:compile 
+npx cap open android

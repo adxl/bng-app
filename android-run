@@ -1,0 +1,7 @@
+#! /bin/bash
+
+
+export ANDROID_SDK_ROOT="$HOME/Android/Sdk"
+
+npx native-run android --sdk-info
+npx cap run android
