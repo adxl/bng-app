@@ -62,7 +62,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 type AttemptMonthStat = {
-  month: string;
+  month: number;
   count: number;
 };
 
@@ -137,7 +137,7 @@ const Home: React.FC = () => {
     });
   };
 
-  const labels = ["janvier", "févirer", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "décembre"];
+  const labels = ["jan", "fév", "mar", "avr", "mai", "juin", "juil", "août", "sept", "oct", "nov", "déc"];
   const options = {
     responsive: true,
     plugins: {
@@ -227,6 +227,7 @@ const Home: React.FC = () => {
   const chartAttemptOptions = React.useCallback(() => {
     const successAttempts = _attempts.filter((attempt) => attempt.score >= 80).length;
     const failedAttempts = _attempts.filter((attempt) => attempt.score < 80).length;
+
     setChartAttempt({
       labels: ["Echoué", "Reussi"],
       datasets: [
@@ -245,7 +246,7 @@ const Home: React.FC = () => {
     const filteredAttempts = _attempts.filter((attempt) => attempt.score >= 80);
 
     return filteredAttempts.reduce((countByMonth: AttemptMonthStat[], attempt) => {
-      const month = new Date(attempt.createdAt).toLocaleString("default", { month: "long" });
+      const month = new Date(attempt.createdAt).getMonth();
       const monthIndex = countByMonth.findIndex((item) => item.month === month);
 
       if (monthIndex !== -1) {
@@ -262,7 +263,7 @@ const Home: React.FC = () => {
     const filteredAttempts = _attempts.filter((attempt) => attempt.score < 80);
 
     return filteredAttempts.reduce((countByMonth: AttemptMonthStat[], attempt) => {
-      const month = new Date(attempt.createdAt).toLocaleString("default", { month: "long" });
+      const month = new Date(attempt.createdAt).getMonth();
       const monthIndex = countByMonth.findIndex((item) => item.month === month);
 
       if (monthIndex !== -1) {
@@ -279,15 +280,17 @@ const Home: React.FC = () => {
     const attemptsByMonthSuccess = calculateAttemptsByMonthSucces();
     const attemptsByMonthFailed = calculateAttemptsByMonthFailes();
 
-    const countsByMonthSucces = labels.map((label) => {
-      const monthItem = attemptsByMonthSuccess.find((item) => item.month === label);
+    const countsByMonthSucces = labels.map((_, index) => {
+      const monthItem = attemptsByMonthSuccess.find((item) => item.month === index);
       return monthItem ? monthItem.count : 0;
     });
 
-    const countsByMonthFailed = labels.map((label) => {
-      const monthItem = attemptsByMonthFailed.find((item) => item.month === label);
+    const countsByMonthFailed = labels.map((_, index) => {
+      const monthItem = attemptsByMonthFailed.find((item) => item.month === index);
       return monthItem ? monthItem.count : 0;
     });
+
+    console.log(countsByMonthSucces, countsByMonthFailed);
 
     setChartAttemptsLine({
       labels,
@@ -502,11 +505,11 @@ const Home: React.FC = () => {
         <div className="w-full grid grid-cols-1 md:grid-cols-4 gap-4">
           {isTechnician(user) && (
             <>
-              <Card className="col-1">
+              <Card>
                 <h5 className="text-xl font-medium">Véhicules</h5>
                 <Doughnut data={_chartVehicle} />
               </Card>
-              <Card className="col-1">
+              <Card>
                 <h5 className="text-xl font-medium">Stations</h5>
                 <Doughnut data={_chartStation} />
               </Card>
@@ -524,23 +527,23 @@ const Home: React.FC = () => {
           )}
           {isAdmin(user) && (
             <>
-              <Card className="col-1">
+              <Card>
                 <h5 className="text-xl font-medium">Véhicules</h5>
                 <Doughnut data={_chartVehicle} />
               </Card>
-              <Card className="col-1">
+              <Card>
                 <h5 className="text-xl font-medium">Stations</h5>
                 <Doughnut data={_chartStation} />
               </Card>
-              <Card className="col-span-1">
+              <Card>
                 <h5 className="text-xl font-medium">Evenements</h5>
                 <Doughnut data={_chartEvent} />
               </Card>
-              <Card className="col-1">
+              <Card>
                 <h5 className="text-xl font-medium">Examen</h5>
                 <Doughnut data={_chartAttempt} />
               </Card>
-              <Card className="col-span-1">
+              <Card>
                 <h5 className="text-xl font-medium">Utilisateurs</h5>
                 <Doughnut data={_chartUser} />
               </Card>
@@ -558,18 +561,18 @@ const Home: React.FC = () => {
                   <h5 className="text-xl font-medium">Evenements</h5>
                 </Card>
               </div>
-              <Card className="col-span-2">
+              <Card className="hidden md:block md:col-span-2">
                 <Line data={_chartAttemptsLine} options={options} />
               </Card>
             </>
           )}
           {isOrganizer(user) && (
             <>
-              <Card className="col-1">
+              <Card>
                 <h5 className="text-xl font-medium">Stations</h5>
                 <Doughnut data={_chartStation} />
               </Card>
-              <Card className="col-span-1">
+              <Card>
                 <h5 className="text-xl font-medium">Evenements</h5>
                 <Doughnut data={_chartEvent} />
               </Card>
@@ -583,11 +586,11 @@ const Home: React.FC = () => {
           )}
           {isInstructor(user) && (
             <>
-              <Card className="col-1">
+              <Card>
                 <h5 className="text-xl font-medium">Examen</h5>
                 <Doughnut data={_chartAttempt} />
               </Card>
-              <Card className="col-span-2">
+              <Card className="col-span-3">
                 <Line data={_chartAttemptsLine} options={options} />
               </Card>
             </>
