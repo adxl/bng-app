@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { BsHourglassSplit } from "react-icons/bs";
 import { FaQuestion } from "react-icons/fa";
-import { HiInformationCircle, HiPencilSquare } from "react-icons/hi2";
+import { HiEye, HiInformationCircle, HiPencilSquare } from "react-icons/hi2";
 import { Link } from "react-router-dom";
 import { Alert, Button, Card, Label, Select, TextInput } from "flowbite-react";
 
 import { createExam, getAllExams } from "@api/exams/exams";
 import { getAllTypes } from "@api/gears/vehicles-types";
+import { isInstructor } from "@typing/api/auth/users";
 import type { Exam } from "@typing/api/exams/exams";
 
+import { useAuth } from "../../hooks/auth";
 import type { VehicleType } from "../../typing/api/gears/vehicles-types";
 
 const ExamsList: React.FC = () => {
+  const { user } = useAuth();
+
   const [_exams, setExams] = useState<Exam[]>([]);
   const [_duration, setDuration] = useState<number>(0);
   const [_type, setType] = useState<string>("");
@@ -66,64 +70,76 @@ const ExamsList: React.FC = () => {
   return (
     <>
       <h1 className="text-5xl font-extrabold dark:text-white text-center w-full my-4">EXAMENS</h1>
-      <div className="flex justify-center w-full">
-        {_error && (
-          <Alert color="failure" icon={HiInformationCircle}>
-            <p>{_error}</p>
-          </Alert>
-        )}
-      </div>
+      {isInstructor(user) && (
+        <div className="flex justify-center w-full">
+          {_error && (
+            <Alert color="failure" icon={HiInformationCircle}>
+              <p>{_error}</p>
+            </Alert>
+          )}
+        </div>
+      )}
       <div className="w-full">
-        {_types.length > 0 ? (
-          <div className="w-full justify-center">
-            <div className="flex  my-9 justify-center w-50 items-end">
-              <div>
-                <Label>Durée de l&apos;examen (en minutes)</Label>
-                <TextInput
-                  type="number"
-                  className="mr-4"
-                  min={1}
-                  required
-                  onChange={(e) => setDuration(Number(e.currentTarget.value))}
-                  value={_duration}
-                />
+        {isInstructor(user) &&
+          (_types.length > 0 ? (
+            <div className="w-full justify-center">
+              <div className="flex  my-9 justify-center w-50 items-end">
+                <div>
+                  <Label>Durée de l&apos;examen (en minutes)</Label>
+                  <TextInput
+                    type="number"
+                    className="mr-4"
+                    min={1}
+                    required
+                    onChange={(e) => setDuration(Number(e.currentTarget.value))}
+                    value={_duration}
+                  />
+                </div>
+                <div>
+                  <Label>Type de l&apos;examen</Label>
+                  {_types.length ? (
+                    <Select required onChange={(e) => setType(e.target.value)} value={_type}>
+                      {_types.map((type) => (
+                        <option key={type.id} value={type.id}>
+                          {type.name}
+                        </option>
+                      ))}
+                    </Select>
+                  ) : (
+                    ""
+                  )}
+                </div>
+                <Button gradientDuoTone="greenToBlue" onClick={handleCreate} className="ml-4">
+                  Ajouter un exam
+                 </Button>
               </div>
-              <div>
-                <Label>Type de l&apos;examen</Label>
-                {_types.length ? (
-                  <Select required onChange={(e) => setType(e.target.value)} value={_type}>
-                    {_types.map((type) => (
-                      <option key={type.id} value={type.id}>
-                        {type.name}
-                      </option>
-                    ))}
-                  </Select>
-                ) : (
-                  ""
-                )}
-              </div>
-              <Button onClick={handleCreate} className="ml-4">
-                Ajouter un exam
-              </Button>
+             
             </div>
-          </div>
-        ) : (
-          <div className="flex flex-col items-center w-full">
-            <span className="text-lg">Tous les exams ont été crées</span>
-          </div>
-        )}
-        <div className="grid grid-cols-2  gap-5 mt-10">
+          ) : (
+            <div className="flex flex-col items-center w-full">
+              <span className="text-lg">Tous les exams ont été crées</span>
+            </div>
+          ))}
+        <div className="grid grid-cols-1 md:grid-cols-2  gap-5 mt-10">
           {_exams.map((exam) => (
             <Card key={exam.id} className=" w-full">
               <div className="flex flex-col items-start">
                 <div className="w-full flex items-center justify-between gap-2">
                   <div className=" text-start">{exam.type && "Exam de type : " + exam.type.name}</div>
                   <div className=" flex justify-end">
+                    {isInstructor(user) ? (
                     <Link to={`edit/${exam.id}`}>
-                      <Button color="dark">
+                      <Button gradientDuoTone="greenToBlue">
                         <HiPencilSquare />
                       </Button>
                     </Link>
+                    ) : (
+                      <Link to={`${exam.id}`}>
+                        <Button gradientDuoTone="greenToBlue">
+                          <HiEye />
+                        </Button>
+                      </Link>
+                    )}
                   </div>
                 </div>
                 <div className="flex items-center gap-2">

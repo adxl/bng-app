@@ -46,9 +46,9 @@ const EventsCreate: React.FC = () => {
   return (
     <div className="flex flex-col w-full">
       <div className="flex mb-5">
-        <Button color="dark">
-          <Link to="/admin/events">Retour</Link>
-        </Button>
+        <Link to="/admin/events">
+          <Button gradientDuoTone="greenToBlue">Retour </Button>
+        </Link>
       </div>
       <Card className="self-center">
         {_error && (
@@ -84,7 +84,7 @@ const EventsCreate: React.FC = () => {
             </Select>
           </div>
 
-          <Button color="dark" type="submit">
+          <Button gradientDuoTone="greenToBlue" type="submit">
             Enregistrer
           </Button>
         </form>

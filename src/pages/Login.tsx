@@ -38,7 +38,7 @@ const Login: React.FC = () => {
   return (
     <div className="flex flex-row justify-center mt-20 p-10">
       <div className="w-1/2 mt-10 mr-5 max-h-full h-full">
-        <img src="/logo.png" className="w-100 h-100 mb-5 p-2 rounded-full" />
+        <img src="/logo.png" className="w-100 h-100 mb-5 p-2" />
       </div>
       <div className="flex items-center max-w-md w-1/2 py-4  rounded-lg">
         <div className="flex flex-col w-full items-center">

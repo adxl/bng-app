@@ -107,10 +107,10 @@ const EventsEdit: React.FC = () => {
   return (
     <div className="flex flex-col w-full">
       <div className="flex justify-between mb-5">
-        <Button color="dark">
-          <Link to="/admin/events">Retour</Link>
-        </Button>
-        <Button color="failure" onClick={handleDelete}>
+        <Link to="/admin/events">
+          <Button gradientDuoTone="greenToBlue">Retour</Button>
+        </Link>
+        <Button gradientDuoTone="pinkToOrange" onClick={handleDelete}>
           Supprimer
         </Button>
       </div>
@@ -160,7 +160,7 @@ const EventsEdit: React.FC = () => {
               <UsersListOptions users={_users} />
             </Select>
           </div>
-          <Button color="dark" type="submit">
+          <Button gradientDuoTone="greenToBlue" type="submit">
             Enregistrer
           </Button>
         </form>

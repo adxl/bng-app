@@ -1,9 +1,13 @@
+import type { User } from "../auth/users";
+
 import type { Exam } from "./exams";
 
 export type Attempt = {
   id: string;
 
   userId: string;
+
+  user?: User | null;
 
   exam: Exam;
 

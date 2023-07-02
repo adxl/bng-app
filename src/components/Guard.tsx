@@ -25,9 +25,9 @@ const Guard: React.FC<Props> = ({ el: Element, roles }) => {
   return (
     <div className="flex flex-col">
       <Navbar />
-      <div className="flex">
+      <div className="md:flex">
         <Sidebar />
-        <div className="flex flex-wrap w-full">
+        <div className="mt-2 md:mt-0 md:flex md:flex-wrap w-full">
           <Element />
         </div>
       </div>

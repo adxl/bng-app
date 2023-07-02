@@ -27,8 +27,7 @@ const Navbar: React.FC = () => {
       <FlowbiteNavbar.Brand as={Link} to="/">
         <img src="/logo.png" alt="BNG Logo" className="w-16 h-16 mr-3" />
       </FlowbiteNavbar.Brand>
-      <div className="flex md:order-2 items-center">
-        <FlowbiteNavbar.Toggle />
+      <div className="flex  items-center">
         {isUser(user) && _eventsWinner && (
           <div className="flex items-center mr-6">
             <div className="flex mr-5">
@@ -49,8 +48,7 @@ const Navbar: React.FC = () => {
             </div>
           </div>
         )}
-
-        <Dropdown inline label={<Avatar alt="User" img="/jetpack.png" rounded />} className="rounded-md" arrowIcon={false}>
+        <Dropdown inline label={<Avatar alt="User" img="/jetpack.png" rounded />} className="rounded-md " arrowIcon={false}>
           <Dropdown.Header>
             <span className="block text-sm">
               Bonjour&nbsp;
@@ -64,7 +62,12 @@ const Navbar: React.FC = () => {
           <Link to={"/profile"}>
             <Dropdown.Item>
               <HiOutlineAdjustments className="w-6 h-6 mr-2" />
-              <p>Profil</p>
+              <p className="flex">
+                Profil
+                <Badge color="indigo" className="ml-3 md:hidden">
+                  {user.role}
+                </Badge>
+              </p>
             </Dropdown.Item>
           </Link>
           <Dropdown.Divider />
@@ -74,7 +77,7 @@ const Navbar: React.FC = () => {
           </Dropdown.Item>
         </Dropdown>
 
-        <div className="flex items-baseline ml-3">
+        <div className="items-baseline ml-3 hidden md:flex">
           <span>{user.firstName}</span>
           <Badge color="indigo" className="ml-3">
             {user.role}

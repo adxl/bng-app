@@ -8,6 +8,8 @@ import { createAnswer, deleteAnswer, updateAnswer } from "@api/exams/answers";
 
 import type { CreateAnswerDto } from "../../api/exams/dto/answers.dto";
 import { getOneQuestion } from "../../api/exams/questions";
+import { useAuth } from "../../hooks/auth";
+import { isInstructor } from "../../typing/api/auth/users";
 import type { Answer } from "../../typing/api/exams/answers";
 
 type Props = {
@@ -17,6 +19,7 @@ type Props = {
 };
 
 const AnswersList: React.FC<Props> = ({ answers, questionId, reloadExam }) => {
+  const { user } = useAuth();
   const [_answers, setAnswers] = useState<Answer[]>(answers);
   const [_title, setTitle] = useState<string>("");
   const [_error, setError] = useState<string>("");
@@ -27,6 +30,7 @@ const AnswersList: React.FC<Props> = ({ answers, questionId, reloadExam }) => {
     isCorrect: false,
     question: { id: questionId },
   };
+
   useEffect(() => {
     setTimeout(() => {
       setError("");
@@ -35,7 +39,7 @@ const AnswersList: React.FC<Props> = ({ answers, questionId, reloadExam }) => {
   }, [_error, _success]);
 
   const handleDelete = (id: string) => {
-    deleteAnswer(id!)
+    deleteAnswer(id)
       .then(() => setAnswers(_answers.filter((answer) => answer.id !== id)))
       .catch(() => setError("Une erreur est survenue"));
   };
@@ -75,73 +79,88 @@ const AnswersList: React.FC<Props> = ({ answers, questionId, reloadExam }) => {
   };
 
   const handleFormChange = (id: string, value: string) => {
-    const data = _answers.map((answer) => {
+    const newData = _answers.map((answer) => {
       if (answer.id === id) {
         answer.title = value;
       }
       return answer;
     });
-    setAnswers(data);
+    setAnswers(newData);
   };
 
   const handleFormChangeSwitch = (id: string, value: boolean) => {
-    const data = _answers.map((answer) => {
+    const newData = _answers.map((answer) => {
       if (answer.id === id) {
         answer.isCorrect = value;
       }
       return answer;
     });
-    setAnswers(data);
+    setAnswers(newData);
   };
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      {_error && (
-        <Alert color="failure" icon={HiInformationCircle}>
-          <p>{_error}</p>
-        </Alert>
-      )}
+      {isInstructor(user) && (
+        <div>
+          {_error && (
+            <Alert color="failure" icon={HiInformationCircle}>
+              <p>{_error}</p>
+            </Alert>
+          )}
 
-      {_answers.filter((a) => a.isCorrect).length !== 1 && (
-        <Alert color="failure" icon={HiInformationCircle}>
-          <p>ATTENTION: Une seule réponse seulement doit être spécifié comme étant la bonne réponse</p>
-        </Alert>
+          {_answers.filter((a) => a.isCorrect).length !== 1 && (
+            <Alert color="failure" icon={HiInformationCircle}>
+              <p>ATTENTION: Une seule réponse seulement doit être spécifiée comme étant la bonne réponse</p>
+            </Alert>
+          )}
+        </div>
       )}
 
       {_answers.map((answer) => (
         <div key={answer.id}>
-          <form key={answer.id} onSubmit={(e) => handleUpdate(e, answer.id)} className="w-full">
-            <div className="flex gap-7">
-              <TextInput
-                minLength={1}
-                maxLength={150}
-                required
-                value={answer.title}
-                onChange={(e) => handleFormChange(answer.id, e.target.value)}
-                className=" w-3/4"
-              />
-              <div>
-                <ToggleSwitch checked={answer.isCorrect} value={""} onChange={(value) => handleFormChangeSwitch(answer.id, value)} label={""} />
+          {isInstructor(user) ? (
+            <form key={answer.id} onSubmit={(e) => handleUpdate(e, answer.id)} className="w-full">
+              <div className="md:flex md:gap-7">
+                <div className="w-full flex flex-nowrap items-center gap-3">
+                  <TextInput
+                    minLength={1}
+                    maxLength={150}
+                    required
+                    value={answer.title}
+                    onChange={(e) => handleFormChange(answer.id, e.target.value)}
+                    className="w-full"
+                  />
+                  <div>
+                    <ToggleSwitch checked={answer.isCorrect} value="" onChange={(value) => handleFormChangeSwitch(answer.id, value)} label="" />
+                  </div>
+                </div>
+                <div className="flex grid-cols-2 mt-1 md:mt-0 gap-1">
+                  <Button className="w-full" gradientDuoTone="greenToBlue" type="submit">
+                    <BiSave />
+                  </Button>
+                  <Button className="w-full" gradientDuoTone="pinkToOrange" onClick={() => handleDelete(answer.id)}>
+                    <MdDeleteOutline />
+                  </Button>
+                </div>
               </div>
-              <Button type="submit">
-                <BiSave />
-              </Button>
-              <Button color="failure" onClick={() => handleDelete(answer.id)}>
-                <MdDeleteOutline />
-              </Button>
-            </div>
-          </form>
+            </form>
+          ) : (
+            <p className="text-base text-lg text-left text-gray-900 dark:text-white">{answer.title}</p>
+          )}
         </div>
       ))}
-      <div className="flex justify-start items-end gap-11 mb-9">
-        <div className="w-full">
-          <Label>Ajouter une réponse</Label>
-          <TextInput maxLength={150} minLength={1} required onChange={(e) => setTitle(e.target.value)} value={_title} />
-          <Button onClick={handleCreate} className="w-full mt-2">
-            <BiSave />
-          </Button>
+
+      {isInstructor(user) && (
+        <div className="flex justify-start items-end gap-11 mb-9">
+          <div className="w-full">
+            <Label>Ajouter une réponse</Label>
+            <TextInput maxLength={150} minLength={1} required onChange={(e) => setTitle(e.target.value)} value={_title} />
+            <Button gradientDuoTone="greenToBlue" onClick={handleCreate} className="w-full mt-2">
+              <BiSave />
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

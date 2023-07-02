@@ -32,9 +32,9 @@ const ReportsEdit: React.FC = () => {
   return (
     <div className="flex flex-col w-full">
       <div className="flex justify-between mb-5">
-        <Button color="dark">
-          <Link to="/admin/reports">Retour</Link>
-        </Button>
+        <Link to="/admin/reports">
+          <Button gradientDuoTone="greenToBlue">Retour</Button>
+        </Link>
       </div>
       <Card className="self-center">
         {_error && (
@@ -55,7 +55,7 @@ const ReportsEdit: React.FC = () => {
               ))}
             </Select>
           </div>
-          <Button color="dark" type="submit">
+          <Button gradientDuoTone="greenToBlue" type="submit">
             Enregistrer
           </Button>
         </form>

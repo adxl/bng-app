@@ -99,7 +99,7 @@ const ExamsLaunch: React.FC = () => {
       {_exam && (
         <div className="w-full">
           <Progress color="indigo" progress={_progressBar} />
-          <div className="flex justify-between my-10">
+          <div className="md:flex justify-between my-10">
             {/* eslint-disable-next-line react/no-unescaped-entities */}
             <h4 className="text-4xl font-bold dark:text-white text-left mb-4 ">Type de l'examen : {_exam.type?.name} </h4>
             <div className="flex justify-between items-center gap-5">
