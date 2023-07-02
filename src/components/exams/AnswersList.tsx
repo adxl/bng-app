@@ -79,23 +79,23 @@ const AnswersList: React.FC<Props> = ({ answers, questionId, reloadExam }) => {
   };
 
   const handleFormChange = (id: string, value: string) => {
-    const newData = _answers.map((answer) => {
+    const data = _answers.map((answer) => {
       if (answer.id === id) {
         answer.title = value;
       }
       return answer;
     });
-    setAnswers(newData);
+    setAnswers(data);
   };
 
   const handleFormChangeSwitch = (id: string, value: boolean) => {
-    const newData = _answers.map((answer) => {
+    const data = _answers.map((answer) => {
       if (answer.id === id) {
         answer.isCorrect = value;
       }
       return answer;
     });
-    setAnswers(newData);
+    setAnswers(data);
   };
 
   return (

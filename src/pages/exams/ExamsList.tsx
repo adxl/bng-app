@@ -28,7 +28,6 @@ const ExamsList: React.FC = () => {
   };
 
   const refreshData = () => {
-    getAllExams().then(({ data }) => setExams(data));
     Promise.all([getAllExams(), getAllTypes()]).then(([{ data: examsData }, { data: typesData }]) => {
       const exams = examsData.map((exam) => ({
         ...exam,
@@ -111,9 +110,8 @@ const ExamsList: React.FC = () => {
                 </div>
                 <Button gradientDuoTone="greenToBlue" onClick={handleCreate} className="ml-4">
                   Ajouter un exam
-                 </Button>
+                </Button>
               </div>
-             
             </div>
           ) : (
             <div className="flex flex-col items-center w-full">
