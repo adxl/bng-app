@@ -32,7 +32,7 @@ const Navbar: React.FC = () => {
           <div className="flex items-center mr-6">
             <div className="flex mr-5">
               <img src="/cap.png" alt="cap" className="w-6 h-6 mr-2" />
-              <span>{_eventsWinner.caps}</span>
+              <span>{user.caps}</span>
             </div>
             <div className="flex mr-2">
               <img src="/medaille-dor.png" alt="Médaille d'or" className="w-6 h-6" />
