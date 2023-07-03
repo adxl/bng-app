@@ -290,8 +290,6 @@ const Home: React.FC = () => {
       return monthItem ? monthItem.count : 0;
     });
 
-    console.log(countsByMonthSucces, countsByMonthFailed);
-
     setChartAttemptsLine({
       labels,
       datasets: [

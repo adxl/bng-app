@@ -7,7 +7,7 @@ services:
     working_dir: /home/node
     env_file: .env
     ports:
-      - "3000:3000"
+      - 3000:3000
     volumes:
       - ./:/home/node
     command: /bin/sh -c "npm i && npm run start"

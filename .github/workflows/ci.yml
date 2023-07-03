@@ -1,0 +1,83 @@
+name: APP CI
+
+on:
+  push:
+    branches:
+     - "*/*"
+     - "develop"
+     - "master"
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Init
+        run: echo "init"
+
+      # - name: Install
+      #   run: npm install
+
+      # - name: Build
+      #   run: npm run build
+
+  publish:
+    needs: build
+    runs-on: ubuntu-20.04
+
+    if: github.ref_name == 'master'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Login
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.HUB_USERNAME }}
+          password: ${{ secrets.HUB_PASSWORD }}
+
+      - name: Build
+        run: |
+          sed -i 's|@VITE_API_URL@|${{ secrets.VITE_API_URL }}|g' ./Dockerfile
+          docker compose -f docker-compose.prod.yaml build
+
+      - name: Push
+        run: docker compose -f docker-compose.prod.yaml push
+
+  deploy:
+    needs: publish
+    runs-on: ubuntu-20.04
+
+    if: github.ref_name == 'master'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Config
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.DROPLET_IP }}
+          username: ${{ secrets.DROPLET_USER }}
+          key: ${{ secrets.DROPLET_SSH_KEY }}
+          source: 'docker-compose.deploy.yaml'
+          target: '/root/deployments/app'
+
+      - name: Run
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.DROPLET_IP }}
+          username: ${{ secrets.DROPLET_USER }}
+          key: ${{ secrets.DROPLET_SSH_KEY }}
+          script: docker stack deploy -c deployments/app/docker-compose.deploy.yaml app
