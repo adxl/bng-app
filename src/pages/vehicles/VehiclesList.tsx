@@ -15,6 +15,7 @@ import { createAuction } from "../../api/gears/auction";
 
 const VehiclesList: React.FC = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const [_vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [_openModal, setOpenModal] = useState<boolean>();
