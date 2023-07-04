@@ -1,4 +1,4 @@
-name: APP CI
+name: App CI
 
 on:
   push:
@@ -22,14 +22,11 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Init
-        run: echo "init"
+      - name: Install
+        run: npm install
 
-      # - name: Install
-      #   run: npm install
-
-      # - name: Build
-      #   run: npm run build
+      - name: Build
+        run: npm run build
 
   publish:
     needs: build
