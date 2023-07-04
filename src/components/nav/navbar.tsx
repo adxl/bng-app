@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { HiOutlineAdjustments } from "react-icons/hi";
 import { HiArrowLeftOnRectangle } from "react-icons/hi2";
 import { Link } from "react-router-dom";
-import { Avatar, Badge, Dropdown, Navbar as FlowbiteNavbar } from "flowbite-react";
+import { Avatar, Badge, Button, Dropdown, Navbar as FlowbiteNavbar } from "flowbite-react";
 
 import { getSelfEventsWinner } from "@api/events/events-winner";
 import { useAuth } from "@hooks/auth";
@@ -28,6 +28,11 @@ const Navbar: React.FC = () => {
         <img src="/logo.png" alt="BNG Logo" className="w-16 h-16 mr-3" />
       </FlowbiteNavbar.Brand>
       <div className="flex  items-center">
+        <div className="mr-5">
+          <Link to="/">
+            <Button gradientDuoTone="purpleToBlue">Enchère en cours</Button>
+          </Link>
+        </div>
         {isUser(user) && _eventsWinner && (
           <div className="flex items-center mr-6">
             <div className="flex mr-5">
