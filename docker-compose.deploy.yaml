@@ -3,6 +3,8 @@ version: '3'
 services:
   app:
     image: adxl/bng-app:latest
+    environment:
+      VITE_API_URL: '@VITE_API_URL@'
     ports:
       - 3000:3000
     deploy:
