@@ -63,7 +63,7 @@ const VehiclesList: React.FC = () => {
               </div>
               <div className="flex items-center gap-2">
                 <strong>Station actuel:</strong>
-                <span>{vehicle?.station.name || "En cours d'utilisation"}</span>
+                <span>{vehicle?.station?.name || "En cours d'utilisation"}</span>
               </div>
             </div>
           </Card>
