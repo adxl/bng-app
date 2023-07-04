@@ -1,28 +1,32 @@
-import React, { useEffect, useState } from "react";
-import { HiOutlineExclamationCircle, HiPencilSquare } from "react-icons/hi2";
+import React, { useEffect, useRef, useState } from "react";
+import { HiInformationCircle, HiOutlineExclamationCircle, HiPencilSquare } from "react-icons/hi2";
 import { RiAuctionLine } from "react-icons/ri";
-import { Link, useNavigate } from "react-router-dom";
-import { Badge, Button, Card, Label, Modal, TextInput } from "flowbite-react";
+import { Link } from "react-router-dom";
+import { Alert, Badge, Button, Card, Label, Modal, TextInput } from "flowbite-react";
 
+import { getActive } from "@api/gears/auction";
 import { getAllVehicles } from "@api/gears/vehicles";
 import { useAuth } from "@hooks/auth";
 import { isTechnician } from "@typing/api/auth/users";
+import type { Auction } from "@typing/api/gears/auctions";
 import type { Vehicle } from "@typing/api/gears/vehicles";
 
 import { createAuction } from "../../api/gears/auction";
 
 const VehiclesList: React.FC = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
 
   const [_vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [_openModal, setOpenModal] = useState<boolean>();
   const [_vehiculeToAuction, setVehiculeToAuction] = useState<Vehicle>();
-  const [_auctionBasePrice, setAuctionBasePrice] = useState<number>(0);
-  const [_auctionClickPrice, setAuctionClickPrice] = useState<number>(0);
+  const _auctionBasePrice = useRef<HTMLInputElement>(null);
+  const _auctionClickPrice = useRef<HTMLInputElement>(null);
+  const [_currentAuction, setCurrentAuction] = useState<Auction | null>(null);
+  const [_error, setError] = useState<string>("");
 
   useEffect(() => {
     getAllVehicles().then(({ data }) => setVehicles(data));
+    refreshAuction();
   }, []);
 
   function handleOpenModal(vehicle: Vehicle) {
@@ -35,18 +39,33 @@ const VehiclesList: React.FC = () => {
     if (!_auctionBasePrice) return;
     if (!_auctionClickPrice) return;
     if (!_vehiculeToAuction) return;
-    const data = { vehicle: _vehiculeToAuction!, basePrice: _auctionBasePrice, clickPrice: _auctionClickPrice };
+    const data = {
+      vehicle: _vehiculeToAuction!,
+      basePrice: Number(_auctionBasePrice.current!.value),
+      clickPrice: Number(_auctionClickPrice.current!.value),
+    };
+
     createAuction(data)
       .then(() => {
-        console.log("create");
-
+        refreshAuction();
         // navigate("/admin/auction");
       })
-      .catch((e) => console.log(e));
+      .catch(() => setError("Une erreur est survenue lors de la création de l'enchère"));
+  };
+
+  const refreshAuction = (): void => {
+    getActive().then(({ data }) => {
+      setCurrentAuction(data);
+    });
   };
 
   return (
     <>
+      {_error && (
+        <Alert color="failure" className="mb-5" icon={HiInformationCircle}>
+          <p>{_error}</p>
+        </Alert>
+      )}
       {isTechnician(user) && (
         <div className="flex justify-end my-4">
           <Link to="create">
@@ -96,7 +115,7 @@ const VehiclesList: React.FC = () => {
                     <span>{vehicle.station.name || "En cours d'utilisation"}</span>
                   </div>
                   <div className="flex justify-end">
-                    {isTechnician(user) && (
+                    {isTechnician(user) && !_currentAuction && (
                       <Button gradientDuoTone="pinkToOrange" onClick={() => handleOpenModal(vehicle)}>
                         <RiAuctionLine />
                       </Button>
@@ -108,55 +127,47 @@ const VehiclesList: React.FC = () => {
           </div>
         ))}
       </div>
-      <Modal show={_openModal} size="md" popup onClose={() => setOpenModal(false)}>
-        <Modal.Header />
-        <Modal.Body>
-          <div className="text-center">
-            <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
-            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-              Êtes vous sûre de vouloir mettre{" "}
-              <span className="font-bold">
-                {_vehiculeToAuction?.type.name} #{_vehiculeToAuction?.id.substring(30)}
-              </span>{" "}
-              en enchères ?
-            </h3>
-            <p className="text-red-700">
-              <div className="flex gap-3">
-                <p>En mettant ce véhicule en enchères, vous ne pourrez plus le modifier. Il sera disponible pour les enchères et ne sera plus</p>
-              </div>
-            </p>
-            <form onSubmit={handleCreateAuction} className="mt-4 text-center">
-              <Label>Avant de confirmer, veuillez remplir ces champs</Label>
-              <br />
-              <br />
-              <Label>Prix de départ</Label>
-              <TextInput
-                type="number"
-                required
-                min="1"
-                value={_auctionBasePrice}
-                onChange={(e) => setAuctionBasePrice(Number(e.target.value))}
-              ></TextInput>
-              <Label>Prix au click</Label>
-              <TextInput
-                type="number"
-                required
-                min="1"
-                value={_auctionClickPrice}
-                onChange={(e) => setAuctionClickPrice(Number(e.target.value))}
-              ></TextInput>
-              <div className="flex justify-center gap-4 mt-4">
-                <Button color="failure" onClick={() => setOpenModal(undefined)}>
-                  Annuler
-                </Button>
-                <Button type="submit" color="gray">
-                  Confirmer
-                </Button>
-              </div>
-            </form>
-          </div>
-        </Modal.Body>
-      </Modal>
+
+      {!_currentAuction && (
+        <Modal show={_openModal} size="md" popup onClose={() => setOpenModal(false)}>
+          <Modal.Header />
+          <Modal.Body>
+            <div className="text-center">
+              <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+              <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                Êtes vous sûre de vouloir mettre{" "}
+                <span className="font-bold">
+                  {_vehiculeToAuction?.type.name} #{_vehiculeToAuction?.id.substring(30)}
+                </span>{" "}
+                en enchères ?
+              </h3>
+              <p className="text-red-700">
+                <div className="flex gap-3">
+                  <p>En mettant ce véhicule en enchères, vous ne pourrez plus le modifier. Il sera disponible pour les enchères et ne sera plus</p>
+                </div>
+              </p>
+              <form onSubmit={handleCreateAuction} className="mt-4 text-center">
+                <Label>Avant de confirmer, veuillez remplir ces champs</Label>
+                <br />
+                <br />
+                <Label>Prix de départ</Label>
+                <TextInput type="number" required min="1" ref={_auctionBasePrice}></TextInput>
+                <Label>Prix au click</Label>
+                <TextInput type="number" required min="1" ref={_auctionClickPrice}></TextInput>
+                <div className="flex justify-center gap-4 mt-4">
+                  <Button color="failure" onClick={() => setOpenModal(undefined)}>
+                    Annuler
+                  </Button>
+                  <Button type="submit" color="gray">
+                    Confirmer
+                  </Button>
+                </div>
+              </form>
+            </div>
+          </Modal.Body>
+        </Modal>
+      )}
+
       {isTechnician(user) && _vehicles.length > 9 && (
         <div className="flex justify-end my-4">
           <Link to="create">
