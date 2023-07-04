@@ -66,7 +66,7 @@ const StationsMap: React.FC = () => {
     getSelfEventsWinner(user.id!).then(({ data }) => {
       setUserCaps(data.caps);
     });
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     setTimeout(() => {

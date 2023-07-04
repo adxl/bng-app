@@ -105,7 +105,7 @@ const Home: React.FC = () => {
         setEvents(data);
       });
     }
-  }, []);
+  }, [user]);
 
   const getStationData = () => {
     getAllStations().then((response) => {
@@ -332,7 +332,7 @@ const Home: React.FC = () => {
       getEventsData();
       getAttemptsData();
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     chartUserOptions();

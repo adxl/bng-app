@@ -20,7 +20,7 @@ const Navbar: React.FC = () => {
         setEventsWinner(data);
       });
     }
-  }, []);
+  }, [user]);
 
   return (
     <FlowbiteNavbar className="mb-5 bg-gray-50 shadow-lg rounded-md">
