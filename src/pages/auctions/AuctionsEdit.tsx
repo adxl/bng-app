@@ -1,5 +1,4 @@
 import React, { useCallback } from "react";
-import { TbSkateboard } from "react-icons/tb";
 import { Button } from "flowbite-react";
 
 import { useSocket } from "@hooks/auctions";
@@ -20,7 +19,7 @@ const AuctionsEdit: React.FC<Props> = ({ auction }) => {
   }, [clickEvent]);
 
   return (
-    <div className="grid grid-cols-8 gap-4">
+    <div className="grid grid-cols-8 gap-4 w-full">
       <div className="col-span-6">
         <div className="flex justify-start">
           <p>Crée le {new Date(auction.createdAt).toLocaleDateString("fr-FR")}</p>
@@ -35,8 +34,8 @@ const AuctionsEdit: React.FC<Props> = ({ auction }) => {
             </div>
 
             <div className="w-full flex justify-center ">
-              <div className=" p-7 bg-slate-500 rounded-full">
-                <TbSkateboard className="text-9xl	" />
+              <div className=" p-7 bg-white rounded-full shadow-lg border">
+                <img src={auction.vehicle.type.name + ".png"} className="w-20 h-20" />
               </div>
             </div>
 
@@ -50,23 +49,23 @@ const AuctionsEdit: React.FC<Props> = ({ auction }) => {
         </div>
       </div>
       <div className="col-span-2">
-        <div className="border-gray-400 border-l-4 p-5">
-          <div className="flex items-center justify-center">
+        <div className="shadow-lg border rounded-lg p-5">
+          <div className="w-full flex items-center justify-center">
             <h2 className="text-4xl font-extrabold">Prix actuel : {auction.basePrice + auction.clicks.length}</h2>
             <img src="/cap.png" alt="cap" className="w-10 h-10 ml-2" />
           </div>
-          <div className="flex items-center justify-center mt-3">
+          <div className="flex items-center justify-center my-3">
             <h2 className="text-4xl font-extrabold">Prix de base : {auction.basePrice}</h2>
             <img src="/cap.png" alt="cap" className="w-10 h-10 ml-2" />
           </div>
-          <p className="text-base font-extrabold mt-5">60 participations dont 3 participants </p>
           {isUser(user) && (
             <Button
               onClick={handleClick}
               type="button"
               className="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 my-2 w-full"
             >
-              Click
+              À MOI !
+              <img src="/a-moi.png" alt="a moi" className="w-8 h-8 ml-2" />
             </Button>
           )}
           <div className="flex items-center justify-center mt-3">

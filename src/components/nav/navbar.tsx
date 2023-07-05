@@ -69,7 +69,7 @@ const Navbar: React.FC = () => {
             </div>
           </>
         )}
-        <Dropdown inline label={<Avatar alt="User" img="/jetpack.png" rounded />} className="rounded-md " arrowIcon={false}>
+        <Dropdown inline label={<Avatar alt="User" img="/jetpack-profile.png" rounded />} className="rounded-md " arrowIcon={false}>
           <Dropdown.Header>
             <span className="block text-sm">
               Bonjour&nbsp;
