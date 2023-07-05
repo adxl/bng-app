@@ -86,7 +86,7 @@ const ExamsLaunch: React.FC = () => {
     updateAttempt(_attemptId, { userAnswers: answers })
       .then(({ data: attempt }) => {
         navigate("/licenses/launch/" + id + "/result", {
-          state: { typeExam: _exam?.type?.name || "", score: attempt.score, isSuccess: attempt.score >= 80 },
+          state: { typeExam: _exam?.type?.name || "", score: attempt.score, isSuccess: attempt.score >= 80, endedAt: attempt.endedAt },
         });
       })
       .catch((_) => {

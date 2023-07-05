@@ -14,7 +14,7 @@ import { AuthProvider } from "./hooks/auth";
 import "./App.css";
 
 const Login = React.lazy(() => import("@pages/Login"));
-
+const ExamensPdf = React.lazy(() => import("@pages/exams/ExamsLicensePdf"));
 const StationsMap = React.lazy(() => import("@pages/stations/StationsMap"));
 const StationsList = React.lazy(() => import("@pages/stations/StationsList"));
 const StationsCreate = React.lazy(() => import("@pages/stations/StationsCreate"));
@@ -68,6 +68,7 @@ const App: React.FC = () => {
                 <Route path="events" element={<Guard el={EventsList} roles={[USER]} />} />
                 <Route path="profile" element={<Guard el={Profile} roles={["*"]} />} />
                 <Route path="auction" element={<Guard el={AuctionsSocketWrapper} roles={[ADMINISTRATOR, TECHNICIAN, USER]} />} />
+                <Route path="certificateLicense" element={<Guard el={ExamensPdf} roles={[USER]} />} />
               </Route>
 
               {/* ROUTES FOR BACK OFFICE */}

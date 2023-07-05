@@ -26,7 +26,7 @@ const VehiclesEdit: React.FC = () => {
   useEffect(() => {
     Promise.all([getOneVehicle(id!), getAllStations(), getAllTypes()]).then(([vehicle, stations, types]) => {
       setYear(vehicle.data.year);
-      setStationId(vehicle.data.station.id);
+      setStationId(vehicle.data?.station?.id);
       setTypeId(vehicle.data.type.id);
       setActive(vehicle.data.active);
 
@@ -44,12 +44,19 @@ const VehiclesEdit: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const data = {
-      year: _year,
-      type: { id: _typeId },
-      station: { id: _stationId },
-      active: _active,
-    };
+    let data = {};
+    if (_stationId) {
+      data = {
+        year: _year,
+        type: { id: _typeId },
+        station: { id: _stationId },
+        active: _active,
+      };
+    } else {
+      data = {
+        year: _year,
+      };
+    }
 
     updateVehicle(id!, data)
       .then(() => {
@@ -89,36 +96,43 @@ const VehiclesEdit: React.FC = () => {
             </div>
             <TextInput required value={_year} onChange={(e) => setYear(Number(e.target.value))} />
           </div>
+          {_stationId ? (
+            <>
+              <div className="max-w-md">
+                <div className="text-start mb-2 block">
+                  <Label value="Type de véhicule" />
+                </div>
+                <Select required onChange={(e) => setTypeId(e.target.value)} value={_typeId}>
+                  {_vehiclesTypes.map((type) => (
+                    <option key={type.id} value={type.id}>
+                      {type.name}
+                    </option>
+                  ))}
+                </Select>
+              </div>
 
-          <div className="max-w-md">
-            <div className="text-start mb-2 block">
-              <Label value="Type de véhicule" />
+              <div className="max-w-md">
+                <div className="text-start mb-2 block">
+                  <Label value="Station actuelle" />
+                </div>
+                <Select required onChange={(e) => setStationId(e.target.value)} value={_stationId}>
+                  {_stations.map((station) => (
+                    <option key={station.id} value={station.id}>
+                      {station.name}
+                    </option>
+                  ))}
+                </Select>
+              </div>
+
+              <div>
+                <ToggleSwitch checked={_active} label="Véhicule opérationnel" onChange={(value) => setActive(value)} />
+              </div>
+            </>
+          ) : (
+            <div className="flex items-center gap-2">
+              <span className="font-semibold text-gray-900 underline dark:text-white decoration-indigo-500">En cours d&apos;utilisation</span>
             </div>
-            <Select required onChange={(e) => setTypeId(e.target.value)} value={_typeId}>
-              {_vehiclesTypes.map((type) => (
-                <option key={type.id} value={type.id}>
-                  {type.name}
-                </option>
-              ))}
-            </Select>
-          </div>
-
-          <div className="max-w-md">
-            <div className="text-start mb-2 block">
-              <Label value="Station actuelle" />
-            </div>
-            <Select required onChange={(e) => setStationId(e.target.value)} value={_stationId}>
-              {_stations.map((station) => (
-                <option key={station.id} value={station.id}>
-                  {station.name}
-                </option>
-              ))}
-            </Select>
-          </div>
-
-          <div>
-            <ToggleSwitch checked={_active} label="Véhicule opérationnel" onChange={(value) => setActive(value)} />
-          </div>
+          )}
 
           <Button gradientDuoTone="greenToBlue" type="submit">
             Enregistrer

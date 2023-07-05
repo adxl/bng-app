@@ -28,6 +28,11 @@ const ReportsList: React.FC = () => {
           .map((report) => (
             <Card key={report.id}>
               <div className="flex flex-col items-start">
+                {!report.ride.vehicle.active && (
+                  <Badge color="red" size="sm" className="ml-3 mb-3">
+                    En suspension
+                  </Badge>
+                )}
                 <div className="w-full flex items-center justify-between gap-2">
                   <div className="flex align-center">
                     <p className="whitespace-nowrap font-bold md:hidden">
@@ -48,19 +53,21 @@ const ReportsList: React.FC = () => {
                       </Badge>
                     ) : (
                       <Badge color="warning" size="sm" className="ml-3">
-                        En_cours
+                        En cours
                       </Badge>
                     )}
                   </div>
-                  <div className="w-full flex justify-end">
-                    {isTechnician(user) && (
-                      <Link to={`edit/${report.id}`}>
-                        <Button gradientDuoTone="greenToBlue">
-                          <HiPencilSquare />
-                        </Button>
-                      </Link>
-                    )}
-                  </div>
+                  {report.status !== "Terminé" && (
+                    <div className="w-full flex justify-end">
+                      {isTechnician(user) && (
+                        <Link to={`edit/${report.id}`}>
+                          <Button gradientDuoTone="greenToBlue">
+                            <HiPencilSquare />
+                          </Button>
+                        </Link>
+                      )}
+                    </div>
+                  )}
                 </div>
                 <div className="flex  items-start">
                   <LuMapPin className="text-emerald-500" size={24}></LuMapPin>
