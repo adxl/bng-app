@@ -6,5 +6,6 @@ export type CreateReportDto = {
 };
 
 export type UpdateReportDto = {
-  status: ReportStatus;
+  status?: ReportStatus;
+  active?: boolean;
 };

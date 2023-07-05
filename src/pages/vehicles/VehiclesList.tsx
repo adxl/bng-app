@@ -54,15 +54,15 @@ const VehiclesList: React.FC = () => {
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <strong>Année de fabrication:</strong>
+                <strong>Année de fabrication :</strong>
                 <span>{vehicle.year}</span>
               </div>
               <div className="flex items-center gap-2">
-                <strong>Type:</strong>
+                <strong>Type :</strong>
                 <span>{vehicle.type.name}</span>
               </div>
               <div className="flex items-center gap-2">
-                <strong>Station actuel:</strong>
+                <strong>Station actuelle :</strong>
                 <span>{vehicle.station.name || "En cours d'utilisation"}</span>
               </div>
             </div>
