@@ -13,6 +13,7 @@ export type User = {
   email: string | null;
   firstName: string | null;
   lastName: string | null;
+  caps: number | null;
   role: UserRole | null;
   createdAt: Date | null;
 };

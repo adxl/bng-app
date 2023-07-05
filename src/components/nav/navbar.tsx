@@ -2,22 +2,30 @@ import React, { useEffect, useState } from "react";
 import { HiOutlineAdjustments } from "react-icons/hi";
 import { HiArrowLeftOnRectangle } from "react-icons/hi2";
 import { Link } from "react-router-dom";
-import { Avatar, Badge, Dropdown, Navbar as FlowbiteNavbar } from "flowbite-react";
+import { Avatar, Badge, Button, Dropdown, Navbar as FlowbiteNavbar } from "flowbite-react";
 
 import { getSelfEventsWinner } from "@api/events/events-winner";
+import { getActive } from "@api/gears/auction";
 import { useAuth } from "@hooks/auth";
-import { isUser } from "@typing/api/auth/users";
+import { isAdmin, isTechnician, isUser } from "@typing/api/auth/users";
 import type { SelfEventWinner } from "@typing/api/events/event-winner";
+import type { Auction } from "@typing/api/gears/auctions";
 
 const Navbar: React.FC = () => {
   const { user, logout } = useAuth();
 
   const [_eventsWinner, setEventsWinner] = useState<SelfEventWinner | null>(null);
+  const [_auction, setAuction] = useState<Auction | null>(null);
 
   useEffect(() => {
-    if (isUser(user)) {
-      getSelfEventsWinner(user.id!).then(({ data }) => {
-        setEventsWinner(data);
+    if (isUser(user) || isTechnician(user) || isAdmin(user)) {
+      if (isUser(user)) {
+        getSelfEventsWinner(user.id!).then(({ data }) => {
+          setEventsWinner(data);
+        });
+      }
+      getActive().then(({ data }) => {
+        setAuction(data);
       });
     }
   }, [user]);
@@ -28,27 +36,40 @@ const Navbar: React.FC = () => {
         <img src="/logo.png" alt="BNG Logo" className="w-16 h-16 mr-3" />
       </FlowbiteNavbar.Brand>
       <div className="flex  items-center">
-        {isUser(user) && _eventsWinner && (
-          <div className="flex items-center mr-6">
-            <div className="flex mr-5">
-              <img src="/cap.png" alt="cap" className="w-6 h-6 mr-2" />
-              <span>{_eventsWinner.caps}</span>
-            </div>
-            <div className="flex mr-2">
-              <img src="/medaille-dor.png" alt="Médaille d'or" className="w-6 h-6" />
-              <span>{_eventsWinner.firsts}</span>
-            </div>
-            <div className="flex mr-2">
-              <img src="/medaille-dargent.png" alt="Médaille d'or" className="w-6 h-6" />
-              <span>{_eventsWinner.seconds}</span>
-            </div>
-            <div className="flex mr-2">
-              <img src="/medaille-de-bronze.png" alt="Médaille d'or" className="w-6 h-6" />
-              <span>{_eventsWinner.thirds}</span>
-            </div>
+        {(isUser(user) || isTechnician(user) || isAdmin(user)) && _auction && (
+          <div className="mr-5">
+            <Link to="/auction">
+              <Button gradientDuoTone="purpleToBlue">Enchère en cours</Button>
+            </Link>
           </div>
         )}
-        <Dropdown inline label={<Avatar alt="User" img="/jetpack.png" rounded />} className="rounded-md " arrowIcon={false}>
+        {isUser(user) && (
+          <>
+            <div className="flex items-center mr-6">
+              <div className="flex mr-5">
+                <img src="/cap.png" alt="cap" className="w-6 h-6 mr-2" />
+                <span>{user.caps}</span>
+              </div>
+              {_eventsWinner && (
+                <>
+                  <div className="flex mr-2">
+                    <img src="/medaille-dor.png" alt="Médaille d'or" className="w-6 h-6" />
+                    <span>{_eventsWinner.firsts}</span>
+                  </div>
+                  <div className="flex mr-2">
+                    <img src="/medaille-dargent.png" alt="Médaille d'or" className="w-6 h-6" />
+                    <span>{_eventsWinner.seconds}</span>
+                  </div>
+                  <div className="flex mr-2">
+                    <img src="/medaille-de-bronze.png" alt="Médaille d'or" className="w-6 h-6" />
+                    <span>{_eventsWinner.thirds}</span>
+                  </div>
+                </>
+              )}
+            </div>
+          </>
+        )}
+        <Dropdown inline label={<Avatar alt="User" img="/jetpack-profile.png" rounded />} className="rounded-md " arrowIcon={false}>
           <Dropdown.Header>
             <span className="block text-sm">
               Bonjour&nbsp;

@@ -40,6 +40,8 @@ const ReportsEdit = React.lazy(() => import("@pages/reports/ReportsEdit"));
 
 const AttemptsList = React.lazy(() => import("@pages/attempts/AttemptsList"));
 
+const AuctionsSocketWrapper = React.lazy(() => import("@pages/auctions/AuctionsSocketWrapper"));
+
 const Placeholder = React.Fragment;
 
 const Home = React.lazy(() => import("@pages/Home"));
@@ -65,6 +67,7 @@ const App: React.FC = () => {
                 <Route path="rides" element={<Guard el={RidesList} roles={[USER]} />} />
                 <Route path="events" element={<Guard el={EventsList} roles={[USER]} />} />
                 <Route path="profile" element={<Guard el={Profile} roles={["*"]} />} />
+                <Route path="auction" element={<Guard el={AuctionsSocketWrapper} roles={[ADMINISTRATOR, TECHNICIAN, USER]} />} />
               </Route>
 
               {/* ROUTES FOR BACK OFFICE */}

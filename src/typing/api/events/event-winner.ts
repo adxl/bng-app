@@ -15,5 +15,4 @@ export type SelfEventWinner = {
   firsts: number;
   seconds: number;
   thirds: number;
-  caps: number;
 };

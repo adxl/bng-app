@@ -22,6 +22,7 @@ const defaultAuthContext = {
     firstName: null,
     lastName: null,
     email: null,
+    caps: null,
     role: null,
     createdAt: null,
   },
