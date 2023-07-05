@@ -40,7 +40,7 @@ const ReportsEdit = React.lazy(() => import("@pages/reports/ReportsEdit"));
 
 const AttemptsList = React.lazy(() => import("@pages/attempts/AttemptsList"));
 
-const AuctionsEdit = React.lazy(() => import("@pages/auctions/AuctionsEdit"));
+const AuctionsSocketWrapper = React.lazy(() => import("@pages/auctions/AuctionsSocketWrapper"));
 
 const Placeholder = React.Fragment;
 
@@ -67,6 +67,7 @@ const App: React.FC = () => {
                 <Route path="rides" element={<Guard el={RidesList} roles={[USER]} />} />
                 <Route path="events" element={<Guard el={EventsList} roles={[USER]} />} />
                 <Route path="profile" element={<Guard el={Profile} roles={["*"]} />} />
+                <Route path="auction" element={<Guard el={AuctionsSocketWrapper} roles={[ADMINISTRATOR, TECHNICIAN, USER]} />} />
               </Route>
 
               {/* ROUTES FOR BACK OFFICE */}
@@ -107,9 +108,6 @@ const App: React.FC = () => {
                   <Route index element={<Guard el={EventsList} roles={[ADMINISTRATOR, ORGANIZER]} />} />
                   <Route path="create" element={<Guard el={EventsCreate} roles={[ORGANIZER]} />} />
                   <Route path="edit/:id" element={<Guard el={EventsEdit} roles={[ORGANIZER]} />} />
-                </Route>
-                <Route path="auction" element={<Outlet />}>
-                  <Route index element={<Guard el={AuctionsEdit} roles={[TECHNICIAN]} />} />
                 </Route>
               </Route>
 

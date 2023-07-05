@@ -7,7 +7,7 @@ import { Avatar, Badge, Button, Dropdown, Navbar as FlowbiteNavbar } from "flowb
 import { getSelfEventsWinner } from "@api/events/events-winner";
 import { getActive } from "@api/gears/auction";
 import { useAuth } from "@hooks/auth";
-import { isUser } from "@typing/api/auth/users";
+import { isAdmin, isTechnician, isUser } from "@typing/api/auth/users";
 import type { SelfEventWinner } from "@typing/api/events/event-winner";
 import type { Auction } from "@typing/api/gears/auctions";
 
@@ -18,10 +18,12 @@ const Navbar: React.FC = () => {
   const [_auction, setAuction] = useState<Auction | null>(null);
 
   useEffect(() => {
-    if (isUser(user)) {
-      getSelfEventsWinner(user.id!).then(({ data }) => {
-        setEventsWinner(data);
-      });
+    if (isUser(user) || isTechnician(user) || isAdmin(user)) {
+      if (isUser(user)) {
+        getSelfEventsWinner(user.id!).then(({ data }) => {
+          setEventsWinner(data);
+        });
+      }
       getActive().then(({ data }) => {
         setAuction(data);
       });
@@ -34,16 +36,15 @@ const Navbar: React.FC = () => {
         <img src="/logo.png" alt="BNG Logo" className="w-16 h-16 mr-3" />
       </FlowbiteNavbar.Brand>
       <div className="flex  items-center">
+        {(isUser(user) || isTechnician(user) || isAdmin(user)) && _auction && (
+          <div className="mr-5">
+            <Link to="/auction">
+              <Button gradientDuoTone="purpleToBlue">Enchère en cours</Button>
+            </Link>
+          </div>
+        )}
         {isUser(user) && (
           <>
-            {_auction && (
-              <div className="mr-5">
-                <Link to="/">
-                  <Button gradientDuoTone="purpleToBlue">Enchère en cours</Button>
-                </Link>
-              </div>
-            )}
-
             <div className="flex items-center mr-6">
               <div className="flex mr-5">
                 <img src="/cap.png" alt="cap" className="w-6 h-6 mr-2" />

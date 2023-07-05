@@ -133,19 +133,17 @@ const VehiclesList: React.FC = () => {
           <Modal.Header />
           <Modal.Body>
             <div className="text-center">
-              <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
-              <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+              <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400" />
+              <h3 className="mb-5 text-lg font-normal text-gray-500">
                 Êtes vous sûre de vouloir mettre{" "}
                 <span className="font-bold">
                   {_vehiculeToAuction?.type.name} #{_vehiculeToAuction?.id.substring(30)}
                 </span>{" "}
                 en enchères ?
               </h3>
-              <p className="text-red-700">
-                <div className="flex gap-3">
-                  <p>En mettant ce véhicule en enchères, vous ne pourrez plus le modifier. Il sera disponible pour les enchères et ne sera plus</p>
-                </div>
-              </p>
+              <div className="flex gap-3 text-red-700">
+                <p>En mettant ce véhicule en enchères, vous ne pourrez plus le modifier. Il sera disponible pour les enchères et ne sera plus</p>
+              </div>
               <form onSubmit={handleCreateAuction} className="mt-4 text-center">
                 <Label>Avant de confirmer, veuillez remplir ces champs</Label>
                 <br />
