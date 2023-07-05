@@ -6,8 +6,7 @@ import react from "@vitejs/plugin-react";
 const DIR = __dirname;
 
 export default defineConfig({
-  root: ".",
-  base: "",
+  base: "/",
   plugins: [
     react({
       include: "**/*.{ts,tsx}",
