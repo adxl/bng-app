@@ -58,6 +58,7 @@ const StationsMap: React.FC = () => {
       setAllowedVehiclesTypes(allowedVehiclesTypes);
       setStations(stations);
       setSkins(skins);
+      setSelectedSkin(skins[0]);
     });
     getAllSkins().then(({ data }) => setSkins(data));
   }, []);
