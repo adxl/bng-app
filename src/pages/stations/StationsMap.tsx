@@ -224,7 +224,7 @@ const StationsMap: React.FC = () => {
               </div>
               <Modal show={_openModal} onClose={() => setOpenModal(false)} className="z-10">
                 <Modal.Header>
-                  Réservation du véhicule
+                  Réservation du véhicule{" "}
                   <b>
                     {_selectedVehicle?.type.name} #{_selectedVehicle?.id.substring(30)}
                   </b>

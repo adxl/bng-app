@@ -27,47 +27,48 @@ const VehiclesList: React.FC = () => {
         </div>
       )}
       <div className="w-full grid gris-col-1 md:grid-cols-3 gap-4">
-        {_vehicles.map((vehicle) => (
-          <Card key={vehicle.id}>
-            <div className="flex flex-col items-start">
-              <div className="w-full flex items-center justify-between gap-2">
-                <div className="flex align-center">
-                  <p className="whitespace-nowrap">#{vehicle.id.substring(30)}</p>
-                  {vehicle.active ? (
-                    <Badge color="green" className="mr-3">
-                      Opérationnel
-                    </Badge>
-                  ) : (
-                    <Badge color="red" className="whitespace-nowrap mr-3">
-                      En panne
-                    </Badge>
-                  )}
+        {_vehicles &&
+          _vehicles.map((vehicle) => (
+            <Card key={vehicle.id}>
+              <div className="flex flex-col items-start">
+                <div className="w-full flex items-center justify-between gap-2">
+                  <div className="flex align-center gap-2">
+                    <p className="whitespace-nowrap">#{vehicle.id.substring(30)}</p>
+                    {vehicle.active ? (
+                      <Badge color="green" className="mr-3">
+                        Opérationnel
+                      </Badge>
+                    ) : (
+                      <Badge color="red" className="whitespace-nowrap mr-3">
+                        En panne
+                      </Badge>
+                    )}
+                  </div>
+                  <div className="w-full flex justify-end">
+                    {isTechnician(user) && (
+                      <Link to={`edit/${vehicle.id}`}>
+                        <Button gradientDuoTone="greenToBlue">
+                          <HiPencilSquare />
+                        </Button>
+                      </Link>
+                    )}
+                  </div>
                 </div>
-                <div className="w-full flex justify-end">
-                  {isTechnician(user) && (
-                    <Link to={`edit/${vehicle.id}`}>
-                      <Button gradientDuoTone="greenToBlue">
-                        <HiPencilSquare />
-                      </Button>
-                    </Link>
-                  )}
+                <div className="flex items-center gap-2">
+                  <strong>Année de fabrication :</strong>
+                  <span>{vehicle.year}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <strong>Type :</strong>
+                  <span>{vehicle.type.name}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <strong>Station actuelle :</strong>
+                  <span>{vehicle?.station?.name || "En cours d'utilisation"}</span>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
-                <strong>Année de fabrication :</strong>
-                <span>{vehicle.year}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <strong>Type :</strong>
-                <span>{vehicle.type.name}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <strong>Station actuelle :</strong>
-                <span>{vehicle.station.name || "En cours d'utilisation"}</span>
-              </div>
-            </div>
-          </Card>
-        ))}
+            </Card>
+          ))}
       </div>
       {isTechnician(user) && _vehicles.length > 9 && (
         <div className="flex justify-end my-4">

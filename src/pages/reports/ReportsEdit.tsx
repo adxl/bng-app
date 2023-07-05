@@ -20,6 +20,8 @@ const ReportsEdit: React.FC = () => {
     getOneReport(id!).then(({ data }) => {
       if (data.status === "Terminé") navigate("/admin/reports");
 
+      if (!data.ride.vehicle) navigate("/admin/reports");
+
       setStatus(data.status);
       setVehicle(data.ride.vehicle);
     });
@@ -38,22 +40,17 @@ const ReportsEdit: React.FC = () => {
   };
 
   const handleDisable = () => {
-    updateVehicle(_vehicle.id, { active: false })
+    updateVehicle(_vehicle!.id, { active: false })
       .then(() => {
-        console.log("ok");
-        setVehicle({ ..._vehicle, active: false });
-
-        // navigate("/admin/reports");
+        setVehicle({ ..._vehicle!, active: false });
       })
       .catch(() => setError("Une erreur est survenue"));
   };
 
   const handleEnable = () => {
-    updateVehicle(_vehicle.id, { active: true })
+    updateVehicle(_vehicle!.id, { active: true })
       .then(() => {
-        console.log("ok");
-        setVehicle({ ..._vehicle, active: true });
-        // navigate("/admin/reports");
+        setVehicle({ ..._vehicle!, active: true });
       })
       .catch(() => setError("Une erreur est survenue"));
   };
@@ -93,7 +90,7 @@ const ReportsEdit: React.FC = () => {
                   </Button>
                 </form>
               </Card>
-              <div className="flex justify-between mt-5 w-full">
+              <div className="flex justify-center mt-5 w-full">
                 <Button
                   onClick={handleDisable}
                   className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-2 py-1.5 text-center mr-2 mb-2"
@@ -109,13 +106,15 @@ const ReportsEdit: React.FC = () => {
                   <Button gradientDuoTone="greenToBlue">Retour</Button>
                 </Link>
               </div>
-              <Button
-                onClick={handleEnable}
-                type="button"
-                className="text-gray-900 bg-gradient-to-r from-lime-200 via-lime-400 to-lime-500 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-lime-300 dark:focus:ring-lime-800 font-medium rounded-lg text-sm px-2 py-1.5 text-center mr-2 mb-2"
-              >
-                Réactiver l&lsquo;appareil {_vehicle.type.name} #{_vehicle.id.substring(30)}
-              </Button>
+              <div className="flex justify-center mt-5 w-full">
+                <Button
+                  onClick={handleEnable}
+                  type="button"
+                  className="text-gray-900 bg-gradient-to-r from-lime-200 via-lime-400 to-lime-500 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-lime-300 dark:focus:ring-lime-800 font-medium rounded-lg text-sm px-2 py-1.5 text-center mr-2 mb-2"
+                >
+                  Réactiver l&lsquo;appareil {_vehicle.type.name} #{_vehicle.id.substring(30)}
+                </Button>
+              </div>
             </div>
           )}
         </>

@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Doughnut } from "react-chartjs-2";
-import { Line } from "react-chartjs-2";
+import { Doughnut, Line } from "react-chartjs-2";
 import CountUp from "react-countup";
 import { FaPaintBrush } from "react-icons/fa";
 import { LuPlaneLanding, LuPlaneTakeoff } from "react-icons/lu";
 import { Link } from "react-router-dom";
-import { ArcElement, Legend, Tooltip } from "chart.js";
-import { CategoryScale, Chart as ChartJS, LinearScale, LineElement, PointElement, Title } from "chart.js";
+import { ArcElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip } from "chart.js";
 import { Button, Card, Carousel, Timeline } from "flowbite-react";
 
 import { getAllUsers } from "@api/auth/user";
@@ -496,9 +494,11 @@ const Home: React.FC = () => {
               )}
             </div>
           </Card>
-          <Button color="dark">
-            <Link to="events">Voir tous les évènements</Link>
-          </Button>
+          <Link to="events" className="w-full">
+            <Button color="dark" className="w-full">
+              Voir tous les évènements
+            </Button>
+          </Link>
         </div>
       )}
       {!isUser(user) && (

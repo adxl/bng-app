@@ -31,7 +31,7 @@ const StationsList: React.FC = () => {
           <Card key={station.id}>
             <div className="flex flex-col items-start">
               <div className="w-full flex items-center justify-between gap-2">
-                <div className="flex align-center">
+                <div className="flex align-center gap-2">
                   <p className="whitespace-nowrap">{station.name}</p>
                   {station.active ? (
                     <Badge color="green" className="mr-3">
