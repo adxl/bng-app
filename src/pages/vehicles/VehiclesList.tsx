@@ -113,7 +113,7 @@ const VehiclesList: React.FC = () => {
                   <div className="flex items-center gap-2">
                     <strong>Station actuelle:</strong>
                     <span>{vehicle?.station?.name || "-"}</span>
-                  </div>           
+                  </div>
                   <div className="flex justify-end">
                     {isTechnician(user) && !_currentAuction && (
                       <Button gradientDuoTone="pinkToOrange" onClick={() => handleOpenModal(vehicle)}>
@@ -121,14 +121,6 @@ const VehiclesList: React.FC = () => {
                       </Button>
                     )}
                   </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <strong>Type :</strong>
-                  <span>{vehicle.type.name}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <strong>Station actuelle :</strong>
-                  <span>{vehicle?.station?.name || "En cours d'utilisation"}</span>
                 </div>
               </div>
             </Card>
