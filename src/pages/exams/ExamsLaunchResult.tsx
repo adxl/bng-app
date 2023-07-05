@@ -15,9 +15,7 @@ const ExamsLaunchResult: React.FC = () => {
 
   const { isSuccess, typeExam, score } = state as Props;
 
-  if (!isSuccess || !typeExam || !score) {
-    navigate("/licenses");
-  }
+  if (!isSuccess || !typeExam || !score) navigate("/licenses");
 
   return (
     <>

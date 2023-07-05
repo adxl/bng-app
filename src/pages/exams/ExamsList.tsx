@@ -126,11 +126,11 @@ const ExamsList: React.FC = () => {
                   <div className=" text-start">{exam.type && "Exam de type : " + exam.type.name}</div>
                   <div className=" flex justify-end">
                     {isInstructor(user) ? (
-                    <Link to={`edit/${exam.id}`}>
-                      <Button gradientDuoTone="greenToBlue">
-                        <HiPencilSquare />
-                      </Button>
-                    </Link>
+                      <Link to={`edit/${exam.id}`}>
+                        <Button gradientDuoTone="greenToBlue">
+                          <HiPencilSquare />
+                        </Button>
+                      </Link>
                     ) : (
                       <Link to={`${exam.id}`}>
                         <Button gradientDuoTone="greenToBlue">

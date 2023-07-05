@@ -32,10 +32,6 @@ export const getAllEnded = (): Response<Attempt[]> => {
   return _get(URL + `/allEnded`);
 };
 
-export const getOneAttempt = (id: string): Response<Attempt> => {
-  return _get(URL + `/${id}`);
-};
-
 export const createAttempt = (data: CreateAttemptDto): Response<CreateResponse> => {
   return _post(URL, data);
 };

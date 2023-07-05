@@ -62,6 +62,9 @@ const ExamsListUser: React.FC = () => {
                       <div className=" text-start">{exam.type && "Exam de type : " + exam.type.name}</div>
                       <p className="text-green-500">{exam.attempts[0].score}%</p>
                     </div>
+                    <Link to={"/certificateLicense"} state={{ attempt: exam.attempts[0], exam: exam }} className="z-50 relative">
+                      <p className=" text-blue-600 dark:text-blue-500 mt-3">Télécharger votre certificat</p>
+                    </Link>
                   </div>
                 </Card>
               ))}
