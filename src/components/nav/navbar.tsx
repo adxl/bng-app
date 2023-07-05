@@ -27,9 +27,6 @@ const Navbar: React.FC = () => {
       getActive().then(({ data }) => {
         setAuction(data);
       });
-      getActive().then(({ data }) => {
-        setAuction(data);
-      });
     }
   }, [user]);
 
