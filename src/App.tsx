@@ -110,9 +110,6 @@ const App: React.FC = () => {
                   <Route path="create" element={<Guard el={EventsCreate} roles={[ORGANIZER]} />} />
                   <Route path="edit/:id" element={<Guard el={EventsEdit} roles={[ORGANIZER]} />} />
                 </Route>
-                <Route path="auction" element={<Outlet />}>
-                  <Route index element={<Guard el={AuctionsEdit} roles={[TECHNICIAN]} />} />
-                </Route>
               </Route>
 
               <Route path="*" element={<Error404 />} />
