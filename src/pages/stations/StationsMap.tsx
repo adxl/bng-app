@@ -6,7 +6,6 @@ import { Accordion, Alert, Badge, Button, Card, Label, Modal, Select, Textarea }
 import Lottie from "lottie-react";
 import { QRCodeCanvas } from "qrcode.react";
 
-import { getSelfEventsWinner } from "@api/events/events-winner";
 import { createReport } from "@api/gears/reports";
 import { createRide, endRide, getEndRideUri, getSelfCurrentRide, reviewRide } from "@api/gears/rides";
 import { getAllStations } from "@api/gears/stations";
@@ -32,8 +31,6 @@ const StationsMap: React.FC = () => {
   const [_selectedStation, setSelectedStation] = useState<Station | null>(null);
   const [_selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
   const [_selectedSkin, setSelectedSkin] = useState<VehicleSkin | null>(_skins[0]);
-
-  const [_userCaps, setUserCaps] = useState<number>(0);
 
   const [_review, setReview] = useState<number | null>(null);
   const [_hover, setHover] = useState<number | null>(null);
@@ -63,9 +60,6 @@ const StationsMap: React.FC = () => {
       setSkins(skins);
     });
     getAllSkins().then(({ data }) => setSkins(data));
-    getSelfEventsWinner(user.id!).then(({ data }) => {
-      setUserCaps(data.caps);
-    });
   }, []);
 
   useEffect(() => {
@@ -81,7 +75,7 @@ const StationsMap: React.FC = () => {
   };
 
   const handleSelectVehicle = (vehicle: Vehicle) => {
-    if (vehicle.type.capsMilestone > _userCaps) {
+    if (vehicle.type.capsMilestone > user.caps!) {
       return setError("Tu n'as pas encore débloqué ce véhicule");
     }
 
@@ -104,7 +98,9 @@ const StationsMap: React.FC = () => {
   const handleReservationSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    createRide({ vehicle: _selectedVehicle!, userId: user.id!, skin: _selectedSkin! })
+    if (!_selectedSkin) return;
+
+    createRide({ vehicle: _selectedVehicle!, userId: user.id!, skin: _selectedSkin })
       .then(() => {
         setOpenModal(false);
         setSuccess("Réservation effectuée !");
@@ -182,7 +178,7 @@ const StationsMap: React.FC = () => {
                 {_selectedStation.vehicles
                   .sort((v1, v2) => (v1.type.capsMilestone < v2.type.capsMilestone ? -1 : 1))
                   .map((vehicle) => {
-                    const isUnlocked = vehicle.type.capsMilestone <= _userCaps;
+                    const isUnlocked = vehicle.type.capsMilestone <= user.caps!;
 
                     return (
                       <Card key={vehicle.id}>
@@ -222,7 +218,7 @@ const StationsMap: React.FC = () => {
                   &nbsp;pour piloter ce dernier
                 </p>
               </div>
-              <Modal show={_openModal} onClose={() => setOpenModal(false)} className="z-10">
+              <Modal show={_openModal} onClose={() => setOpenModal(false)} className="z-10 w-full max-w-full">
                 <Modal.Header>
                   Réservation du véhicule
                   <b>
@@ -231,30 +227,43 @@ const StationsMap: React.FC = () => {
                 </Modal.Header>
                 <Modal.Body>
                   <form onSubmit={handleReservationSubmit} className="flex flex-col w-full gap-4">
-                    <div className="grid grid-cols-6 gap-4">
-                      <div className="col-span-4">
+                    <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
+                      <div className="col-span-6">
                         <div className="text-start mb-2 block">
                           <Label value="Skin du véhicule" />
                         </div>
-                        <Select required onChange={(e) => handleSelectSkin(e.currentTarget.value)}>
-                          <option>---</option>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 col-span-6">
                           {_skins.map((skin) => {
-                            const isUnlocked = _userCaps >= skin.tier * 50;
+                            const isUnlocked = user.caps! >= skin.tier * 50;
                             return (
-                              <option
-                                disabled={!isUnlocked}
-                                className="flex justify-center align-center"
-                                key={skin.id}
-                                value={isUnlocked ? skin.id : ""}
-                              >
-                                {!isUnlocked && "🔒 "}
-                                {`${skin.name} ${!isUnlocked ? `(${skin.tier * 50} capsules)` : ""}  `}
-                              </option>
+                              <div key={skin.id} className="flex flex-col items-center">
+                                {!isUnlocked ? (
+                                  <div className="w-full relative border-2 border-dashed border-yellow-500 rounded-lg">
+                                    <img src={skin.image} className="rounded-md h-28 w-full grayscale" style={{ objectFit: "cover" }} />
+                                    <span className="absolute bottom-0 right-0 m-2">🔒</span>
+                                  </div>
+                                ) : (
+                                  <div className="w-full relative">
+                                    <img
+                                      src={skin.image}
+                                      className={
+                                        "border-2 rounded-md h-28 w-full " +
+                                        (_selectedSkin?.id === skin.id ? "border-green-600" : "border-transparent")
+                                      }
+                                      style={{ objectFit: "cover" }}
+                                      onClick={() => handleSelectSkin(skin.id)}
+                                    />
+                                    {_selectedSkin?.id === skin.id && <span className="absolute bottom-0 right-0 m-2">✅</span>}
+                                  </div>
+                                )}
+
+                                <small>{skin.name}</small>
+                              </div>
                             );
                           })}
-                        </Select>
+                        </div>
                       </div>
-                      <img src={_selectedSkin?.image} className="col-span-2 border rounded-md h-28 w-full" style={{ objectFit: "cover" }} />
+                      {/* <img src={_selectedSkin?.image} className="col-span-2 border rounded-md h-28 w-full" style={{ objectFit: "cover" }} /> */}
                     </div>
                     {_error && (
                       <Alert color="failure" className="mb-5 absolute top-6 left-1/2 -translate-x-1/2" icon={HiInformationCircle}>
