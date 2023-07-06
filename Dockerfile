@@ -7,7 +7,7 @@ WORKDIR /home/node
 
 ### build stage ###
 
-FROM node:18.0.0-alpine as build
+FROM node:18-alpine as build
 
 USER node
 WORKDIR /home/node
@@ -18,7 +18,7 @@ RUN npm install && VITE_API_URL="@VITE_API_URL@" VITE_SOCKET_URL="@VITE_SOCKET_U
 
 ### production stage ###
 
-FROM node:18.0.0-alpine as production
+FROM node:18-alpine as production
 
 USER node
 
