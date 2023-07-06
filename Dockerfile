@@ -14,7 +14,7 @@ WORKDIR /home/node
 
 COPY --chown=node:node . .
 
-RUN npm install && VITE_API_URL="@VITE_API_URL@" npx vite build
+RUN npm install && VITE_API_URL="@VITE_API_URL@" VITE_SOCKET_URL="@VITE_SOCKET_URL@" npx vite build
 
 ### production stage ###
 

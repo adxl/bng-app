@@ -34,7 +34,7 @@ export function SocketProvider({ room, onReload, children }: IProps): ReactEleme
   const [_isLoaded, setIsLoaded] = useState<boolean>(false);
 
   useEffect(() => {
-    const socketURL = import.meta.env.VITE_WS_URL + "/auctions";
+    const socketURL = import.meta.env.VITE_SOCKET_URL + "/auctions";
     const socket = io(socketURL, { auth: { token: _token }, reconnection: false, transports: ["websocket"] });
 
     socket.on("joinedRoom", () => {

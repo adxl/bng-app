@@ -47,6 +47,7 @@ jobs:
       - name: Build
         run: |
           sed -i 's|@VITE_API_URL@|${{ secrets.VITE_API_URL }}|g' ./Dockerfile
+          sed -i 's|@VITE_SOCKET_URL@|${{ secrets.VITE_SOCKET_URL }}|g' ./Dockerfile
           docker compose -f docker-compose.prod.yaml build
 
       - name: Push
