@@ -351,9 +351,9 @@ const Home: React.FC = () => {
           <Card className="row-span-2 hidden md:flex">
             <h5 className="text-xl font-medium">Évènements</h5>
             <div className="flex items-baseline">
-              <span className="text-gray-600">A venir </span>
+              <span className="text-gray-600">Terminé</span>
               <FaPaintBrush className="ml-1" color="#10B981" size={15}></FaPaintBrush>
-              <span className="text-gray-600">- Terminé </span>
+              <span className="text-gray-600">- A venir </span>
               <FaPaintBrush className="ml-1" color="#F59E0B" size={15}></FaPaintBrush>
             </div>
             <FullCalendar

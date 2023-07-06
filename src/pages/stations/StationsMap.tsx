@@ -113,6 +113,8 @@ const StationsMap: React.FC = () => {
   const handleEndRideSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!_selectedStation) return;
+
     endRide(_ride!.id, { endStation: _selectedStation! })
       .then(() => {
         setOpenModal(false);
