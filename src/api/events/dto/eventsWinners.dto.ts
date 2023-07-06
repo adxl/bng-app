@@ -1,5 +1,6 @@
 export type UpdateEventWinnersDto = {
-  userId: string;
-
-  rank: number;
+  winners: Array<{
+    userId: string;
+    rank: number;
+  }>;
 };

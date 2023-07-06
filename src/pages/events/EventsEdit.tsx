@@ -35,11 +35,9 @@ const EventsEdit: React.FC = () => {
   useEffect(() => {
     getOneEvent(id!).then(({ data }) => {
       setName(data.name);
-      data.winners.forEach((winner) => {
-        if (winner.rank === 1 && winner.userId != null) setFirstPlace(winner.userId);
-        if (winner.rank === 2 && winner.userId != null) setSecondPlace(winner.userId);
-        if (winner.rank === 3 && winner.userId != null) setThirdPlace(winner.userId);
-      });
+      setFirstPlace(data.winners[0].userId ?? "");
+      setSecondPlace(data.winners[1].userId ?? "");
+      setThirdPlace(data.winners[2].userId ?? "");
       if (data.endedAt) setEndedAt(new Date(data.endedAt));
     });
   }, []);
@@ -59,18 +57,16 @@ const EventsEdit: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!_firstPlace || !_secondPlace || !_thirdPlace) return setError("Veuillez sélectionner un gagnant");
+    if (!_firstPlace || !_secondPlace || !_thirdPlace) {
+      return setError("Veuillez sélectionner des gagnants");
+    }
+
     if (!_endedAt) return setError("Veuillez sélectionner une date de fin");
+
     const data = {
       name: _name,
       endedAt: _endedAt,
     };
-
-    updateEvent(id!, data)
-      .then(() => {
-        navigate("/admin/events");
-      })
-      .catch(() => setError("Une erreur est survenue"));
 
     const winners = [
       {
@@ -87,13 +83,15 @@ const EventsEdit: React.FC = () => {
       },
     ];
 
-    winners.forEach((winner) => {
-      updateEventWinners(id!, winner)
-        .then(() => {
-          navigate("/admin/events");
-        })
-        .catch(() => setError("Une erreur est survenue"));
-    });
+    updateEvent(id!, data)
+      .then(() => {
+        updateEventWinners(id!, { winners })
+          .then(() => {
+            navigate("/admin/events");
+          })
+          .catch(() => setError("Une erreur est survenue"));
+      })
+      .catch(() => setError("Une erreur est survenue"));
   };
 
   const handleDelete = () => {
