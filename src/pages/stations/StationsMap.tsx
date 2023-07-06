@@ -3,6 +3,7 @@ import { HiInformationCircle, HiStar } from "react-icons/hi";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { Link } from "react-router-dom";
 import { Accordion, Alert, Badge, Button, Card, Label, Modal, Select, Textarea } from "flowbite-react";
+import { Icon } from "leaflet";
 import Lottie from "lottie-react";
 import { QRCodeCanvas } from "qrcode.react";
 
@@ -138,6 +139,11 @@ const StationsMap: React.FC = () => {
     getSelfCurrentRide().then(({ data }) => setRide(data));
   };
 
+  const MarkerIcon = new Icon({
+    iconUrl: `/station.png`,
+    iconSize: [50, 50],
+  });
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 relative w-full">
       {_success && (
@@ -152,7 +158,7 @@ const StationsMap: React.FC = () => {
               <TileLayer url="https://stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png" />
               {_stations.map((station) => (
                 <div key={station.id}>
-                  <Marker position={[station.latitude, station.longitude]}>
+                  <Marker icon={MarkerIcon} position={[station.latitude, station.longitude]}>
                     <Popup className="map-popup">
                       <strong>{station.name}</strong>
                       <div>
