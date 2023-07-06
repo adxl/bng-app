@@ -75,19 +75,19 @@ const AuctionsEdit: React.FC<Props> = ({ auction }) => {
           <div className="mt-5">
             <ul className="max-w-md space-y-1 text-gray-500 list-disc list-inside text-left">
               {auction.clicks.slice(0, 5).map((click) => (
-                <>
+                <React.Fragment key={click.id}>
                   {click.userId === user.id ? (
-                    <li key={click.id} className="bg-green-200 rounded-md">
+                    <li className="bg-green-200 rounded-md">
                       Vous avez cliqué le {new Date(click.timestamp).toLocaleDateString("fr-FR")} à{" "}
                       {new Date(click.timestamp).toLocaleTimeString("fr-FR")}
                     </li>
                   ) : (
-                    <li key={click.id}>
+                    <li>
                       #{click.userId.substring(30)} a cliqué le {new Date(click.timestamp).toLocaleDateString("fr-FR")} à{" "}
                       {new Date(click.timestamp).toLocaleTimeString("fr-FR")}
                     </li>
                   )}
-                </>
+                </React.Fragment>
               ))}
             </ul>
           </div>
