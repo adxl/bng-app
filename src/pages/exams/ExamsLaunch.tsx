@@ -31,19 +31,17 @@ const ExamsLaunch: React.FC = () => {
   const launchTimer = (duration: number) => {
     const startDate = new Date().toISOString();
     const endDate = new Date(new Date().getTime() + duration * 60000).toISOString();
-    const remainingTime = new Date(endDate).getTime() - new Date(startDate).getTime();
     const durationInSec = duration * 60;
-    const interval = remainingTime / durationInSec;
-    const progressIncrement = 100 / durationInSec / 2;
+    const remainingTimeInMs = new Date(endDate).getTime() - new Date(startDate).getTime();
 
     const timer = setInterval(() => {
-      setProgressBar((prev) => prev - progressIncrement);
-    }, interval);
+      setProgressBar((prev) => prev - 100 / durationInSec);
+    }, 1000);
 
     setTimeout(() => {
       clearInterval(timer);
       navigate("/licenses");
-    }, remainingTime);
+    }, remainingTimeInMs);
   };
 
   useEffect(() => {
