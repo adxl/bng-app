@@ -27,6 +27,9 @@ const Profile: React.FC = () => {
 
   function handleProfileSubmit(e: React.FormEvent): void {
     e.preventDefault();
+
+    if (!_firstName.length || !_lastName.length) setError("Une erreur est survenue");
+
     if (user.id)
       updateProfile(user.id, { firstName: _firstName, lastName: _lastName })
         .then(() => {
@@ -38,6 +41,9 @@ const Profile: React.FC = () => {
 
   function handlePasswordSubmit(e: React.FormEvent): void {
     e.preventDefault();
+
+    if (!_odlPwd.length || !_newPwd.length || !_confirmNewPwd.length) setError("Une erreur est survenue");
+
     if (user.id && _newPwd === _confirmNewPwd)
       updatePassword(user.id, { oldPwd: _odlPwd, password: _newPwd })
         .then(() => setSuccess("Mot de passe changé avec succès !"))

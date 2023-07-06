@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button, Card, Label, Progress, TextInput } from "flowbite-react";
 
-import { getOneExamPublic } from "@api/exams/exams";
+import { getAllExamsUser, getOneExamPublic } from "@api/exams/exams";
 
 import { createAttempt, updateAttempt } from "../../api/exams/attempts";
 import { getOneType } from "../../api/gears/vehicles-types";
@@ -42,24 +42,32 @@ const ExamsLaunch: React.FC = () => {
 
     setTimeout(() => {
       clearInterval(timer);
-
-      const form = formData.current;
-      if (!form) return;
-      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+      navigate("/licenses");
     }, remainingTime);
   };
 
   useEffect(() => {
     getOneExamPublic(id!)
       .then(({ data: exam }) => {
-        getOneType(exam.typeId).then(({ data: type }) => {
-          const oneExam = { ...exam, type };
-          setExam(oneExam);
-          createAttempt({ exam: { id: id! }, userId: user.id ?? "" }).then(({ data: attempt }) => {
-            setAttemptId(attempt.identifiers[0].id);
-            launchTimer(exam.duration);
+        if (!exam) navigate("/licenses");
+
+        Promise.all([getOneType(exam.typeId), getAllExamsUser()])
+          .then(([{ data: type }, { data: allExams }]) => {
+            const examUser = allExams.find((e) => e.id === id);
+            if (examUser?.attempts?.length) navigate("/licenses");
+
+            const oneExam = { ...exam, type };
+
+            createAttempt({ exam: { id: id! }, userId: user.id ?? "" }).then(({ data: attempt }) => {
+              setAttemptId(attempt.identifiers[0].id);
+              launchTimer(exam.duration);
+            });
+
+            setExam(oneExam);
+          })
+          .catch((_) => {
+            navigate("/licenses");
           });
-        });
       })
       .catch((_) => {
         navigate("/licenses");

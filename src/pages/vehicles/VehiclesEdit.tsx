@@ -79,9 +79,11 @@ const VehiclesEdit: React.FC = () => {
         <Link to="/admin/vehicles">
           <Button gradientDuoTone="greenToBlue">Retour</Button>
         </Link>
-        <Button gradientDuoTone="pinkToOrange" onClick={handleDelete}>
-          Supprimer
-        </Button>
+        {_stationId && (
+          <Button gradientDuoTone="pinkToOrange" onClick={handleDelete}>
+            Supprimer
+          </Button>
+        )}
       </div>
       <Card className="self-center">
         {_error && (

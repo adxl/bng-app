@@ -1,5 +1,4 @@
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { HiPencilSquare } from "react-icons/hi2";
 import { Link } from "react-router-dom";
 import { Badge, Button, Card } from "flowbite-react";
@@ -47,8 +46,8 @@ const EventsList: React.FC = () => {
             <Card key={event.id}>
               <div className="flex flex-col items-start">
                 <div className="w-full flex items-center justify-between gap-2">
-                  <div className="flex align-center">
-                    <p className="whitespace-nowrap">{event.name}</p>
+                  <div className="flex align-center w-full">
+                    <p>{event.name}</p>
                     {event.endedAt ? (
                       <Badge color="green" size="sm" className="ml-3">
                         Terminé
@@ -59,15 +58,15 @@ const EventsList: React.FC = () => {
                       </Badge>
                     )}
                   </div>
-                  <div className="w-full flex justify-end">
-                    {isOrganizer(user) && (
+                  {isOrganizer(user) && (
+                    <div className="flex justify-end">
                       <Link to={`edit/${event.id}`}>
                         <Button gradientDuoTone="greenToBlue">
                           <HiPencilSquare />
                         </Button>
                       </Link>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
                 <p className="text-gray-500 ml-3">Début: {new Date(event.startsAt).toLocaleDateString("fr-FR")}</p>
                 {event.endedAt ? (

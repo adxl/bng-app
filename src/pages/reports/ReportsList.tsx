@@ -39,7 +39,7 @@ const ReportsList: React.FC = () => {
                       {new Date(report.createdAt).toLocaleDateString("fr-FR")} à&nbsp;
                       {new Date(report.createdAt).toLocaleTimeString("fr-FR")}
                     </p>
-                    <p className="whitespace-nowrap font-bold hidden md:block">
+                    <p className="font-bold hidden md:block">
                       Rapport du : {new Date(report.createdAt).toLocaleDateString("fr-FR")} à&nbsp;
                       {new Date(report.createdAt).toLocaleTimeString("fr-FR")}
                     </p>
@@ -58,7 +58,7 @@ const ReportsList: React.FC = () => {
                     )}
                   </div>
                   {report.status !== "Terminé" && (
-                    <div className="w-full flex justify-end">
+                    <div className=" flex justify-end">
                       {isTechnician(user) && (
                         <Link to={`edit/${report.id}`}>
                           <Button gradientDuoTone="greenToBlue">
@@ -69,7 +69,7 @@ const ReportsList: React.FC = () => {
                     </div>
                   )}
                 </div>
-                <div className="flex  items-start">
+                <div className="flex  items-start mt-3">
                   <LuMapPin className="text-emerald-500" size={24}></LuMapPin>
                   <p className="whitespace-nowrap">{report.ride.endStation?.name}</p>
                 </div>
@@ -80,7 +80,7 @@ const ReportsList: React.FC = () => {
                   </p>
                 </div>
                 {report.ride.comment ? (
-                  <figure className="max-w-screen-md mx-auto text-center">
+                  <figure className="max-w-screen-md mx-auto text-center mt-6">
                     <svg
                       aria-hidden="true"
                       className="w-8 h-8 mx-auto mb-3 text-green-500 dark:text-green-400"
